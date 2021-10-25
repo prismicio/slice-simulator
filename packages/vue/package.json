@@ -1,0 +1,55 @@
+{
+	"name": "@prismicio/sliframe-vue",
+	"version": "0.0.0",
+	"description": "Preview and develop Prismic slices fast with minimal configuration",
+	"keywords": [
+		"typescript",
+		"prismic"
+	],
+	"repository": {
+		"type": "git",
+		"url": "ssh://git@github.com/prismicio/sliframe.git",
+		"directory": "packages/vue"
+	},
+	"license": "Apache-2.0",
+	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "src/index.js",
+	"module": "src/index.js",
+	"files": [
+		"dist",
+		"src"
+	],
+	"scripts": {
+		"build": "exit 0",
+		"dev": "exit 0",
+		"prepare": "npm run build",
+		"release": "npm run build && npm run test && standard-version && git push --follow-tags && npm run build && npm publish",
+		"release:dry": "standard-version --dry-run",
+		"release:alpha": "npm run build && npm run test && standard-version --release-as major --prerelease alpha && git push --follow-tags && npm run build && npm publish --tag alpha",
+		"release:alpha:dry": "standard-version --release-as major --prerelease alpha --dry-run",
+		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava",
+		"test": "npm run unit"
+	},
+	"dependencies": {
+		"@prismicio/sliframe-core": "0.0.0"
+	},
+	"devDependencies": {
+		"ava": "^3.15.0",
+		"nyc": "^15.1.0",
+		"standard-version": "^9.3.2",
+		"ts-eager": "^2.0.2"
+	},
+	"engines": {
+		"node": ">=12.7.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}
