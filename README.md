@@ -4,7 +4,7 @@ TODO: Go through all "TODO" comments in the project
 
 TODO: Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
 - package_name
-- package_description
+- Preview and develop Prismic slices fast with minimal configuration
 - github_org_slash_github_repo
 - github_repo
 
@@ -21,7 +21,7 @@ TODO: Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, packa
 
 <!-- TODO: Replacing link to Prismic with [Prismic][prismic] is useful here -->
 
-package_description.
+Preview and develop Prismic slices fast with minimal configuration.
 
 <!--
 
