@@ -1,0 +1,26 @@
+{
+	"types": [
+		{
+			"type": "feat",
+			"section": "Features"
+		},
+		{
+			"type": "fix",
+			"section": "Bug Fixes"
+		},
+		{
+			"type": "refactor",
+			"section": "Refactor"
+		},
+		{
+			"type": "docs",
+			"section": "Documentation"
+		},
+		{
+			"type": "chore",
+			"section": "Chore"
+		}
+	],
+	"tagPrefix": "@prismicio/sliframe-core@",
+	"path": "./packages/core"
+}
