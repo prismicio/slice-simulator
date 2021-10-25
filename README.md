@@ -1,16 +1,14 @@
 <!--
 
-TODO: Go through all "TODO" comments in the project
-
-TODO: Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- package_name
+Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
+- @prismicio/sliframe
 - Preview and develop Prismic slices fast with minimal configuration
-- github_org_slash_github_repo
-- github_repo
+- prismicio/sliframe
+- sliframe
 
 -->
 
-# package_name
+# @prismicio/sliframe
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -19,9 +17,7 @@ TODO: Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, packa
 [![Conventional Commits][conventional-commits-src]][conventional-commits-href]
 [![License][license-src]][license-href]
 
-<!-- TODO: Replacing link to Prismic with [Prismic][prismic] is useful here -->
-
-Preview and develop Prismic slices fast with minimal configuration.
+Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
 <!--
 
@@ -38,7 +34,7 @@ Non-breaking space: &nbsp; are here on purpose to fix emoji rendering on certain
 ## Install
 
 ```bash
-npm install package_name
+npm install @prismicio/sliframe-*
 ```
 
 ## Documentation
@@ -90,21 +86,21 @@ For more clarity on this project and its structure you can also check out the de
 <!-- TODO: Replace link with a more useful one if available -->
 
 [forum-question]: https://community.prismic.io
-[repo-bug-report]: https://github.com/github_org_slash_github_repo/issues/new?assignees=&labels=bug&template=bug_report.md&title=
-[repo-feature-request]: https://github.com/github_org_slash_github_repo/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
-[repo-pull-requests]: https://github.com/github_org_slash_github_repo/pulls
+[repo-bug-report]: https://github.com/prismicio/sliframe/issues/new?assignees=&labels=bug&template=bug_report.md&title=
+[repo-feature-request]: https://github.com/prismicio/sliframe/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
+[repo-pull-requests]: https://github.com/prismicio/sliframe/pulls
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/package_name/latest.svg
-[npm-version-href]: https://npmjs.com/package/package_name
-[npm-downloads-src]: https://img.shields.io/npm/dm/package_name.svg
-[npm-downloads-href]: https://npmjs.com/package/package_name
-[github-actions-ci-src]: https://github.com/github_org_slash_github_repo/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/github_org_slash_github_repo/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/github/github_org_slash_github_repo.svg
-[codecov-href]: https://codecov.io/gh/github_org_slash_github_repo
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/sliframe-core/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/sliframe-core
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/sliframe-core.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/sliframe-core
+[github-actions-ci-src]: https://github.com/prismicio/sliframe/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/prismicio/sliframe/actions?query=workflow%3Aci
+[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/sliframe.svg
+[codecov-href]: https://codecov.io/gh/prismicio/sliframe
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/package_name.svg
-[license-href]: https://npmjs.com/package/package_name
+[license-src]: https://img.shields.io/npm/l/@prismicio/sliframe-core.svg
+[license-href]: https://npmjs.com/package/@prismicio/sliframe-core

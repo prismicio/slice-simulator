@@ -22,5 +22,5 @@
 		}
 	],
 	"tagPrefix": "@prismicio/sliframe-core@",
-	"path": "./packages/core"
+	"path": "."
 }

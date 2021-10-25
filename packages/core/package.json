@@ -8,7 +8,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "ssh://git@github.com/github_org_slash_github_repo.git",
+		"url": "ssh://git@github.com/prismicio/sliframe.git",
 		"directory": "packages/core"
 	},
 	"license": "Apache-2.0",
