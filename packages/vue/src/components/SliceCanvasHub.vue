@@ -1,5 +1,5 @@
 <template>
-	<div class="sliframe-hub">
+	<div class="slice-canvas-hub">
 		todo:hub
 	</div>
 </template>

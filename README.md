@@ -1,14 +1,14 @@
 <!--
 
 Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- @prismicio/sliframe
+- @prismicio/slice-canvas
 - Preview and develop Prismic slices fast with minimal configuration
-- prismicio/sliframe
-- sliframe
+- prismicio/slice-canvas
+- slice-canvas
 
 -->
 
-# @prismicio/sliframe
+# @prismicio/slice-canvas
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -34,7 +34,7 @@ Non-breaking space: &nbsp; are here on purpose to fix emoji rendering on certain
 ## Install
 
 ```bash
-npm install @prismicio/sliframe-*
+npm install @prismicio/slice-canvas-*
 ```
 
 ## Documentation
@@ -86,21 +86,21 @@ For more clarity on this project and its structure you can also check out the de
 <!-- TODO: Replace link with a more useful one if available -->
 
 [forum-question]: https://community.prismic.io
-[repo-bug-report]: https://github.com/prismicio/sliframe/issues/new?assignees=&labels=bug&template=bug_report.md&title=
-[repo-feature-request]: https://github.com/prismicio/sliframe/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
-[repo-pull-requests]: https://github.com/prismicio/sliframe/pulls
+[repo-bug-report]: https://github.com/prismicio/slice-canvas/issues/new?assignees=&labels=bug&template=bug_report.md&title=
+[repo-feature-request]: https://github.com/prismicio/slice-canvas/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
+[repo-pull-requests]: https://github.com/prismicio/slice-canvas/pulls
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/sliframe-core/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/sliframe-core
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/sliframe-core.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/sliframe-core
-[github-actions-ci-src]: https://github.com/prismicio/sliframe/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/prismicio/sliframe/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/sliframe.svg
-[codecov-href]: https://codecov.io/gh/prismicio/sliframe
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-canvas-client/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/slice-canvas-client
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-canvas-client.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-canvas-client
+[github-actions-ci-src]: https://github.com/prismicio/slice-canvas/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/prismicio/slice-canvas/actions?query=workflow%3Aci
+[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-canvas.svg
+[codecov-href]: https://codecov.io/gh/prismicio/slice-canvas
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/sliframe-core.svg
-[license-href]: https://npmjs.com/package/@prismicio/sliframe-core
+[license-src]: https://img.shields.io/npm/l/@prismicio/slice-canvas-client.svg
+[license-href]: https://npmjs.com/package/@prismicio/slice-canvas-client

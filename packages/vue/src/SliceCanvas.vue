@@ -1,26 +1,26 @@
 <template>
-	<div class="sliframe">
+	<div class="slice-canvas">
 		Hello World Vue
-		<SliframeHub />
+		<slicecanvasHub />
 		{{ state.status }}
 		{{ { currentRoute } }}
 	</div>
 </template>
 
 <script>
-import { State, createRouter } from "@prismicio/sliframe-core";
-import "@prismicio/sliframe-core/dist/css/style.min.css";
+import { State, createRouter } from "@prismicio/slicecanvas-client";
+import "@prismicio/slicecanvas-client/dist/css/style.min.css";
 
-import { SliframeHub } from "./components";
+import { slicecanvasHub } from "./components";
 
 export default {
 	components: {
-		SliframeHub
+		slicecanvasHub
 	},
 	props: {
 		statePredicate: {
 			type: Function,
-			default: () => import("~~/.slicemachine/sliframe-state.json"),
+			default: () => import("~~/.slicemachine/slicecanvas-state.json"),
 		},
 	},
 	data() {

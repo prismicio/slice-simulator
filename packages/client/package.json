@@ -1,5 +1,5 @@
 {
-	"name": "@prismicio/sliframe-core",
+	"name": "@prismicio/slice-canvas-client",
 	"version": "0.0.0",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
@@ -8,7 +8,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "ssh://git@github.com/prismicio/sliframe.git",
+		"url": "ssh://git@github.com/prismicio/slice-canvas.git",
 		"directory": "packages/core"
 	},
 	"license": "Apache-2.0",

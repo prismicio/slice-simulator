@@ -1,1 +1,1 @@
-export { default as SliframeHub } from "./SliframeHub.vue";
+export { default as slice-canvasHub } from "./slice-canvasHub.vue";
