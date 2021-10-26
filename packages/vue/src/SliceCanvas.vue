@@ -1,47 +1,54 @@
 <template>
 	<div class="slice-canvas">
-		Hello World Vue
-		<slicecanvasHub />
-		{{ state.status }}
-		{{ { currentRoute } }}
+		<SliceCanvasHub />
 	</div>
 </template>
 
-<script>
-import { State, createRouter } from "@prismicio/slicecanvas-client";
-import "@prismicio/slicecanvas-client/dist/css/style.min.css";
+<script lang="ts">
+import Vue, { PropType } from "vue";
 
-import { slicecanvasHub } from "./components";
+import {
+	createStateManager,
+	getDefaultState,
+	createRouter,
+	getDefaultRoute,
+	SliceCanvasData
+} from "@prismicio/slice-canvas-client";
+import "@prismicio/slice-canvas-client/dist/css/style.min.css";
 
-export default {
+import SliceCanvasHub from "./SliceCanvasHub.vue";
+
+export default Vue.extend({
 	components: {
-		slicecanvasHub
+		SliceCanvasHub
 	},
 	props: {
 		statePredicate: {
-			type: Function,
-			default: () => import("~~/.slicemachine/slicecanvas-state.json"),
+			type: Function as PropType<() => Promise<unknown>>,
+			default: () => import("~~/.slicemachine/slice-canvas-state.json"),
 		},
 	},
-	data() {
+	data(): SliceCanvasData {
 		return {
-			state: State.getDefault(),
-			currentRoute: null,
+			stateManager: createStateManager(),
+			state: getDefaultState(),
 			router: createRouter(),
+			route: getDefaultRoute(),
 		};
 	},
 	mounted() {
-		this.init();
-	},
-	methods: {
-		init() {
-			this.router.watch((currentRoute) => {
-				this.currentRoute = currentRoute;
-			});
-			State.load(this.statePredicate, (state) => {
-				this.state = state;
-			});
-		}
+		this.stateManager.on("loaded", (state) => {
+			console.log(state);
+			this.state = state;
+
+			this.router.watch();
+		});
+		this.router.on("routeResolved", (route) => {
+			console.log(route);
+			this.route = route;
+		})
+
+		this.stateManager.load(this.statePredicate);
 	}
-}
+})
 </script>
