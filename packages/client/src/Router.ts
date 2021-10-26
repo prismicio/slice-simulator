@@ -1,86 +1,66 @@
-export type RouteDefinition = {
-	name: string;
-	path: string;
-	regex: RegExp;
+import { EventEmitter } from "./EventEmitter";
+import { ResolvedRoute, RouteDefinition } from "./types";
+
+export type RouterEvents = {
+	routeResolved: ResolvedRoute;
 };
 
-export type ResolvedRoute = {
-	params?: { [key: string]: string };
-} & RouteDefinition;
-
-export const createRouter = (): Router => {
-	return new Router();
-};
-
-export class Router {
-	private static routes: RouteDefinition[] = [
-		{
-			name: "single",
-			path: "/preview/[libraries]/[slice]/[variation]",
-			regex:
-				/^\/preview\/(?<libraries>[^\/]+)\/(?<slice>[^\/]+)\/(?<variation>[^\/]+)\/?$/i,
-		},
-		{
-			name: "playground",
-			path: "/playground",
-			regex: /^\/playground\/?$/i,
-		},
-		{
-			name: "hub",
-			path: "/",
-			regex: /^\/?$/i,
-		},
-	];
-
-	private static fourOFour: RouteDefinition = {
+export class Router extends EventEmitter<RouterEvents> {
+	public static fourOFour: RouteDefinition = {
 		name: "404",
 		path: "[...any]",
 		regex: /^.*$/i,
 	};
 
-	private watching = false;
-	private watcher: () => void = () => undefined;
+	public routes: RouteDefinition[];
+	public route: ResolvedRoute | null = null;
 
-	watch(callback: (route: ResolvedRoute) => void): void {
-		if (!this.watching) {
-			this.watching = true;
+	private _watching = false;
+
+	constructor(routes: RouteDefinition[]) {
+		super();
+
+		this.routes = routes;
+	}
+
+	watch(): void {
+		if (!this._watching) {
+			this._watching = true;
 
 			if (!window.location.hash) {
 				window.location.hash = "/";
 			}
 
-			this.watcher = () => {
-				this.resolveRoute(callback);
-			};
-
-			window.addEventListener("hashchange", this.watcher);
-			this.watcher();
+			window.addEventListener("hashchange", this.resolveRoute.bind(this));
+			this.resolveRoute();
 		}
 	}
 
 	unwatch(): void {
-		if (this.watching) {
-			this.watching = false;
-			window.removeEventListener("hashchange", this.watcher);
+		if (this._watching) {
+			this._watching = false;
+			window.removeEventListener("hashchange", this.resolveRoute.bind(this));
 		}
 	}
 
-	resolveRoute(callback: (route: ResolvedRoute) => void): void {
+	resolveRoute(): void {
 		const path = window.location.hash.replace(/^#/, "");
 
-		for (const route of Router.routes) {
+		for (const route of this.routes) {
 			const match = path.match(route.regex);
 
 			if (match) {
-				callback({
+				this.route = {
 					...route,
 					params: match.groups,
-				});
+				};
+				this.emit("routeResolved", this.route);
 
 				return;
 			}
 		}
 
-		callback(Router.fourOFour);
+		this.route = Router.fourOFour;
+		this.emit("routeResolved", this.route);
 	}
 }
