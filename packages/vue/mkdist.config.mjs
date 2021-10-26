@@ -7,12 +7,12 @@ import { mkdist } from "mkdist";
 const run = async () => {
 	const writtenFiles = [];
 
-	writtenFiles.push(...(await mkdist({ format: "mjs" })).writtenFiles);
+	writtenFiles.push(...(await mkdist({ format: "cjs" })).writtenFiles);
 
 	writtenFiles.push(
 		...(
 			await mkdist({
-				format: "cjs",
+				format: "mjs",
 				declaration: true,
 				cleanDist: false,
 			})
