@@ -1,3 +1,4 @@
+import { SliceZone } from "@prismicio/types";
 import { Library } from "slicemachine-core/models/Library";
 
 import type { StateManager } from "./StateManager";
@@ -25,9 +26,19 @@ export type ResolvedRoute = {
 	params?: { [key: string]: string };
 } & RouteDefinition;
 
+export interface SliceCanvasProps {
+	statePredicate:
+		| (() => Promise<Library[] | { default: Library[] }>)
+		| Promise<Library[] | { default: Library[] }>;
+	zIndex: number;
+}
+
 export interface SliceCanvasData {
 	stateManager: StateManager;
 	state: State;
 	router: Router;
 	route: ResolvedRoute | null;
+	slices: SliceZone;
 }
+
+export type SliceCanvasOptions = SliceCanvasProps & SliceCanvasData;

@@ -1,6 +1,6 @@
-import { Library } from "slicemachine-core/models/Library";
+import { SliceCanvasProps } from "../dist";
 import { getDefaultState } from "./getDefaultState";
-import { EventEmitter } from "./EventEmitter";
+import { EventEmitter } from "./lib/EventEmitter";
 
 import { State, StateManagerStatus } from "./types";
 
@@ -17,16 +17,14 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this.state = state;
 	}
 
-	async load(predicate: () => Promise<unknown>): Promise<void> {
+	async load(predicate: SliceCanvasProps["statePredicate"]): Promise<void> {
 		try {
-			const data = await predicate();
+			const data = await (typeof predicate === "function"
+				? predicate()
+				: predicate);
 
 			this.state = {
-				data: (data && typeof data === "object" && "default" in data
-					? // When using import()
-					  (data as { default: unknown }).default
-					: // When using require()
-					  data) as Library[],
+				data: Array.isArray(data) ? data : data.default,
 				status: StateManagerStatus.Loaded,
 				error: null,
 			};

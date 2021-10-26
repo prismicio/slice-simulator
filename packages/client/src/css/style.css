@@ -1,3 +1,13 @@
 .slice-canvas {
 	color: red;
 }
+
+.slice-canvas-pinned {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow: scroll;
+	background: #fefefe;
+}

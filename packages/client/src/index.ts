@@ -11,5 +11,7 @@ export type {
 	State,
 	RouteDefinition,
 	ResolvedRoute,
+	SliceCanvasProps,
 	SliceCanvasData,
+	SliceCanvasOptions,
 } from "./types";

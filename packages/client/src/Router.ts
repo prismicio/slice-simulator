@@ -1,4 +1,4 @@
-import { EventEmitter } from "./EventEmitter";
+import { EventEmitter } from "./lib/EventEmitter";
 import { ResolvedRoute, RouteDefinition } from "./types";
 
 export type RouterEvents = {

@@ -3,7 +3,7 @@ import { Router } from "./Router";
 
 export const routes: RouteDefinition[] = [
 	{
-		name: "single",
+		name: "preview",
 		path: "/preview/[libraries]/[slice]/[variation]",
 		regex:
 			/^\/preview\/(?<libraries>[^\/]+)\/(?<slice>[^\/]+)\/(?<variation>[^\/]+)\/?$/i,

@@ -33,9 +33,10 @@
 		"build": "cross-env NODE_ENV=production npm-run-all build:postcss build:siroc",
 		"build:siroc": "siroc build",
 		"build:postcss": "postcss src/css/style.css --output src/css/style.min.css --no-map --map --verbose",
-		"dev": "cross-env NODE_ENV=development npm-run-all build:postcss --parallel dev:postcss dev:siroc",
-		"dev:siroc": "chokidar \"./src/**/*\" --command \"siroc build\"",
+		"dev": "cross-env NODE_ENV=development npm-run-all build:postcss --parallel dev:postcss dev:siroc dev:markup",
+		"dev:siroc": "chokidar \"./src/**/*\" --ignore \"./src/markup/**/*\" --command \"siroc build\"",
 		"dev:postcss": "postcss src/css/style.css --output src/css/style.min.css --no-map --map --verbose --watch",
+		"dev:markup": "browser-sync start --server --watch --port 1234 --files \"src/css/*.css\" --startPath \"/src/markup/preview.html\" --no-open",
 		"prepare": "npm run build",
 		"release": "npm run build && npm run test && standard-version && git push --follow-tags && npm run build && npm publish",
 		"release:dry": "standard-version --dry-run",
@@ -45,11 +46,13 @@
 		"test": "npm run unit"
 	},
 	"dependencies": {
+		"@prismicio/types": "^0.1.15",
 		"slicemachine-core": "file:../../../slice-machine/packages/slicemachine-core"
 	},
 	"devDependencies": {
-		"autoprefixer": "10.3.7",
+		"autoprefixer": "^10.3.7",
 		"ava": "^3.15.0",
+		"browser-sync": "^2.27.5",
 		"chokidar-cli": "^3.0.0",
 		"cross-env": "^7.0.3",
 		"cssnano": "^5.0.8",
