@@ -1,37 +1,33 @@
 <template>
-	<div class="slice-canvas slice-canvas-pinned" :style="{ zIndex }">
-		<template v-if="route">
-			<SliceCanvasHub v-if="route.name === 'hub'" />
-			<SliceCanvasPreview v-else-if="route.name === 'preview'" />
-			<slot :slices="slices" v-if="['preview', 'playground'].includes(route.name)" />
-		</template>
+	<div class="slice-canvas-renderer" :style="{
+		zIndex,
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100vh',
+		overflow: 'auto',
+		background: '#fefefe'
+	}">
+		<slot :slices="slices" v-if="state" />
 	</div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from "vue";
+import { ExtendedVue } from "vue/types/vue";
 
+import { RendererAPI, MessageType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
 	getDefaultState,
-	createRouter,
-	getDefaultRoute,
 	SliceCanvasData,
 	SliceCanvasProps,
 	SliceCanvasOptions,
-} from "@prismicio/slice-canvas-client";
-import "@prismicio/slice-canvas-client/dist/css/style.min.css";
-
-import SliceCanvasHub from "./SliceCanvasHub.vue";
-import SliceCanvasPreview from "./SliceCanvasPreview.vue";
-import { ExtendedVue } from "vue/types/vue";
+} from "@prismicio/slice-canvas-renderer";
 
 export default {
-	name: "SliceCanvas",
-	components: {
-		SliceCanvasHub,
-		SliceCanvasPreview,
-	},
+	name: "SliceCanvasRenderer",
 	props: {
 		statePredicate: {
 			type: Function as PropType<() => Promise<unknown>>,
@@ -47,21 +43,21 @@ export default {
 		return {
 			stateManager: createStateManager(),
 			state: getDefaultState(),
-			router: createRouter(),
-			route: getDefaultRoute(),
 			slices: [],
 		};
 	},
 	mounted(this: SliceCanvasOptions) {
 		this.stateManager.on("loaded", (state) => {
 			console.log(state);
+
 			this.state = state;
 
-			this.router.watch();
-		});
-		this.router.on("routeResolved", (route) => {
-			console.log(JSON.stringify(route));
-			this.route = route;
+			const api = new RendererAPI({
+				[MessageType.GetLibraries]: () => this.stateManager.getLibraries(),
+				[MessageType.SetSlicesByID]: (message) => {
+					this.slices = this.stateManager.getSlicesByID(message.data);
+				}
+			}, { debug: process.env.NODE_ENV === "development" });
 		});
 
 		this.stateManager.load(this.statePredicate);
