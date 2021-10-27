@@ -1,6 +1,6 @@
 {
-	"name": "@prismicio/slice-canvas-client",
-	"version": "0.0.0",
+  "name": "@prismicio/slice-canvas-client",
+  "version": "0.0.0",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",
@@ -9,34 +9,19 @@
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/prismicio/slice-canvas.git",
-		"directory": "packages/core"
+		"directory": "packages/client"
 	},
 	"license": "Apache-2.0",
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"type": "module",
-	"exports": {
-		".": {
-			"require": "./dist/index.cjs",
-			"import": "./dist/index.mjs"
-		},
-		"./css/*": "./dist/css/*",
-		"./package.json": "./package.json"
-	},
-	"main": "dist/index.cjs",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
 	"files": [
 		"dist",
 		"src"
 	],
-	"scripts": {
-		"build": "cross-env NODE_ENV=production npm-run-all build:postcss build:siroc",
-		"build:siroc": "siroc build",
-		"build:postcss": "postcss src/css/style.css --output src/css/style.min.css --no-map --map --verbose",
-		"dev": "cross-env NODE_ENV=development npm-run-all build:postcss --parallel dev:postcss dev:siroc dev:markup",
-		"dev:siroc": "chokidar \"./src/**/*\" --ignore \"./src/markup/**/*\" --command \"siroc build\"",
-		"dev:postcss": "postcss src/css/style.css --output src/css/style.min.css --no-map --map --verbose --watch",
-		"dev:markup": "browser-sync start --server --watch --port 1234 --files \"src/css/*.css\" --startPath \"/src/markup/preview.html\" --no-open",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "serve": "vite preview",
 		"prepare": "npm run build",
 		"release": "npm run build && npm run test && standard-version && git push --follow-tags && npm run build && npm publish",
 		"release:dry": "standard-version --dry-run",
@@ -44,28 +29,28 @@
 		"release:alpha:dry": "standard-version --release-as major --prerelease alpha --dry-run",
 		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava",
 		"test": "npm run unit"
-	},
-	"dependencies": {
-		"@prismicio/types": "^0.1.15",
-		"slicemachine-core": "file:../../../slice-machine/packages/slicemachine-core"
-	},
-	"devDependencies": {
+  },
+  "devDependencies": {
+		"@fontsource/ibm-plex-sans": "^4.5.1",
+		"@prismicio/slice-canvas-com": "0.0.0",
+		"@prismicio/slice-canvas-renderer": "0.0.0",
+		"@vitejs/plugin-vue": "^1.9.3",
 		"autoprefixer": "^10.3.7",
 		"ava": "^3.15.0",
-		"browser-sync": "^2.27.5",
-		"chokidar-cli": "^3.0.0",
-		"cross-env": "^7.0.3",
 		"cssnano": "^5.0.8",
-		"npm-run-all": "^4.1.5",
 		"nyc": "^15.1.0",
-		"postcss": "^8.3.11",
-		"postcss-cli": "^9.0.1",
-		"postcss-import": "^14.0.2",
 		"postcss-nesting": "^8.0.1",
+		"postcss-import": "14.0.2",
 		"siroc": "^0.16.0",
 		"standard-version": "^9.3.2",
-		"ts-eager": "^2.0.2"
-	},
+		"tailwindcss": "2.2.17",
+		"ts-eager": "^2.0.2",
+    "typescript": "^4.4.4",
+    "vite": "^2.6.12",
+		"vue": "^3.2.16",
+		"vue-router": "^4.0.6",
+    "vue-tsc": "^0.3.0"
+  },
 	"engines": {
 		"node": ">=12.7.0"
 	},
