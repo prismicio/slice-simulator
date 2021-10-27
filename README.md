@@ -92,15 +92,15 @@ For more clarity on this project and its structure you can also check out the de
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-canvas-client/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/slice-canvas-client
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-canvas-client.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-canvas-client
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-canvas-renderer/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/slice-canvas-renderer
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-canvas-renderer.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-canvas-renderer
 [github-actions-ci-src]: https://github.com/prismicio/slice-canvas/workflows/ci/badge.svg
 [github-actions-ci-href]: https://github.com/prismicio/slice-canvas/actions?query=workflow%3Aci
 [codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-canvas.svg
 [codecov-href]: https://codecov.io/gh/prismicio/slice-canvas
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/slice-canvas-client.svg
-[license-href]: https://npmjs.com/package/@prismicio/slice-canvas-client
+[license-src]: https://img.shields.io/npm/l/@prismicio/slice-canvas-renderer.svg
+[license-href]: https://npmjs.com/package/@prismicio/slice-canvas-renderer
