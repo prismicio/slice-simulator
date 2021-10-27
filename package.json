@@ -6,26 +6,32 @@
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"scripts": {
 		"build": "npm run build --workspaces --if-present",
-		"dev": "npm run dev --workspaces --if-present",
+		"dev": "npm-run-all --parallel dev:*",
+		"dev:client": "npm run dev --w packages/client",
+		"dev:com": "npm run dev --w packages/com",
+		"dev:renderer": "npm run dev --w packages/renderer",
+		"dev:renderer-vue": "npm run dev --w packages/renderer-vue",
 		"format": "prettier --write .",
 		"prepare": "npm run build",
 		"lint": "eslint --ext .js,.ts .",
 		"test": "npm run lint && npm run unit --workspaces --if-present"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
+		"@typescript-eslint/eslint-plugin": "^5.2.0",
+		"@typescript-eslint/parser": "^5.2.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-tsdoc": "^0.2.14",
+		"npm-run-all": "^4.1.5",
 		"prettier": "^2.4.1",
-		"prettier-plugin-jsdoc": "^0.3.24",
-		"typescript": "^4.4.4"
+		"prettier-plugin-jsdoc": "^0.3.24"
 	},
 	"workspaces": [
 		"packages/client",
-		"packages/vue"
+		"packages/com",
+		"packages/renderer",
+		"packages/renderer-vue"
 	],
 	"engines": {
 		"node": ">=12.7.0"
