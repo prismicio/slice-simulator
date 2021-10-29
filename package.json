@@ -12,7 +12,6 @@
 		"dev:renderer": "npm run dev --w packages/renderer",
 		"dev:renderer-vue": "npm run dev --w packages/renderer-vue",
 		"format": "prettier --write .",
-		"prepare": "npm run build",
 		"lint": "eslint --ext .js,.ts .",
 		"test": "npm run lint && npm run unit --workspaces --if-present"
 	},
