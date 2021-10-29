@@ -17,7 +17,7 @@
 import Vue, { PropType } from "vue";
 import { ExtendedVue } from "vue/types/vue";
 
-import { RendererAPI, MessageType } from "@prismicio/slice-canvas-com";
+import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
 	getDefaultState,
@@ -47,17 +47,20 @@ export default {
 		};
 	},
 	mounted(this: SliceCanvasOptions) {
-		this.stateManager.on("loaded", (state) => {
-			console.log(state);
-
+		this.stateManager.on("loaded", async (state) => {
 			this.state = state;
 
 			const api = new RendererAPI({
-				[MessageType.GetLibraries]: () => this.stateManager.getLibraries(),
-				[MessageType.SetSlicesByID]: (message) => {
-					this.slices = this.stateManager.getSlicesByID(message.data);
+				[ClientRequestType.GetLibraries]: () => this.stateManager.getLibraries(),
+				[ClientRequestType.SetSliceZone]: (message) => {
+					this.slices = message.data;
+				},
+				[ClientRequestType.SetSliceZoneFromSliceIDs]: (message) => {
+					this.slices = this.stateManager.setSliceZoneFromSliceIDs(message.data);
 				}
 			}, { debug: process.env.NODE_ENV === "development" });
+
+			await api.ready();
 		});
 
 		this.stateManager.load(this.statePredicate);
