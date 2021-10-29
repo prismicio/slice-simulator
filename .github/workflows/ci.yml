@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [16]
+        node: [12]
 
     steps:
       - uses: actions/setup-node@v2
@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci --ignore-scripts
+        run: npm install --global npm@^7.0.0 && npm ci --ignore-scripts
 
       - name: Lint
         run: npm run lint
