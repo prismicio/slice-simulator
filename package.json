@@ -31,11 +31,12 @@
 		"prettier": "^2.4.1",
 		"prettier-plugin-jsdoc": "^0.3.24"
 	},
+	"//": "Order matters!",
 	"workspaces": [
-		"packages/client",
-		"packages/com",
 		"packages/renderer",
-		"packages/renderer-vue"
+		"packages/com",
+		"packages/renderer-vue",
+		"packages/client"
 	],
 	"engines": {
 		"node": ">=12.7.0"
