@@ -3,7 +3,7 @@
 		<template #sidebar>
 			<slice-list v-if="rendererState.libraries" :library="rendererState.libraries[0]" />
 		</template>
-		<slice-iframe :slice="current.slice" :variation="current.variation" />
+		<slice-iframe :src="src" />
 	</with-sidebar>
 </template>
 
@@ -13,19 +13,10 @@ import { ref } from "vue";
 import { state as rendererState } from "~/store/renderer";
 
 import WithSidebar from '~/components/layouts/WithSidebar.vue';
-import SliceList from "~/components/display/slice/List.vue"
-import SliceIframe from "~/components/display/slice/Iframe.vue"
+import SliceList from "~/components/display/slice/List.vue";
+import SliceIframe from "~/components/controls/slice/Iframe.vue";
 
-const current = ref({
-	slice: {
-		name: "SimpleHero",
-		id: "simple-hero",
-	},
-	variation: {
-		name: "With a House",
-		id: "with-a-house"
-	}
-});
+const src = ref("http://localhost:3000/slice-canvas");
 
-defineExpose({ rendererState, current });
+defineExpose({ rendererState, src });
 </script>

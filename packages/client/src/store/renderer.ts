@@ -1,4 +1,4 @@
-import { Ref, ref, toRaw, unref } from "vue";
+import { Ref, ref, unref } from "vue";
 
 import {
 	LibrarySummary,
@@ -26,7 +26,7 @@ export const setCurrent = (
 	variation: VariationSummary | Ref<VariationSummary>,
 ): void => {
 	state.value.current = {
-		slice: unref(toRaw(slice)),
-		variation: unref(toRaw(variation)),
+		slice: unref(slice),
+		variation: unref(variation),
 	};
 };
