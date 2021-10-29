@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Slice, SliceZone } from "@prismicio/types";
+import { SliceZone } from "@prismicio/types";
 
-import {
-	SliceCanvasProps,
-	LibrarySummary,
-	SliceSummary,
-	VariationSummary,
-} from "./types";
+import { SliceCanvasProps, LibrarySummary } from "./types";
 import { getDefaultState } from "./getDefaultState";
 import { EventEmitter } from "./lib/EventEmitter";
 
@@ -49,6 +44,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this.emit("loaded", this.state);
 	}
 
+	// TODO: Temporary solution, should be refactored
 	getLibraries(): LibrarySummary[] {
 		if (this.state.status !== StateManagerStatus.Loaded || !this.state.data) {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
@@ -73,11 +69,11 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		});
 	}
 
-	// TODO: Refactor as part of core?
-	getSlicesByID(
+	// TODO: Temporary solution, should be refactored
+	setSliceZoneFromSliceIDs(
 		slices: {
-			slice: SliceSummary;
-			variation: VariationSummary;
+			sliceID: string;
+			variationID: string;
 		}[],
 	): SliceZone {
 		if (this.state.status !== StateManagerStatus.Loaded || !this.state.data) {
@@ -94,8 +90,8 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		return slices.map((slice) => {
 			return allMocks.find((mock: any) => {
 				return (
-					mock.slice_type === slice.slice.id &&
-					mock.variation === slice.variation.id
+					mock.slice_type === slice.sliceID &&
+					mock.variation === slice.variationID
 				);
 			});
 		}) as unknown as SliceZone;

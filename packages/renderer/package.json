@@ -41,7 +41,7 @@
 	},
 	"dependencies": {
 		"@prismicio/types": "^0.1.15",
-		"slicemachine-core": "file:../../../slice-machine/packages/slicemachine-core"
+		"@slicemachine/core": "0.1.1-slicecanvas.0"
 	},
 	"devDependencies": {
 		"ava": "^3.15.0",

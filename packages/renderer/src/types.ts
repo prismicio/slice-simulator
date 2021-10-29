@@ -1,5 +1,5 @@
 import { SliceZone } from "@prismicio/types";
-import { Library } from "slicemachine-core/models/Library";
+import { Library } from "@slicemachine/core/models/Library";
 
 import type { StateManager } from "./StateManager";
 
