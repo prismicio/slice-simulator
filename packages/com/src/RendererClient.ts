@@ -1,28 +1,57 @@
-import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
+import {
+	ChannelEmitter,
+	TransactionMethod,
+	AllChannelEmitterOptions,
+	TransactionsMethods,
+} from "./channel";
+import {
+	APITransactions,
+	ClientRequestType,
+	ClientTransactions,
+} from "./types";
 
-import { ChannelSender } from "./lib";
-import { Messages, MessageType, SuccessResponse } from "./types";
+export const rendererClientDefaultOptions: Partial<AllChannelEmitterOptions> = {
+	requestIDPrefix: "client-",
+};
 
-export class RendererClient extends ChannelSender<Messages> {
+export class RendererClient
+	extends ChannelEmitter<APITransactions>
+	implements TransactionsMethods<ClientTransactions>
+{
 	constructor(
 		target: HTMLIFrameElement,
-		options?: { debug?: boolean; timeout?: number },
+		options: Partial<AllChannelEmitterOptions>,
 	) {
-		super(target, options);
+		super(target, {}, { ...rendererClientDefaultOptions, ...options });
 	}
 
-	// TODO: Return type should be inferred from Messages
-	async ping(): Promise<SuccessResponse<undefined>> {
-		return await this.postMessage(MessageType.Ping);
-	}
+	[ClientRequestType.Ping]: TransactionMethod<
+		ClientTransactions[ClientRequestType.Ping]
+	> = async () => {
+		return await this.postFormattedRequest(ClientRequestType.Ping);
+	};
 
-	async getLibraries(): Promise<SuccessResponse<LibrarySummary[]>> {
-		return await this.postMessage(MessageType.GetLibraries);
-	}
+	[ClientRequestType.GetLibraries]: TransactionMethod<
+		ClientTransactions[ClientRequestType.GetLibraries]
+	> = async () => {
+		return await this.postFormattedRequest(ClientRequestType.GetLibraries);
+	};
 
-	async setSlicesByID(
-		data: Messages[MessageType.SetSlicesByID]["data"],
-	): Promise<SuccessResponse> {
-		return await this.postMessage(MessageType.SetSlicesByID, data);
-	}
+	[ClientRequestType.SetSliceZone]: TransactionMethod<
+		ClientTransactions[ClientRequestType.SetSliceZone]
+	> = async (data) => {
+		return await this.postFormattedRequest(
+			ClientRequestType.SetSliceZone,
+			data,
+		);
+	};
+
+	[ClientRequestType.SetSliceZoneFromSliceIDs]: TransactionMethod<
+		ClientTransactions[ClientRequestType.SetSliceZoneFromSliceIDs]
+	> = async (data) => {
+		return await this.postFormattedRequest(
+			ClientRequestType.SetSliceZoneFromSliceIDs,
+			data,
+		);
+	};
 }

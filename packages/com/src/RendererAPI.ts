@@ -1,39 +1,56 @@
-import { ChannelReceiver } from "./lib";
-import { MessageType, Messages } from "./types";
+import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
 
-export class RendererAPI extends ChannelReceiver<Messages> {
+import { AllChannelReceiverOptions, ChannelReceiver } from "./channel";
+import { ClientRequestType, ClientTransactions } from "./types";
+
+export type ForeignHandlers = {
+	[ClientRequestType.GetLibraries]: (
+		request: ClientTransactions[ClientRequestType.GetLibraries]["request"],
+	) => LibrarySummary[];
+
+	[ClientRequestType.SetSliceZone]: (
+		request: ClientTransactions[ClientRequestType.SetSliceZone]["request"],
+	) => void;
+
+	[ClientRequestType.SetSliceZoneFromSliceIDs]: (
+		request: ClientTransactions[ClientRequestType.SetSliceZoneFromSliceIDs]["request"],
+	) => void;
+};
+
+export const rendererAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
+	requestIDPrefix: "renderer-",
+};
+
+export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 	constructor(
-		handlers: { [key in keyof Messages]?: (message: Messages[key]) => unknown },
-		options?: { debug?: boolean },
+		requestHandlers: ForeignHandlers,
+		options: Partial<AllChannelReceiverOptions>,
 	) {
-		// TODO: Refactor for clarity maybe(?)
-		const handleForeignMethod = <T extends Messages[keyof Messages]>(
-			callback: (message: T, handler: (message: T) => unknown) => unknown,
-		) => {
-			return (message: T) => {
-				const handler = handlers[message.type];
-				if (!handler) {
-					this.sendError(message.id, 501);
-				} else {
-					callback(message, handler as (message: T) => unknown);
-				}
-			};
-		};
-
-		// TODO: This needs to have a better interface
 		super(
 			{
-				[MessageType.Ping]: (message) => {
-					this.sendSuccess(message.id, 200, "pong");
+				[ClientRequestType.Ping]: (request) => {
+					return this.postSuccessResponse(request.requestID, "pong");
 				},
-				[MessageType.GetLibraries]: handleForeignMethod((message, handler) => {
-					this.sendSuccess(message.id, 200, handler(message));
-				}),
-				[MessageType.SetSlicesByID]: handleForeignMethod((message, handler) => {
-					this.sendSuccess(message.id, 200, handler(message));
-				}),
+				[ClientRequestType.GetLibraries]: (request) => {
+					return this.postSuccessResponse(
+						request.requestID,
+						requestHandlers[request.type](request),
+					);
+				},
+				[ClientRequestType.SetSliceZone]: (request) => {
+					return this.postSuccessResponse(
+						request.requestID,
+						requestHandlers[request.type](request),
+					);
+				},
+				[ClientRequestType.SetSliceZoneFromSliceIDs]: (request) => {
+					return this.postSuccessResponse(
+						request.requestID,
+						requestHandlers[request.type](request),
+					);
+				},
 			},
-			options,
+			{ ...rendererAPIDefaultOptions, ...options },
 		);
 	}
 }

@@ -21,6 +21,6 @@
 			"section": "Chore"
 		}
 	],
-	"tagPrefix": "@prismicio/slice-canvas-renderer@",
+	"tagPrefix": "@prismicio/slice-canvas-com@",
 	"path": "."
 }
