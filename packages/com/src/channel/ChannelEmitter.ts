@@ -5,6 +5,7 @@ import {
 } from "./ChannelNetwork";
 import {
 	createSuccessResponseMessage,
+	createErrorResponseMessage,
 	isRequestMessage,
 	validateMessage,
 } from "./message";
@@ -23,12 +24,12 @@ import {
 } from "./types";
 
 export type ChannelEmitterOptions = {
-	connectionTimeout: number;
+	connectTimeout: number;
 };
 
 export const channelEmitterDefaultOptions: ChannelEmitterOptions &
 	Partial<ChannelNetworkOptions> = {
-	connectionTimeout: 20000,
+	connectTimeout: 20000,
 	requestIDPrefix: "emitter-",
 };
 
@@ -50,9 +51,18 @@ export abstract class ChannelEmitter<
 
 		return this._channel;
 	}
-	protected set channel(channel: MessageChannel) {
+	protected set channel(channel: MessageChannel | null) {
 		this._channel = channel;
+
+		// Update port automatically
+		if (this._channel) {
+			this.port = this._channel.port1;
+		} else {
+			this.port = null;
+		}
 	}
+	private _receiverReady = false;
+	private _receiverReadyCallback: (() => Promise<void>) | null = null;
 	private _connected = false;
 
 	constructor(
@@ -63,12 +73,25 @@ export abstract class ChannelEmitter<
 		super(requestHandlers, { ...channelEmitterDefaultOptions, ...options });
 
 		this._target = target;
+
+		window.addEventListener("message", this._onPublicMessage.bind(this));
 	}
 
-	connect(reconnect = false): Promise<SuccessResponseMessage> {
-		this.channel = new MessageChannel();
-		this.port = this.channel.port1;
+	/**
+	 * Initiates connection to receiver
+	 */
+	connect(newOrigin = false): Promise<SuccessResponseMessage> {
+		// Disconnect first
+		this.disconnect();
+		// If changing origin we'll need to wait for receiver to be ready again
+		if (newOrigin) {
+			this._receiverReady = false;
+		}
 
+		// Create new message channel (set up port automatically)
+		this.channel = new MessageChannel();
+
+		// Handshake promise
 		return new Promise<SuccessResponseMessage>((resolve, reject) => {
 			// Wait for target to be loaded
 			this._target.addEventListener(
@@ -79,61 +102,20 @@ export abstract class ChannelEmitter<
 						throw new Error("Target window is not available");
 					}
 
-					const readyTimeout = setTimeout(() => {
+					const receiverReadyTimeout = setTimeout(() => {
 						reject(new ConnectionTimeoutError());
-					}, this.options.connectionTimeout);
+					}, this.options.connectTimeout);
 
 					// Connect to target once ready
-					const onReadyConnect = async (
-						event?: MessageEvent<unknown>,
-					): Promise<void> => {
-						if (this.options.debug && event) {
-							// eslint-disable-next-line no-console
-							console.debug(event.data);
-						}
-
-						let maybeReadyResponse: SuccessResponseMessage | null = null;
-
-						// If not reconnecting...
-						if (!reconnect) {
-							if (!event || event.source !== this._target.contentWindow) {
-								// ...return if no event or event is not from target...
-								return;
-							} else {
-								// ...otherwise, return if not valid or ready message
-								try {
-									const message = validateMessage(event.data);
-
-									if (
-										!isRequestMessage(message) ||
-										message.type !== InternalReceiverRequestType.Ready
-									) {
-										return;
-									} else {
-										maybeReadyResponse = createSuccessResponseMessage(
-											message.requestID,
-											undefined,
-										);
-									}
-								} catch (error) {
-									if (error instanceof TypeError) {
-									} else {
-										throw error;
-									}
-								}
-							}
-						}
-
-						// Clear ready timeout
-						clearTimeout(readyTimeout);
+					const receiverReadyCallback = async (): Promise<void> => {
+						// Clear receiver ready timeout
+						clearTimeout(receiverReadyTimeout);
 
 						// Conclude handshake by sending message channel port to target
 						const request = this.createRequestMessage(
 							InternalEmitterRequestType.Connect,
 							undefined,
 						);
-
-						// Send port
 						const response = await this.postRequest<
 							RequestMessage<InternalEmitterRequestType.Connect>,
 							ResponseMessage
@@ -145,31 +127,94 @@ export abstract class ChannelEmitter<
 							]);
 						});
 
-						// Answer ready message if neceassary
-						if (maybeReadyResponse) {
-							this.postResponse(maybeReadyResponse);
-						}
-
+						// If post request succeed, we're connected
 						this._connected = true;
-
-						if (!reconnect) {
-							window.addEventListener("message", onReadyConnect.bind(this));
-						}
 
 						resolve(response);
 					};
 
-					if (reconnect) {
-						// Target is assumed already ready upon reconnection
-						onReadyConnect();
+					if (this._receiverReady) {
+						// If receiver is already ready, send port immediately
+						receiverReadyCallback();
 					} else {
-						// Listen for target to be ready
-						window.addEventListener("message", onReadyConnect.bind(this));
+						// Else wait for receiver to be ready
+						this._receiverReadyCallback = receiverReadyCallback;
 					}
 				},
 				{ once: true },
 			);
 		});
+	}
+
+	/**
+	 * Destroys current connection to receiver if any
+	 */
+	disconnect() {
+		this._connected = false;
+		this.channel = null;
+	}
+
+	/**
+	 * Handles public messages
+	 */
+	private async _onPublicMessage(event: MessageEvent<unknown>): Promise<void> {
+		// Return is event is not from target
+		if (event.source !== this._target.contentWindow) {
+			return;
+		}
+
+		try {
+			const message = validateMessage(event.data);
+
+			if (isRequestMessage(message)) {
+				if (this.options.debug) {
+					// eslint-disable-next-line no-console
+					console.debug(event.data);
+				}
+
+				switch (message.type) {
+					case InternalReceiverRequestType.Ready:
+						this.postResponse(
+							createSuccessResponseMessage(message.requestID, undefined),
+							(response) => {
+								(event.source as WindowProxy).postMessage(
+									response,
+									event.origin,
+								);
+							},
+						);
+
+						this._receiverReady = true;
+
+						// If emitter if waiting for receiver to be ready
+						if (this._receiverReadyCallback) {
+							await this._receiverReadyCallback();
+							this._receiverReadyCallback = null;
+						}
+						break;
+
+					default:
+						this.postResponse(
+							createErrorResponseMessage(message.requestID, undefined),
+							(response) => {
+								(event.source as WindowProxy).postMessage(
+									response,
+									event.origin,
+								);
+							},
+						);
+						break;
+				}
+			} else {
+				// No response messages are expected on public channel
+			}
+		} catch (error) {
+			if (error instanceof TypeError) {
+				// Ignore unknown messages
+			} else {
+				throw error;
+			}
+		}
 	}
 
 	protected postFormattedRequest<

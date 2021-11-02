@@ -86,7 +86,7 @@ export abstract class ChannelNetwork<
 		return createRequestMessage(type, data, this.options.requestIDPrefix);
 	}
 
-	private async onMessage(event: MessageEvent<unknown>): Promise<void> {
+	protected async onMessage(event: MessageEvent<unknown>): Promise<void> {
 		if (this.options.debug) {
 			// eslint-disable-next-line no-console
 			console.debug(event.data);

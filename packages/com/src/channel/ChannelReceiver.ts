@@ -7,6 +7,7 @@ import {
 	createSuccessResponseMessage,
 	validateMessage,
 	isRequestMessage,
+	createErrorResponseMessage,
 } from "./message";
 import { NotReadyError } from "./errors";
 import {
@@ -17,12 +18,18 @@ import {
 	TransactionsHandlers,
 	InternalReceiverRequestType,
 	ExtractSuccessResponseMessage,
+	RequestMessage,
+	ResponseMessage,
+	InternalEmitterRequestType,
 } from "./types";
 
-export type ChannelReceiverOptions = Record<string, unknown>;
+export type ChannelReceiverOptions = {
+	readyTimeout: number;
+};
 
 export const channelReceiverDefaultOptions: ChannelReceiverOptions &
 	Partial<ChannelNetworkOptions> = {
+	readyTimeout: 20000,
 	requestIDPrefix: "receiver-",
 };
 
@@ -43,48 +50,90 @@ export abstract class ChannelReceiver<
 	) {
 		super(requestHandlers, { ...channelReceiverDefaultOptions, ...options });
 
-		window.addEventListener("message", this._onConnection.bind(this));
+		window.addEventListener("message", this._onPublicMessage.bind(this));
 	}
 
+	/**
+	 * Tells the emitter that receiver is ready
+	 */
 	public async ready(): Promise<SuccessResponseMessage> {
 		if (window.parent === window) {
 			throw new Error("Receiver is currently not embedded as an iframe");
 		}
+
+		this._ready = false;
 
 		const request = this.createRequestMessage(
 			InternalReceiverRequestType.Ready,
 			undefined,
 		);
 
-		return await this.postRequest(request, (request) => {
-			window.parent.postMessage(request, "*");
-		});
+		const response = await this.postRequest<
+			RequestMessage<InternalReceiverRequestType.Ready>,
+			ResponseMessage
+		>(
+			request,
+			(request) => {
+				window.parent.postMessage(request, "*");
+			},
+			{
+				timeout: this.options.readyTimeout,
+			},
+		);
+
+		this._ready = true;
+
+		return response;
 	}
 
-	private _onConnection(event: MessageEvent<unknown>) {
-		if (this.options.debug) {
-			// eslint-disable-next-line no-console
-			console.debug(event.data);
-		}
-
+	/**
+	 * Handles public messages
+	 */
+	private _onPublicMessage(event: MessageEvent<unknown>): void {
 		try {
-			const request = validateMessage(event.data);
+			const message = validateMessage(event.data);
 
-			if (isRequestMessage(request)) {
-				this.port = event.ports[0];
+			if (isRequestMessage(message)) {
+				if (this.options.debug) {
+					// eslint-disable-next-line no-console
+					console.debug(event.data);
+				}
 
-				const response = createSuccessResponseMessage(
-					request.requestID,
-					undefined,
-				);
+				switch (message.type) {
+					case InternalEmitterRequestType.Connect:
+						this.port = event.ports[0];
 
-				this.postResponse(response);
+						const response = createSuccessResponseMessage(
+							message.requestID,
+							undefined,
+						);
 
-				this._ready = true;
+						this.postResponse(response);
+
+						this._ready = true;
+						break;
+
+					default:
+						this.postResponse(
+							createErrorResponseMessage(message.requestID, undefined),
+							(response) => {
+								(event.source as WindowProxy).postMessage(
+									response,
+									event.origin,
+								);
+							},
+						);
+						break;
+				}
+			} else {
+				// Forward response messages to default message handler if necessary
+				if (!this._ready) {
+					this.onMessage(event);
+				}
 			}
 		} catch (error) {
 			if (error instanceof TypeError) {
-				return console.warn(error.message);
+				// Ignore unknown messages
 			} else {
 				throw error;
 			}
