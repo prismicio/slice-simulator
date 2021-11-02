@@ -26,8 +26,8 @@ const iframe = ref<HTMLIFrameElement | null>(null);
 
 let client: RendererClient | null = null;
 
-const updateClient = async (reconnect = false) => {
-	await client!.connect(reconnect);
+const updateClient = async (newOrigin = false) => {
+	await client!.connect(newOrigin);
 	await client!.ping();
 
 	const { data: libraries } = await client!.getLibraries();
