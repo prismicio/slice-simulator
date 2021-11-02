@@ -39,15 +39,18 @@ export const SliceCanvasRenderer = Vue.extend<
 
 			const api = new RendererAPI(
 				{
-					[ClientRequestType.GetLibraries]: () =>
-						this.stateManager.getLibraries(),
-					[ClientRequestType.SetSliceZone]: (message) => {
-						this.slices = message.data;
+					[ClientRequestType.GetLibraries]: (req, res) => {
+						return res.success(this.stateManager.getLibraries());
 					},
-					[ClientRequestType.SetSliceZoneFromSliceIDs]: (message) => {
-						this.slices = this.stateManager.setSliceZoneFromSliceIDs(
-							message.data,
-						);
+					[ClientRequestType.SetSliceZone]: (req, res) => {
+						this.slices = req.data;
+
+						return res.success();
+					},
+					[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
+						this.slices = this.stateManager.setSliceZoneFromSliceIDs(req.data);
+
+						return res.success();
 					},
 				},
 				{ debug: process.env.NODE_ENV === "development" },

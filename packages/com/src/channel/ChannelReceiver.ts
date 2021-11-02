@@ -15,7 +15,7 @@ import {
 	UnknownResponseMessage,
 	UnknownTransaction,
 	TransactionsHandlers,
-	ReceiverRequestType,
+	InternalReceiverRequestType,
 	ExtractSuccessResponseMessage,
 } from "./types";
 
@@ -52,7 +52,7 @@ export abstract class ChannelReceiver<
 		}
 
 		const request = this.createRequestMessage(
-			ReceiverRequestType.Ready,
+			InternalReceiverRequestType.Ready,
 			undefined,
 		);
 

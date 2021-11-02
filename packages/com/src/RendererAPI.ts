@@ -1,54 +1,47 @@
-import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
-
-import { AllChannelReceiverOptions, ChannelReceiver } from "./channel";
+import {
+	AllChannelReceiverOptions,
+	ChannelReceiver,
+	RequestMessage,
+	ResponseMessage,
+	Transaction,
+	TransactionHandler,
+	TransactionsHandlers,
+} from "./channel";
 import { ClientRequestType, ClientTransactions } from "./types";
-
-export type ForeignHandlers = {
-	[ClientRequestType.GetLibraries]: (
-		request: ClientTransactions[ClientRequestType.GetLibraries]["request"],
-	) => LibrarySummary[];
-
-	[ClientRequestType.SetSliceZone]: (
-		request: ClientTransactions[ClientRequestType.SetSliceZone]["request"],
-	) => void;
-
-	[ClientRequestType.SetSliceZoneFromSliceIDs]: (
-		request: ClientTransactions[ClientRequestType.SetSliceZoneFromSliceIDs]["request"],
-	) => void;
-};
 
 export const rendererAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
 	requestIDPrefix: "renderer-",
 };
 
+export const notImplementedHandler: TransactionHandler<
+	// This is the onl
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	Transaction<RequestMessage<any, any>, ResponseMessage<any, any>>
+> = (_res, res) => {
+	return res.error(undefined, 501);
+};
+
 export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 	constructor(
-		requestHandlers: ForeignHandlers,
+		requestHandlers: Partial<TransactionsHandlers<ClientTransactions>>,
 		options: Partial<AllChannelReceiverOptions>,
 	) {
 		super(
 			{
-				[ClientRequestType.Ping]: (request) => {
-					return this.postSuccessResponse(request.requestID, "pong");
-				},
-				[ClientRequestType.GetLibraries]: (request) => {
-					return this.postSuccessResponse(
-						request.requestID,
-						requestHandlers[request.type](request),
-					);
-				},
-				[ClientRequestType.SetSliceZone]: (request) => {
-					return this.postSuccessResponse(
-						request.requestID,
-						requestHandlers[request.type](request),
-					);
-				},
-				[ClientRequestType.SetSliceZoneFromSliceIDs]: (request) => {
-					return this.postSuccessResponse(
-						request.requestID,
-						requestHandlers[request.type](request),
-					);
-				},
+				[ClientRequestType.Ping]:
+					requestHandlers[ClientRequestType.Ping] ||
+					((_res, res) => {
+						return res.success("pong");
+					}),
+				[ClientRequestType.GetLibraries]:
+					requestHandlers[ClientRequestType.GetLibraries] ||
+					notImplementedHandler,
+				[ClientRequestType.SetSliceZone]:
+					requestHandlers[ClientRequestType.SetSliceZone] ||
+					notImplementedHandler,
+				[ClientRequestType.SetSliceZoneFromSliceIDs]:
+					requestHandlers[ClientRequestType.SetSliceZoneFromSliceIDs] ||
+					notImplementedHandler,
 			},
 			{ ...rendererAPIDefaultOptions, ...options },
 		);

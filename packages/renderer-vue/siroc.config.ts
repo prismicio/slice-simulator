@@ -5,5 +5,6 @@ export default defineSirocConfig({
 		output: {
 			sourcemap: true,
 		},
+		externals: ["~~/.slicemachine/slice-canvas-state.json"],
 	},
 });

@@ -20,7 +20,7 @@ export type SuccessResponseMessage<TData = void> = {
 
 export type ErrorResponseMessage<TError = unknown> = {
 	data?: never;
-	error: TError;
+	error: unknown | TError;
 } & ResponseMessageBase;
 
 export type ResponseMessage<TData = void, TError = unknown> =
@@ -73,9 +73,17 @@ export type TransactionHandler<
 	>,
 > = (
 	request: TTransaction["request"],
-) =>
-	| Promise<ExtractSuccessResponseMessage<TTransaction["response"]>>
-	| ExtractSuccessResponseMessage<TTransaction["response"]>;
+	response: {
+		success: (
+			data: ExtractSuccessResponseMessage<TTransaction["response"]>["data"],
+			status?: number,
+		) => ExtractSuccessResponseMessage<TTransaction["response"]>;
+		error: (
+			error: ExtractErrorResponseMessage<TTransaction["response"]>["error"],
+			status?: number,
+		) => ExtractErrorResponseMessage<TTransaction["response"]>;
+	},
+) => Promise<TTransaction["response"]> | TTransaction["response"];
 
 export type TransactionsMethods<
 	TTransactions extends Record<string, UnknownTransaction>,
@@ -100,23 +108,23 @@ export type UnknownTransactionMethod = TransactionMethod<UnknownTransaction>;
 export type UnknownTransactionHandler = TransactionHandler<UnknownTransaction>;
 
 // Emitter
-export enum EmitterRequestType {
+export enum InternalEmitterRequestType {
 	Connect = "connect",
 }
 
-export type EmitterTransactions = {
-	[EmitterRequestType.Connect]: Transaction<
-		RequestMessage<EmitterRequestType.Connect>
+export type InternalEmitterTransactions = {
+	[InternalEmitterRequestType.Connect]: Transaction<
+		RequestMessage<InternalEmitterRequestType.Connect>
 	>;
 };
 
 // Receiver
-export enum ReceiverRequestType {
+export enum InternalReceiverRequestType {
 	Ready = "ready",
 }
 
-export type ReceiverTransactions = {
-	[ReceiverRequestType.Ready]: Transaction<
-		RequestMessage<ReceiverRequestType.Ready>
+export type InternalReceiverTransactions = {
+	[InternalReceiverRequestType.Ready]: Transaction<
+		RequestMessage<InternalReceiverRequestType.Ready>
 	>;
 };

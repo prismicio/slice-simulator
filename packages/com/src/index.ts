@@ -1,7 +1,6 @@
 export { RendererClient, rendererClientDefaultOptions } from "./RendererClient";
 
 export { RendererAPI, rendererAPIDefaultOptions } from "./RendererAPI";
-export type { ForeignHandlers } from "./RendererAPI";
 
 export {
 	// Validators

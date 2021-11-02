@@ -37,7 +37,10 @@ export {
 	PortNotSetError,
 } from "./errors";
 
-export { EmitterRequestType, ReceiverRequestType } from "./types";
+export {
+	InternalEmitterRequestType,
+	InternalReceiverRequestType,
+} from "./types";
 export type {
 	// Messages
 	RequestMessage,
@@ -63,7 +66,7 @@ export type {
 	UnknownTransactionMethod,
 	UnknownTransactionHandler,
 	// Emitter
-	EmitterTransactions,
+	InternalEmitterTransactions,
 	// Receiver
-	ReceiverTransactions,
+	InternalReceiverTransactions,
 } from "./types";

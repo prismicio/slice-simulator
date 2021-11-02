@@ -13,8 +13,6 @@ import {
 } from "./errors";
 import {
 	RequestMessage,
-	SuccessResponseMessage,
-	ErrorResponseMessage,
 	ExtractSuccessResponseMessage,
 	TransactionsHandlers,
 	UnknownRequestMessage,
@@ -101,7 +99,21 @@ export abstract class ChannelNetwork<
 						createErrorResponseMessage(message.requestID, undefined, 400),
 					);
 				} else {
-					await this.requestHandlers[message.type](message);
+					try {
+						const response = await this.requestHandlers[message.type](message, {
+							success: createSuccessResponseMessage.bind(
+								this,
+								message.requestID,
+							),
+							error: createErrorResponseMessage.bind(this, message.requestID),
+						});
+
+						this.postResponse(response);
+					} catch (error) {
+						this.postResponse(
+							createErrorResponseMessage(message.requestID, error, 500),
+						);
+					}
 				}
 			} else {
 				if (!this._pendingRequests.has(message.requestID)) {
@@ -171,31 +183,5 @@ export abstract class ChannelNetwork<
 		postMessage(response);
 
 		return response;
-	}
-
-	protected postSuccessResponse<TData = undefined>(
-		requestID: string,
-		data: TData,
-		status = 200,
-		postMessage = (response: SuccessResponseMessage<TData>): void =>
-			this.port.postMessage(response),
-	): SuccessResponseMessage<TData> {
-		return this.postResponse(
-			createSuccessResponseMessage(requestID, data, status),
-			postMessage,
-		);
-	}
-
-	protected postErrorResponse<TError = undefined>(
-		requestID: string,
-		error: TError,
-		status = 400,
-		postMessage = (response: ErrorResponseMessage<TError>): void =>
-			this.port.postMessage(response),
-	): ErrorResponseMessage<TError> {
-		return this.postResponse(
-			createErrorResponseMessage(requestID, error, status),
-			postMessage,
-		);
 	}
 }

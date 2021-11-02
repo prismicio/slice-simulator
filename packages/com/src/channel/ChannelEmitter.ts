@@ -18,8 +18,8 @@ import {
 	UnknownResponseMessage,
 	TransactionsHandlers,
 	UnknownTransaction,
-	EmitterRequestType,
-	ReceiverRequestType,
+	InternalEmitterRequestType,
+	InternalReceiverRequestType,
 } from "./types";
 
 export type ChannelEmitterOptions = {
@@ -106,7 +106,7 @@ export abstract class ChannelEmitter<
 
 									if (
 										!isRequestMessage(message) ||
-										message.type !== ReceiverRequestType.Ready
+										message.type !== InternalReceiverRequestType.Ready
 									) {
 										return;
 									} else {
@@ -129,13 +129,13 @@ export abstract class ChannelEmitter<
 
 						// Conclude handshake by sending message channel port to target
 						const request = this.createRequestMessage(
-							EmitterRequestType.Connect,
+							InternalEmitterRequestType.Connect,
 							undefined,
 						);
 
 						// Send port
 						const response = await this.postRequest<
-							RequestMessage<EmitterRequestType.Connect>,
+							RequestMessage<InternalEmitterRequestType.Connect>,
 							ResponseMessage
 						>(request, (request) => {
 							// Target content window is checked in previous statement
