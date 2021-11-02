@@ -20,7 +20,7 @@ export class RendererClient
 {
 	constructor(
 		target: HTMLIFrameElement,
-		options: Partial<AllChannelEmitterOptions>,
+		options?: Partial<AllChannelEmitterOptions>,
 	) {
 		super(target, {}, { ...rendererClientDefaultOptions, ...options });
 	}

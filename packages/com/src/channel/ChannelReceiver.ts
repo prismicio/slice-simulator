@@ -46,7 +46,7 @@ export abstract class ChannelReceiver<
 
 	constructor(
 		requestHandlers: TransactionsHandlers<TEmitterTransactions>,
-		options: Partial<AllChannelReceiverOptions>,
+		options?: Partial<AllChannelReceiverOptions>,
 	) {
 		super(requestHandlers, { ...channelReceiverDefaultOptions, ...options });
 

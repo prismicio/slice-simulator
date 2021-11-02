@@ -68,7 +68,7 @@ export abstract class ChannelEmitter<
 	constructor(
 		target: HTMLIFrameElement,
 		requestHandlers: TransactionsHandlers<TReceiverTransactions>,
-		options: Partial<AllChannelEmitterOptions>,
+		options?: Partial<AllChannelEmitterOptions>,
 	) {
 		super(requestHandlers, { ...channelEmitterDefaultOptions, ...options });
 

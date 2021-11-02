@@ -24,7 +24,7 @@ export const notImplementedHandler: TransactionHandler<
 export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 	constructor(
 		requestHandlers: Partial<TransactionsHandlers<ClientTransactions>>,
-		options: Partial<AllChannelReceiverOptions>,
+		options?: Partial<AllChannelReceiverOptions>,
 	) {
 		super(
 			{
