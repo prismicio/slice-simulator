@@ -1,6 +1,6 @@
 {
 	"name": "@prismicio/slice-canvas-com",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",
@@ -39,7 +39,7 @@
 		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava"
 	},
 	"dependencies": {
-		"@prismicio/slice-canvas-renderer": "0.0.0",
+		"@prismicio/slice-canvas-renderer": "^0.0.1",
 		"statuses": "^2.0.1"
 	},
 	"devDependencies": {
