@@ -5,13 +5,13 @@
 	"license": "Apache-2.0",
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"scripts": {
-		"build": "npm-run-all build:renderer build:com --parallel build:client build:renderer-*",
-		"build:client": "npm run build --w packages/client",
+		"build": "npm-run-all build:renderer build:com --parallel build:local-controller build:renderer-*",
+		"build:local-controller": "npm run build --w packages/local-controller",
 		"build:com": "npm run build --w packages/com",
 		"build:renderer": "npm run build --w packages/renderer",
 		"build:renderer-vue": "npm run build --w packages/renderer-vue",
 		"dev": "npm-run-all --parallel dev:*",
-		"dev:client": "npm run dev --w packages/client",
+		"dev:local-controller": "npm run dev --w packages/local-controller",
 		"dev:com": "npm run dev --w packages/com",
 		"dev:renderer": "npm run dev --w packages/renderer",
 		"dev:renderer-vue": "npm run dev --w packages/renderer-vue",
@@ -36,7 +36,7 @@
 		"packages/renderer",
 		"packages/com",
 		"packages/renderer-vue",
-		"packages/client"
+		"packages/local-controller"
 	],
 	"engines": {
 		"node": ">=12.7.0"

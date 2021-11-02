@@ -1,5 +1,5 @@
 {
-  "name": "@prismicio/slice-canvas-client",
+  "name": "@prismicio/slice-canvas-local-controller",
   "version": "0.0.0",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
@@ -9,7 +9,7 @@
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/prismicio/slice-canvas.git",
-		"directory": "packages/client"
+		"directory": "packages/local-controller"
 	},
 	"license": "Apache-2.0",
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
