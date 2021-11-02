@@ -56,14 +56,16 @@ export abstract class ChannelNetwork<
 
 		return this._port;
 	}
-	protected set port(port: MessagePort) {
+	protected set port(port: MessagePort | null) {
 		// Destroy old port
 		if (this._port) {
 			this._port.onmessage = null;
 		}
 
 		this._port = port;
-		this.port.onmessage = this.onMessage.bind(this);
+		if (this._port) {
+			this._port.onmessage = this.onMessage.bind(this);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
