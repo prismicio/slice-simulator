@@ -37,7 +37,7 @@ const updateClient = async (newOrigin = false) => {
 
 onMounted(async () => {
 	if (iframe.value) {
-		client = new RendererClient(iframe.value, { debug: process.env.NODE_ENV === "development" });
+		client = new RendererClient(iframe.value, { debug: true });
 
 		watch(() => props.src, () => updateClient(true));
 		await updateClient();
