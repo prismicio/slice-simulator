@@ -43,7 +43,14 @@ export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 					requestHandlers[ClientRequestType.SetSliceZoneFromSliceIDs] ||
 					notImplementedHandler,
 			},
-			{ ...rendererAPIDefaultOptions, ...options },
+			{
+				...rendererAPIDefaultOptions,
+				// True if `debug=true` is among query parameters
+				debug: /[\?&]debug=true/i.test(
+					decodeURIComponent(window.location.search),
+				),
+				...options,
+			},
 		);
 	}
 }
