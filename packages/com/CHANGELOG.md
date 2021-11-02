@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-com@0.0.1...@prismicio/slice-canvas-com@0.0.2) (2021-11-02)
+
+
+### Features
+
+* **com:** add debug mod to renderer API ([edcfd11](https://github.com/prismicio/slice-canvas/commit/edcfd112cc5c44402391c756c4ab80a3be25d54b))
+* **com:** make options optional ([9bafadf](https://github.com/prismicio/slice-canvas/commit/9bafadf9057356fad870873b36cd75612ff09796))
+
 ### 0.0.1 (2021-11-02)
 
 
