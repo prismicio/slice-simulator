@@ -5,15 +5,12 @@ import {
 	createStateManager,
 	getDefaultState,
 	SliceCanvasData,
+	SliceCanvasOptions,
 	SliceCanvasProps,
 } from "@prismicio/slice-canvas-renderer";
+import { CreateElement, ExtendedVue } from "vue/types/vue";
 
-export const SliceCanvasRenderer = Vue.extend<
-	SliceCanvasData,
-	Record<string, never>,
-	Record<string, never>,
-	SliceCanvasProps
->({
+export const SliceCanvasRenderer = {
 	name: "SliceCanvasRenderer",
 	props: {
 		statePredicate: {
@@ -33,35 +30,32 @@ export const SliceCanvasRenderer = Vue.extend<
 			slices: [],
 		};
 	},
-	mounted() {
+	mounted(this: SliceCanvasOptions) {
 		this.stateManager.on("loaded", async (state) => {
 			this.state = state;
 
-			const api = new RendererAPI(
-				{
-					[ClientRequestType.GetLibraries]: (req, res) => {
-						return res.success(this.stateManager.getLibraries());
-					},
-					[ClientRequestType.SetSliceZone]: (req, res) => {
-						this.slices = req.data;
-
-						return res.success();
-					},
-					[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-						this.slices = this.stateManager.setSliceZoneFromSliceIDs(req.data);
-
-						return res.success();
-					},
+			const api = new RendererAPI({
+				[ClientRequestType.GetLibraries]: (req, res) => {
+					return res.success(this.stateManager.getLibraries());
 				},
-				{ debug: process.env.NODE_ENV === "development" },
-			);
+				[ClientRequestType.SetSliceZone]: (req, res) => {
+					this.slices = req.data;
+
+					return res.success();
+				},
+				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
+					this.slices = this.stateManager.setSliceZoneFromSliceIDs(req.data);
+
+					return res.success();
+				},
+			});
 
 			await api.ready();
 		});
 
 		this.stateManager.load(this.statePredicate);
 	},
-	render(h) {
+	render(this: SliceCanvasOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];
 
 		if (this.state && this.slices.length && this.$scopedSlots.default) {
@@ -90,4 +84,11 @@ export const SliceCanvasRenderer = Vue.extend<
 			children,
 		);
 	},
-});
+	// This is some weird ass trick to get around `Vue.extend` messing up `this` context, don't do this at home kids
+} as unknown as ExtendedVue<
+	Vue,
+	SliceCanvasData,
+	Record<string, never>,
+	Record<string, never>,
+	SliceCanvasProps
+>;
