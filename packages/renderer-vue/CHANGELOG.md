@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-vue@0.0.1...@prismicio/slice-canvas-renderer-vue@0.0.2) (2021-11-02)
+
+
+### Bug Fixes
+
+* **controller-vue:** prevent context lost with Vue.extend() ([21daa27](https://github.com/prismicio/slice-canvas/commit/21daa27641688e940599110eb344965ae272e6db))
+
 ### 0.0.1 (2021-11-02)
 
 
