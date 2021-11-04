@@ -14,7 +14,7 @@ export const rendererAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
 };
 
 export const notImplementedHandler: TransactionHandler<
-	// This is the onl
+	// This is the only place we need an "any transaction" type, might need a dedicated type for it if we start to use it elsewhere
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	Transaction<RequestMessage<any, any>, ResponseMessage<any, any>>
 > = (_res, res) => {
