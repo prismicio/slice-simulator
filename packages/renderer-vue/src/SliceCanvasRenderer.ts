@@ -1,4 +1,5 @@
 import Vue, { PropType, VNodeChildren } from "vue";
+import { CreateElement, ExtendedVue } from "vue/types/vue";
 
 import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
@@ -8,7 +9,6 @@ import {
 	SliceCanvasOptions,
 	SliceCanvasProps,
 } from "@prismicio/slice-canvas-renderer";
-import { CreateElement, ExtendedVue } from "vue/types/vue";
 
 export const SliceCanvasRenderer = {
 	name: "SliceCanvasRenderer",
@@ -58,7 +58,7 @@ export const SliceCanvasRenderer = {
 	render(this: SliceCanvasOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];
 
-		if (this.state && this.slices.length && this.$scopedSlots.default) {
+		if (this.state.data && this.slices.length && this.$scopedSlots.default) {
 			children.push(
 				this.$scopedSlots.default({
 					slices: this.slices,

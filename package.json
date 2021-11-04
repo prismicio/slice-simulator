@@ -9,11 +9,13 @@
 		"build:local-controller": "npm run build --w packages/local-controller",
 		"build:com": "npm run build --w packages/com",
 		"build:renderer": "npm run build --w packages/renderer",
+		"build:renderer-react": "npm run build --w packages/renderer-react",
 		"build:renderer-vue": "npm run build --w packages/renderer-vue",
 		"dev": "npm-run-all --parallel dev:*",
 		"dev:local-controller": "npm run dev --w packages/local-controller",
 		"dev:com": "npm run dev --w packages/com",
 		"dev:renderer": "npm run dev --w packages/renderer",
+		"dev:renderer-react": "npm run dev --w packages/renderer-react",
 		"dev:renderer-vue": "npm run dev --w packages/renderer-vue",
 		"format": "prettier --write .",
 		"prepare": "npm run build",
@@ -37,6 +39,7 @@
 		"packages/renderer",
 		"packages/com",
 		"packages/renderer-vue",
+		"packages/renderer-react",
 		"packages/local-controller"
 	],
 	"engines": {
