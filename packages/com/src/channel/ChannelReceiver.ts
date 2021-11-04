@@ -109,8 +109,6 @@ export abstract class ChannelReceiver<
 						);
 
 						this.postResponse(response);
-
-						this._ready = true;
 						break;
 
 					default:

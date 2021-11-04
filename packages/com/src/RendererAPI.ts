@@ -30,7 +30,7 @@ export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 			{
 				[ClientRequestType.Ping]:
 					requestHandlers[ClientRequestType.Ping] ||
-					((_res, res) => {
+					((_req, res) => {
 						return res.success("pong");
 					}),
 				[ClientRequestType.GetLibraries]:
