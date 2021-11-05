@@ -2,31 +2,29 @@
 import { SliceZone } from "@prismicio/types";
 
 import { SliceCanvasProps, LibrarySummary } from "./types";
-import { getDefaultState } from "./getDefaultState";
+import { getDefaultManagedState } from "./getDefaultManagedState";
 import { EventEmitter } from "./lib/EventEmitter";
 
-import { State, StateManagerStatus } from "./types";
+import { ManagedState, StateManagerStatus } from "./types";
 
 export type StateManagerEvents = {
-	loaded: State;
+	loaded: ManagedState;
 };
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
-	public state: State;
+	public managedState: ManagedState;
 
-	constructor(state: State = getDefaultState()) {
+	constructor(managedState: ManagedState = getDefaultManagedState()) {
 		super();
 
-		this.state = state;
+		this.managedState = managedState;
 	}
 
-	async load(predicate: SliceCanvasProps["statePredicate"]): Promise<void> {
+	async load(state: SliceCanvasProps["state"]): Promise<void> {
 		try {
-			const data = await (typeof predicate === "function"
-				? predicate()
-				: predicate);
+			const data = await (typeof state === "function" ? state() : state);
 
-			this.state = {
+			this.managedState = {
 				data: Array.isArray(data) ? data : data.default,
 				status: StateManagerStatus.Loaded,
 				error: null,
@@ -34,23 +32,26 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		} catch (error) {
 			console.error(error);
 
-			this.state = {
+			this.managedState = {
 				data: null,
 				status: StateManagerStatus.Error,
 				error: error as Error,
 			};
 		}
 
-		this.emit("loaded", this.state);
+		this.emit("loaded", this.managedState);
 	}
 
 	// TODO: Temporary solution, should be refactored
 	getLibraries(): LibrarySummary[] {
-		if (this.state.status !== StateManagerStatus.Loaded || !this.state.data) {
+		if (
+			this.managedState.status !== StateManagerStatus.Loaded ||
+			!this.managedState.data
+		) {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
 		}
 
-		return this.state.data.map((library) => {
+		return this.managedState.data.map((library) => {
 			return {
 				name: library.name,
 				slices: library.components.map((slice) => {
@@ -70,17 +71,20 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 	}
 
 	// TODO: Temporary solution, should be refactored
-	setSliceZoneFromSliceIDs(
+	getSliceZoneFromSliceIDs(
 		slices: {
 			sliceID: string;
 			variationID: string;
 		}[],
 	): SliceZone {
-		if (this.state.status !== StateManagerStatus.Loaded || !this.state.data) {
+		if (
+			this.managedState.status !== StateManagerStatus.Loaded ||
+			!this.managedState.data
+		) {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
 		}
 
-		const allMocks = this.state.data
+		const allMocks = this.managedState.data
 			.map((library) =>
 				library.components.map((slice) => slice.infos.mock).flat(),
 			)

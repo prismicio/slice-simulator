@@ -9,22 +9,24 @@ export const enum StateManagerStatus {
 	Error = "error",
 }
 
-export type State = {
+export type ManagedState = {
 	data: Library[] | null;
 	status: StateManagerStatus;
 	error: Error | null;
 };
 
 export interface SliceCanvasProps {
-	statePredicate:
+	state:
 		| (() => Promise<Library[] | { default: Library[] }>)
-		| Promise<Library[] | { default: Library[] }>;
-	zIndex: number;
+		| Promise<Library[] | { default: Library[] }>
+		| Library[]
+		| { default: Library[] };
+	zIndex?: number;
 }
 
 export interface SliceCanvasData {
 	stateManager: StateManager;
-	state: State;
+	managedState: ManagedState;
 	slices: SliceZone;
 }
 
