@@ -16,7 +16,7 @@ export const SliceCanvasRenderer = {
 	name: "SliceCanvasRenderer",
 	props: {
 		state: {
-			type: Function as PropType<SliceCanvasProps["state"]>,
+			type: [Function, Array] as PropType<SliceCanvasProps["state"]>,
 			required: true,
 		},
 		zIndex: {
@@ -35,6 +35,7 @@ export const SliceCanvasRenderer = {
 	mounted(this: SliceCanvasOptions) {
 		this.stateManager.on("loaded", async (state) => {
 			this.managedState = state;
+			this.slices = getDefaultSlices(this.stateManager);
 
 			const api = new RendererAPI({
 				[ClientRequestType.GetLibraries]: (_req, res) => {
@@ -52,7 +53,11 @@ export const SliceCanvasRenderer = {
 				},
 			});
 
-			await api.ready();
+			try {
+				await api.ready();
+			} catch (error) {
+				console.error(error);
+			}
 		});
 
 		this.stateManager.load(this.state);
@@ -65,10 +70,13 @@ export const SliceCanvasRenderer = {
 			this.slices.length &&
 			this.$scopedSlots.default
 		) {
+			// TODO: Temporary solution to mimic Storybook iframe interface
 			children.push(
-				this.$scopedSlots.default({
-					slices: this.slices,
-				}),
+				h("div", { attrs: { id: "root" } }, [
+					this.$scopedSlots.default({
+						slices: this.slices,
+					}),
+				]),
 			);
 		}
 

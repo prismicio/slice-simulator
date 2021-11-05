@@ -76,6 +76,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			sliceID: string;
 			variationID: string;
 		}[],
+		loose = false, // TODO: Temporary solution to mimic Storybook iframe interface
 	): SliceZone {
 		if (
 			this.managedState.status !== StateManagerStatus.Loaded ||
@@ -91,13 +92,24 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			.flat()
 			.filter(Boolean) as any;
 
-		return slices.map((slice) => {
-			return allMocks.find((mock: any) => {
-				return (
-					mock.slice_type === slice.sliceID &&
-					mock.variation === slice.variationID
-				);
-			});
-		}) as unknown as SliceZone;
+		return slices
+			.map((slice) => {
+				return allMocks.find((mock: any) => {
+					if (loose) {
+						return (
+							mock.slice_type.toLowerCase().replace(/[-_]/g, "") ===
+								slice.sliceID.toLowerCase().replace(/[-_]/g, "") &&
+							mock.variation.toLowerCase().replace(/[-_]/g, "") ===
+								slice.variationID.toLowerCase().replace(/[-_]/g, "")
+						);
+					} else {
+						return (
+							mock.slice_type === slice.sliceID &&
+							mock.variation === slice.variationID
+						);
+					}
+				});
+			})
+			.filter(Boolean) as SliceZone;
 	}
 }

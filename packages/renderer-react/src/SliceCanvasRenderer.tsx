@@ -28,6 +28,7 @@ export const SliceCanvasRenderer = (
 	React.useEffect(() => {
 		stateManager.on("loaded", async (state) => {
 			setManagedState(state);
+			setSlices(getDefaultSlices(stateManager));
 
 			const api = new RendererAPI({
 				[ClientRequestType.GetLibraries]: (req, res) => {
@@ -45,7 +46,11 @@ export const SliceCanvasRenderer = (
 				},
 			});
 
-			await api.ready();
+			try {
+				await api.ready();
+			} catch (error) {
+				console.error(error);
+			}
 		});
 
 		stateManager.load(props.state);
@@ -65,7 +70,10 @@ export const SliceCanvasRenderer = (
 				background: "#fefefe",
 			}}
 		>
-			{managedState.data && slices.length ? props.sliceZone(slices) : null}
+			{managedState.data && slices.length ? (
+				// TODO: Temporary solution to mimic Storybook iframe interface
+				<div id="root">{props.sliceZone(slices)}</div>
+			) : null}
 		</div>
 	);
 };
