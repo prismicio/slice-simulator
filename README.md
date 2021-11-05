@@ -19,23 +19,20 @@ Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.jso
 
 Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
-<!--
-
-TODO: Create a small list of package features:
-
-- 🤔 &nbsp;A useful feature;
-- 🥴 &nbsp;Another useful feature;
-- 🙃 &nbsp;A final useful feature.
-
-Non-breaking space: &nbsp; are here on purpose to fix emoji rendering on certain systems.
-
--->
+- 🛠 &nbsp;Minimal configuration;
+- 🖥 &nbsp;Preview and develop slices locally;
+- 🈂 &nbsp;Compatible with [React][react] & [Vue][vue].
 
 ## Install
 
 ```bash
-npm install @prismicio/slice-canvas-*
+npm install @prismicio/slice-canvas-* # `react` or `vue`
 ```
+
+For further details, refer to each packages' READMEs:
+
+- [@prismicio/slice-canvas-renderer-react](./packages/slice-canvas-renderer-react#install)
+- [@prismicio/slice-canvas-renderer-vue](./packages/slice-canvas-renderer-vue#install)
 
 ## Documentation
 
@@ -82,6 +79,8 @@ For more clarity on this project and its structure you can also check out the de
 [prismic-docs]: https://prismic.io/docs
 [changelog]: ./CHANGELOG.md
 [contributing]: ./CONTRIBUTING.md
+[react]: https://reactjs.org
+[vue]: https://vuejs.org
 
 <!-- TODO: Replace link with a more useful one if available -->
 
