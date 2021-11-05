@@ -39,7 +39,7 @@ export const channelNetworkDefaultOptions: ChannelNetworkOptions = {
 };
 
 export abstract class ChannelNetwork<
-	TOptions extends Record<string, unknown> = Record<string, never>,
+	TOptions extends Record<string, unknown> = Record<string, unknown>,
 	TPartnerTransactions extends Record<string, UnknownTransaction> = Record<
 		string,
 		never
