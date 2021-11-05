@@ -31,8 +31,8 @@ npm install @prismicio/slice-canvas-* # `react` or `vue`
 
 For further details, refer to each packages' READMEs:
 
-- [@prismicio/slice-canvas-renderer-react](./packages/slice-canvas-renderer-react#install)
-- [@prismicio/slice-canvas-renderer-vue](./packages/slice-canvas-renderer-vue#install)
+- [@prismicio/slice-canvas-renderer-react](./packages/renderer-react#install)
+- [@prismicio/slice-canvas-renderer-vue](./packages/renderer-vue#install)
 
 ## Documentation
 
