@@ -33,9 +33,9 @@ Then create a page for Slice Canvas:
 ```vue
 <!-- e.g. ~/pages/slice-canvas.vue -->
 <template>
-  <SliceCanvasRenderer :state="state" #default="{ slices }">
-    <SliceZone :slices="slices" />
-  </SliceCanvasRenderer>
+	<SliceCanvasRenderer :state="state" #default="{ slices }">
+		<SliceZone :slices="slices" />
+	</SliceCanvasRenderer>
 </template>
 
 <script>
@@ -45,13 +45,13 @@ import SliceZone from "vue-slicezone";
 import state from "~~/.slicemachine/slice-canvas-state.json";
 
 export default {
-  components: {
-    SliceCanvasRenderer,
-    SliceZone
-  },
-  data() {
-    return { state };
-  }
+	components: {
+		SliceCanvasRenderer,
+		SliceZone
+	},
+	data() {
+		return { state };
+	}
 }
 </script>
 ```
