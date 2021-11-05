@@ -56,7 +56,7 @@ export default {
 </script>
 ```
 
-⚠ &nbsp;Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that update the import to use CJS instead:
+⚠ &nbsp;Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that, update the import to use CJS instead:
 ```diff
 - import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue";
 + import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue/dist/index.cjs";
