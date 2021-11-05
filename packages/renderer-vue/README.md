@@ -29,6 +29,39 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 npm install @prismicio/slice-canvas-renderer-vue
 ```
 
+Then create a page for Slice Canvas:
+```vue
+<!-- e.g. ~/pages/slice-canvas.vue -->
+<template>
+  <SliceCanvasRenderer :state="state" #default="{ slices }">
+    <SliceZone :slices="slices" />
+  </SliceCanvasRenderer>
+</template>
+
+<script>
+import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue";
+import SliceZone from "vue-slicezone";
+
+import state from "~~/.slicemachine/slice-canvas-state.json";
+
+export default {
+  components: {
+    SliceCanvasRenderer,
+    SliceZone
+  },
+  data() {
+    return { state };
+  }
+}
+</script>
+```
+
+> ⚠ &nbsp;Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that update the import to use CJS instead:
+> ```diff
+> - import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue";
+> + import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue/dist/index.cjs";
+> ```
+
 ## Documentation
 
 To discover what's new on this package check out [the changelog][changelog]. For full documentation, visit the [official Prismic documentation][prismic-docs].
