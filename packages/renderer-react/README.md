@@ -29,6 +29,35 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 npm install @prismicio/slice-canvas-renderer-react
 ```
 
+Then create a page for Slice Canvas:
+```jsx
+// e.g. ~/pages/slice-canvas.jsx
+import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-react";
+import SliceZone from "next-slicezone";
+
+import state from "../.slicemachine/slice-canvas-state.json";
+import resolver from  "../sm-resolver";
+
+const SliceCanvas = () => (<SliceCanvasRenderer
+  // The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
+	sliceZone={(slices) => <SliceZone slices={slices} resolver={resolver} />}
+	state={state}
+/>);
+
+export default SliceCanvas;
+```
+
+⚠ &nbsp;With Next.js, make sure your transpile the renderer package:
+```javascript
+// next.config.js
+const withTM = require('next-transpile-modules')([
+	'next-slicezone',
+	'@prismicio/slice-canvas-renderer-react',
+]);
+
+module.exports = withTM();
+```
+
 ## Documentation
 
 To discover what's new on this package check out [the changelog][changelog]. For full documentation, visit the [official Prismic documentation][prismic-docs].
