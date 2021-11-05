@@ -3,7 +3,9 @@ import * as React from "react";
 import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
-	getDefaultState,
+	getDefaultManagedState,
+	getDefaultProps,
+	getDefaultSlices,
 	SliceCanvasData,
 	SliceCanvasProps,
 } from "@prismicio/slice-canvas-renderer";
@@ -15,15 +17,17 @@ export type SliceCanvasRendererProps = {
 export const SliceCanvasRenderer = (
 	props: SliceCanvasRendererProps,
 ): JSX.Element => {
+	const defaultProps = getDefaultProps();
+
 	const stateManager = createStateManager();
-	const [state, setState] = React.useState<SliceCanvasData["state"]>(
-		getDefaultState(),
+	const [managedState, setManagedState] = React.useState(
+		getDefaultManagedState(),
 	);
-	const [slices, setSlices] = React.useState<SliceCanvasData["slices"]>([]);
+	const [slices, setSlices] = React.useState(getDefaultSlices());
 
 	React.useEffect(() => {
 		stateManager.on("loaded", async (state) => {
-			setState(state);
+			setManagedState(state);
 
 			const api = new RendererAPI({
 				[ClientRequestType.GetLibraries]: (req, res) => {
@@ -35,7 +39,7 @@ export const SliceCanvasRenderer = (
 					return res.success();
 				},
 				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-					setSlices(stateManager.setSliceZoneFromSliceIDs(req.data));
+					setSlices(stateManager.getSliceZoneFromSliceIDs(req.data));
 
 					return res.success();
 				},
@@ -44,14 +48,14 @@ export const SliceCanvasRenderer = (
 			await api.ready();
 		});
 
-		stateManager.load(props.statePredicate);
+		stateManager.load(props.state);
 	}, []);
 
 	return (
 		<div
 			className="slice-canvas-renderer"
 			style={{
-				zIndex: props.zIndex,
+				zIndex: props.zIndex || defaultProps.zIndex,
 				position: "fixed",
 				top: 0,
 				left: 0,
@@ -61,14 +65,7 @@ export const SliceCanvasRenderer = (
 				background: "#fefefe",
 			}}
 		>
-			{state.data && slices.length ? props.sliceZone(slices) : null}
+			{managedState.data && slices.length ? props.sliceZone(slices) : null}
 		</div>
 	);
-};
-
-// TODO: Defaults should come from the agnostic renderer package
-// Not sure if this is the right way to handle default props properly
-// though as when using the component TS doesn't whine about missing props
-SliceCanvasRenderer.defaultProps = {
-	zIndex: 100,
 };

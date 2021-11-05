@@ -4,7 +4,9 @@ import { CreateElement, ExtendedVue } from "vue/types/vue";
 import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
-	getDefaultState,
+	getDefaultManagedState,
+	getDefaultProps,
+	getDefaultSlices,
 	SliceCanvasData,
 	SliceCanvasOptions,
 	SliceCanvasProps,
@@ -13,29 +15,29 @@ import {
 export const SliceCanvasRenderer = {
 	name: "SliceCanvasRenderer",
 	props: {
-		statePredicate: {
-			type: Function as PropType<SliceCanvasProps["statePredicate"]>,
-			// @ts-expect-error - Only valid in real context
-			default: () => import("~~/.slicemachine/slice-canvas-state.json"),
+		state: {
+			type: Function as PropType<SliceCanvasProps["state"]>,
+			required: true,
 		},
 		zIndex: {
-			type: Number as PropType<SliceCanvasProps["zIndex"]>,
-			default: 100,
+			type: Number as PropType<Required<SliceCanvasProps["zIndex"]>>,
+			default: getDefaultProps().zIndex,
+			required: false,
 		},
 	},
 	data() {
 		return {
 			stateManager: createStateManager(),
-			state: getDefaultState(),
-			slices: [],
+			managedState: getDefaultManagedState(),
+			slices: getDefaultSlices(),
 		};
 	},
 	mounted(this: SliceCanvasOptions) {
 		this.stateManager.on("loaded", async (state) => {
-			this.state = state;
+			this.managedState = state;
 
 			const api = new RendererAPI({
-				[ClientRequestType.GetLibraries]: (req, res) => {
+				[ClientRequestType.GetLibraries]: (_req, res) => {
 					return res.success(this.stateManager.getLibraries());
 				},
 				[ClientRequestType.SetSliceZone]: (req, res) => {
@@ -44,7 +46,7 @@ export const SliceCanvasRenderer = {
 					return res.success();
 				},
 				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-					this.slices = this.stateManager.setSliceZoneFromSliceIDs(req.data);
+					this.slices = this.stateManager.getSliceZoneFromSliceIDs(req.data);
 
 					return res.success();
 				},
@@ -53,12 +55,16 @@ export const SliceCanvasRenderer = {
 			await api.ready();
 		});
 
-		this.stateManager.load(this.statePredicate);
+		this.stateManager.load(this.state);
 	},
 	render(this: SliceCanvasOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];
 
-		if (this.state.data && this.slices.length && this.$scopedSlots.default) {
+		if (
+			this.managedState.data &&
+			this.slices.length &&
+			this.$scopedSlots.default
+		) {
 			children.push(
 				this.$scopedSlots.default({
 					slices: this.slices,
