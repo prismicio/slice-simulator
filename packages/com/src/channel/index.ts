@@ -25,9 +25,10 @@ export {
 	createErrorResponseMessage,
 	validateMessage,
 	isRequestMessage,
+	isResponseMessage,
 	isSuccessResponseMessage,
 	isErrorResponseMessage,
-} from "./message";
+} from "./messages";
 
 export {
 	ConnectionTimeoutError,

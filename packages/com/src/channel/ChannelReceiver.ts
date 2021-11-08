@@ -8,7 +8,7 @@ import {
 	validateMessage,
 	isRequestMessage,
 	createErrorResponseMessage,
-} from "./message";
+} from "./messages";
 import { NotReadyError } from "./errors";
 import {
 	SuccessResponseMessage,

@@ -5,7 +5,7 @@ import {
 	isRequestMessage,
 	isSuccessResponseMessage,
 	validateMessage,
-} from "./message";
+} from "./messages";
 import {
 	PortNotSetError,
 	RequestTimeoutError,
@@ -135,6 +135,7 @@ export abstract class ChannelNetwork<
 			if (error instanceof TypeError) {
 				return console.warn(error.message);
 			} else {
+				// Should not be possible, but who knows :shrug:
 				throw error;
 			}
 		}

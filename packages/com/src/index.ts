@@ -6,6 +6,7 @@ export {
 	// Validators
 	validateMessage,
 	isRequestMessage,
+	isResponseMessage,
 	isSuccessResponseMessage,
 	isErrorResponseMessage,
 	// Error classes
