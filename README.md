@@ -26,7 +26,7 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 ## Install
 
 ```bash
-npm install @prismicio/slice-canvas-* # `react` or `vue`
+npm install @prismicio/slice-canvas-renderer-* # `react` or `vue`
 ```
 
 For further details, refer to each packages' READMEs:
