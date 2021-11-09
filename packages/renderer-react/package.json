@@ -1,6 +1,6 @@
 {
 	"name": "@prismicio/slice-canvas-renderer-react",
-	"version": "0.0.2",
+	"version": "0.0.0",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",
