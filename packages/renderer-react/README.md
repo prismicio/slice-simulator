@@ -47,17 +47,6 @@ const SliceCanvas = () => (<SliceCanvasRenderer
 export default SliceCanvas;
 ```
 
-⚠ &nbsp;With Next.js, make sure your transpile the renderer package:
-```javascript
-// next.config.js
-const withTM = require('next-transpile-modules')([
-	'next-slicezone',
-	'@prismicio/slice-canvas-renderer-react',
-]);
-
-module.exports = withTM();
-```
-
 ## Documentation
 
 To discover what's new on this package check out [the changelog][changelog]. For full documentation, visit the [official Prismic documentation][prismic-docs].
