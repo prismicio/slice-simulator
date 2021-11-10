@@ -79,6 +79,10 @@ export abstract class ChannelEmitter<
 
 	/**
 	 * Initiates connection to receiver
+	 *
+	 * @param newOrigin - Indicates to the emitter that we're connecting to a new origin
+	 *
+	 * @returns Success connect message
 	 */
 	connect(newOrigin = false): Promise<SuccessResponseMessage> {
 		// Disconnect first
@@ -87,9 +91,6 @@ export abstract class ChannelEmitter<
 		if (newOrigin) {
 			this._receiverReady = false;
 		}
-
-		// Create new message channel (set up port automatically)
-		this.channel = new MessageChannel();
 
 		// Handshake promise
 		return new Promise<SuccessResponseMessage>((resolve, reject) => {
@@ -110,6 +111,11 @@ export abstract class ChannelEmitter<
 					const receiverReadyCallback = async (): Promise<void> => {
 						// Clear receiver ready timeout
 						clearTimeout(receiverReadyTimeout);
+
+						// Create new message channel (set up port automatically)
+						// This is done here to prevent transferable objects neutering
+						// when calling `connect()` multiple times
+						this.channel = new MessageChannel();
 
 						// Conclude handshake by sending message channel port to target
 						const request = this.createRequestMessage(
