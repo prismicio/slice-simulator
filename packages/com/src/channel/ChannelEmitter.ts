@@ -64,6 +64,9 @@ export abstract class ChannelEmitter<
 	private _receiverReady = false;
 	private _receiverReadyCallback: (() => Promise<void>) | null = null;
 	private _connected = false;
+	public get connected(): boolean {
+		return this._connected;
+	}
 
 	constructor(
 		target: HTMLIFrameElement,
