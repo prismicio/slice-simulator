@@ -9,6 +9,7 @@ import {
 import {
 	PortNotSetError,
 	RequestTimeoutError,
+	ResponseError,
 	TooManyConcurrentRequestsError,
 } from "./errors";
 import {
@@ -18,6 +19,7 @@ import {
 	UnknownRequestMessage,
 	UnknownResponseMessage,
 	UnknownTransaction,
+	ExtractErrorResponseMessage,
 } from "./types";
 
 export type PostRequestOptions = {
@@ -169,7 +171,11 @@ export abstract class ChannelNetwork<
 
 						isSuccessResponseMessage(response)
 							? resolve(response as ExtractSuccessResponseMessage<TResponse>)
-							: reject(response);
+							: reject(
+									new ResponseError(
+										response as ExtractErrorResponseMessage<TResponse>,
+									),
+							  );
 					},
 				);
 

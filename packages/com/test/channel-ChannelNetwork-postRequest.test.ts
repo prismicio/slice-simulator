@@ -5,7 +5,9 @@ import {
 	createErrorResponseMessage,
 	createSuccessResponseMessage,
 	RequestTimeoutError,
+	ResponseError,
 	TooManyConcurrentRequestsError,
+	UnknownErrorResponseMessage,
 } from "../src/channel";
 
 class StandaloneChannelNetwork extends ChannelNetwork {}
@@ -53,13 +55,16 @@ test("posts valid requests to its partner and throws error response", async (t) 
 		channel.port1.postMessage(response);
 	};
 
-	try {
+	const error = await t.throwsAsync<ResponseError<UnknownErrorResponseMessage>>(
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		await channelNetwork.postRequest(request);
-		t.fail("Expected `channelNetwork.postRequest()` to throw");
-	} catch (receivedResponse) {
-		t.deepEqual(receivedResponse, response);
-	}
+		channelNetwork.postRequest(request),
+		{
+			instanceOf: ResponseError,
+			message: response.msg,
+		},
+	);
+
+	t.deepEqual(error.response, response);
 });
 
 test("posts valid requests to its partner and timeout after set default timeout", async (t) => {

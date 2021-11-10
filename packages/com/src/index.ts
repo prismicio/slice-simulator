@@ -10,6 +10,7 @@ export {
 	isSuccessResponseMessage,
 	isErrorResponseMessage,
 	// Error classes
+	ResponseError,
 	ConnectionTimeoutError,
 	TooManyConcurrentRequestsError,
 	RequestTimeoutError,

@@ -1,4 +1,17 @@
+import { UnknownErrorResponseMessage } from ".";
 import { UnknownRequestMessage } from "./types";
+
+export class ResponseError<
+	TErrorResponse extends UnknownErrorResponseMessage,
+> extends Error {
+	public response: TErrorResponse;
+
+	constructor(errorResponse: TErrorResponse) {
+		super(errorResponse.msg);
+
+		this.response = errorResponse;
+	}
+}
 
 export class ConnectionTimeoutError extends Error {
 	constructor() {
@@ -14,10 +27,12 @@ export class TooManyConcurrentRequestsError extends Error {
 		this.request = request;
 	}
 }
-export class RequestTimeoutError extends Error {
+export class RequestTimeoutError<
+	TRequest extends UnknownRequestMessage,
+> extends Error {
 	public request: UnknownRequestMessage;
 
-	constructor(request: UnknownRequestMessage) {
+	constructor(request: TRequest) {
 		super(`Request \`${request.requestID}\` timed out`);
 
 		this.request = request;

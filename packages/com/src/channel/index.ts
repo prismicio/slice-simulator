@@ -31,6 +31,7 @@ export {
 } from "./messages";
 
 export {
+	ResponseError,
 	ConnectionTimeoutError,
 	TooManyConcurrentRequestsError,
 	RequestTimeoutError,
