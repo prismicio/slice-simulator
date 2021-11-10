@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-com@0.0.2...@prismicio/slice-canvas-com@0.0.3) (2021-11-10)
+
+
+### Features
+
+* **com:** expose a "connected" method ([4cda8b3](https://github.com/prismicio/slice-canvas/commit/4cda8b31243fe552f8aea109eef2adf677368c07))
+
+
+### Chore
+
+* **com:** typo ([923f88c](https://github.com/prismicio/slice-canvas/commit/923f88cba59075a4029436cfec72c627000c447b))
+
+
+### Documentation
+
+* **com:** missing comment ([6bb1f07](https://github.com/prismicio/slice-canvas/commit/6bb1f075c783884f02de965d12cbb472987a1541))
+* create READMEs ([52f86a5](https://github.com/prismicio/slice-canvas/commit/52f86a57eea2e0143514591e9b969ec193d701b8))
+
+
+### Refactor
+
+* **com:** create message channel later to allow multiple connect to race ([3bda0e4](https://github.com/prismicio/slice-canvas/commit/3bda0e49fd5d3f5ed844534d50c4eab7bcddf49b))
+* **com:** throw response errors through an error class ([c1ba556](https://github.com/prismicio/slice-canvas/commit/c1ba5561c81ba49851700c46a632856be54c152e))
+
 ### [0.0.2](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-com@0.0.1...@prismicio/slice-canvas-com@0.0.2) (2021-11-02)
 
 
