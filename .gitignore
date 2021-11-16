@@ -1,6 +1,7 @@
 # custom
 dist
 examples/**/package-lock.json
+packages/**/package-lock.json
 
 # os
 .DS_Store
