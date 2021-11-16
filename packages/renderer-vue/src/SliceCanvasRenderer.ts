@@ -16,7 +16,7 @@ export const SliceCanvasRenderer = {
 	name: "SliceCanvasRenderer",
 	props: {
 		state: {
-			type: [Function, Array] as PropType<SliceCanvasProps["state"]>,
+			type: [Function, Object] as PropType<SliceCanvasProps["state"]>,
 			required: true,
 		},
 		zIndex: {

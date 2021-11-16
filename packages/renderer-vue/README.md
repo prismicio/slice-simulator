@@ -42,7 +42,7 @@ Then create a page for Slice Canvas:
 import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-vue";
 import SliceZone from "vue-slicezone";
 
-import state from "~~/.slicemachine/slice-canvas-state.json";
+import state from "~~/.slicemachine/libraries-state.json";
 
 export default {
 	components: {

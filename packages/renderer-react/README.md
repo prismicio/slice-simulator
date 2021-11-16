@@ -35,7 +35,7 @@ Then create a page for Slice Canvas:
 import { SliceCanvasRenderer } from "@prismicio/slice-canvas-renderer-react";
 import SliceZone from "next-slicezone";
 
-import state from "../.slicemachine/slice-canvas-state.json";
+import state from "../.slicemachine/libraries-state.json";
 import resolver from  "../sm-resolver";
 
 const SliceCanvas = () => (<SliceCanvasRenderer
