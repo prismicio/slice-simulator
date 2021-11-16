@@ -1,5 +1,5 @@
 import { SliceZone } from "@prismicio/types";
-import { Library } from "@slicemachine/core/models/Library";
+import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
 import type { StateManager } from "./StateManager";
 
@@ -10,17 +10,16 @@ export const enum StateManagerStatus {
 }
 
 export type ManagedState = {
-	data: Library[] | null;
+	data: LibrariesState.Libraries | null;
 	status: StateManagerStatus;
 	error: Error | null;
 };
 
 export interface SliceCanvasProps {
 	state:
-		| (() => Promise<Library[] | { default: Library[] }>)
-		| Promise<Library[] | { default: Library[] }>
-		| Library[]
-		| { default: Library[] };
+		| (() => Promise<LibrariesState.Libraries>)
+		| Promise<LibrariesState.Libraries>
+		| LibrariesState.Libraries;
 	zIndex?: number;
 }
 
@@ -44,6 +43,6 @@ export type SliceSummary = {
 };
 
 export type LibrarySummary = {
-	name: string;
+	path: string;
 	slices: SliceSummary[];
 };

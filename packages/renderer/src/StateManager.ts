@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { SliceZone } from "@prismicio/types";
+import { SharedSlice, SliceZone } from "@prismicio/types";
+import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
 import { SliceCanvasProps, LibrarySummary } from "./types";
 import { getDefaultManagedState } from "./getDefaultManagedState";
@@ -22,10 +22,18 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 	async load(state: SliceCanvasProps["state"]): Promise<void> {
 		try {
-			const data = await (typeof state === "function" ? state() : state);
+			const raw = await (typeof state === "function" ? state() : state);
+
+			const res = LibrariesState.Libraries.decode(raw);
+			if (res._tag === "Left") {
+				console.error(res.left);
+				throw new Error(
+					"State does not validate expected format, see trace above for detailed report",
+				);
+			}
 
 			this.managedState = {
-				data: Array.isArray(data) ? data : data.default,
+				data: res.right,
 				status: StateManagerStatus.Loaded,
 				error: null,
 			};
@@ -51,23 +59,25 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
 		}
 
-		return this.managedState.data.map((library) => {
-			return {
-				name: library.name,
-				slices: library.components.map((slice) => {
-					return {
-						name: slice.infos.model.name,
-						id: slice.infos.model.id,
-						variations: slice.infos.model.variations.map((variation) => {
-							return {
-								name: variation.name,
-								id: variation.id,
-							};
-						}),
-					};
-				}),
-			};
-		});
+		return Object.entries(this.managedState.data).map(
+			([libraryPath, slices]) => {
+				return {
+					path: libraryPath,
+					slices: Object.values(slices).map((slice) => {
+						return {
+							id: slice.id,
+							name: slice.name || slice.id,
+							variations: slice.model.variations.map((variation) => {
+								return {
+									id: variation.id,
+									name: variation.name || variation.id,
+								};
+							}),
+						};
+					}),
+				};
+			},
+		);
 	}
 
 	// TODO: Temporary solution, should be refactored
@@ -85,30 +95,34 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
 		}
 
-		const allMocks = this.managedState.data
-			.map((library) =>
-				library.components.map((slice) => slice.infos.mock).flat(),
-			)
-			.flat()
-			.filter(Boolean) as any;
+		const keyed = (str: string) =>
+			loose ? str.toLowerCase().replace(/[-_]/g, "") : str;
+
+		const allMocks = Object.values(this.managedState.data).reduce<
+			Record<string, Record<string, SharedSlice>>
+		>((acc, sliceMap) => {
+			Object.values(sliceMap).forEach((slice) => {
+				acc[keyed(slice.id)] = Object.values(slice.mocks).reduce<
+					Record<string, SharedSlice>
+				>((acc, mock) => {
+					// TODO: Type definition from Slice Machine core is incomplete
+					acc[keyed(mock.variation)] = mock as unknown as SharedSlice;
+
+					return acc;
+				}, {});
+			});
+
+			return acc;
+		}, {});
 
 		return slices
 			.map((slice) => {
-				return allMocks.find((mock: any) => {
-					if (loose) {
-						return (
-							mock.slice_type.toLowerCase().replace(/[-_]/g, "") ===
-								slice.sliceID.toLowerCase().replace(/[-_]/g, "") &&
-							mock.variation.toLowerCase().replace(/[-_]/g, "") ===
-								slice.variationID.toLowerCase().replace(/[-_]/g, "")
-						);
-					} else {
-						return (
-							mock.slice_type === slice.sliceID &&
-							mock.variation === slice.variationID
-						);
-					}
-				});
+				const sliceID = keyed(slice.sliceID);
+				const variationID = keyed(slice.variationID);
+
+				if (sliceID in allMocks && variationID in allMocks[sliceID]) {
+					return allMocks[sliceID][variationID];
+				}
 			})
 			.filter(Boolean) as SliceZone;
 	}
