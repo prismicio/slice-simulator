@@ -1,6 +1,6 @@
 <template>
 	<article class="slice-list">
-		<h2 class="heading-h1 mb-6">{{ library.name }}</h2>
+		<h2 class="heading-h1 mb-6">{{ library.path }}</h2>
 		<ul class="space-y-2">
 			<li v-for="slice in library.slices" :key="slice.id">
 				<slice-list-item :slice="slice" />

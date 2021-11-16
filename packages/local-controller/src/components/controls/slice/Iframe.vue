@@ -41,30 +41,31 @@ onMounted(async () => {
 
 		watch(() => props.src, () => updateClient(true));
 		await updateClient();
-
-		watchEffect(() => {
-			client!.setSliceZoneFromSliceIDs([{
-				sliceID: rendererState.value.current.slice.id,
-				variationID: rendererState.value.current.variation.id,
-			}]);
-		});
 	} else {
-		throw new Error("iframe not found")
+		throw new Error("iframe not found");
 	}
-
 });
+
+watch(rendererState, async () => {
+	if (client) {
+		await client.setSliceZoneFromSliceIDs([{
+			sliceID: rendererState.value.current.slice.id,
+			variationID: rendererState.value.current.variation.id,
+		}]);
+	}
+}, { deep: true });
 
 const names = computed(() => {
 	if (!rendererState.value.current) {
 		return {
 			slice: "Loading...",
-			variation: "Loading..."
-		}
+			variation: "Loading...",
+		};
 	} else {
 		return {
 			slice: rendererState.value.current.slice.name,
-			variation: rendererState.value.current.variation.name
-		}
+			variation: rendererState.value.current.variation.name,
+		};
 	}
 })
 
