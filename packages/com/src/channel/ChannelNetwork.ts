@@ -135,7 +135,7 @@ export abstract class ChannelNetwork<
 			}
 		} catch (error) {
 			if (error instanceof TypeError) {
-				return console.warn(error.message);
+				console.warn(error.message);
 			} else {
 				// Should not be possible, but who knows :shrug:
 				throw error;
