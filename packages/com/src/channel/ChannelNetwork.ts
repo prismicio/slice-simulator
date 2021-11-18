@@ -151,6 +151,11 @@ export abstract class ChannelNetwork<
 		postMessage = (request: TRequest): void => this.port.postMessage(request),
 		options: PostRequestOptions = {},
 	): Promise<ExtractSuccessResponseMessage<TResponse>> {
+		if (this.options.debug) {
+			// eslint-disable-next-line no-console
+			console.debug(request);
+		}
+
 		if (this._pendingRequests.size >= this.options.maximumRequestConcurrency) {
 			throw new TooManyConcurrentRequestsError(request);
 		}
@@ -189,6 +194,11 @@ export abstract class ChannelNetwork<
 		postMessage = (response: TResponse): void =>
 			this.port.postMessage(response),
 	): TResponse {
+		if (this.options.debug) {
+			// eslint-disable-next-line no-console
+			console.debug(response);
+		}
+
 		postMessage(response);
 
 		return response;

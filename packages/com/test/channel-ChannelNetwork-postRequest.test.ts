@@ -1,4 +1,5 @@
 import test from "ava";
+import * as sinon from "sinon";
 
 import {
 	ChannelNetwork,
@@ -204,4 +205,55 @@ test("uses provided post message method", async (t) => {
 	);
 
 	t.deepEqual(receivedResponse, response);
+});
+
+test.serial("debug logs messages when on debug mode", async (t) => {
+	const consoleDebugStub = sinon.stub(console, "debug");
+
+	const channelNetwork = new StandaloneChannelNetwork({}, { debug: true });
+
+	const channel = new MessageChannel();
+
+	// @ts-expect-error - taking a shortcut by setting protected property
+	channelNetwork.port = channel.port2;
+
+	const request = channelNetwork.createRequestMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(request.requestID, dummyData);
+
+	channel.port1.onmessage = () => {
+		channel.port1.postMessage(response);
+	};
+
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	await channelNetwork.postRequest(request);
+
+	// Request and response are actually logged...
+	t.is(consoleDebugStub.callCount, 2);
+
+	consoleDebugStub.restore();
+});
+
+test.serial("doesn't debug log messages when not on debug mode", async (t) => {
+	const consoleDebugStub = sinon.stub(console, "debug");
+
+	const channelNetwork = new StandaloneChannelNetwork({}, { debug: false });
+
+	const channel = new MessageChannel();
+
+	// @ts-expect-error - taking a shortcut by setting protected property
+	channelNetwork.port = channel.port2;
+
+	const request = channelNetwork.createRequestMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(request.requestID, dummyData);
+
+	channel.port1.onmessage = () => {
+		channel.port1.postMessage(response);
+	};
+
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	await channelNetwork.postRequest(request);
+
+	t.is(consoleDebugStub.callCount, 0);
+
+	consoleDebugStub.restore();
 });
