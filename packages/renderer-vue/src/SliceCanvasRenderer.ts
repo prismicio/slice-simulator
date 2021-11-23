@@ -10,6 +10,7 @@ import {
 	SliceCanvasData,
 	SliceCanvasOptions,
 	SliceCanvasProps,
+	StateManagerEventType,
 } from "@prismicio/slice-canvas-renderer";
 
 export const SliceCanvasRenderer = {
@@ -32,22 +33,26 @@ export const SliceCanvasRenderer = {
 			slices: getDefaultSlices(),
 		};
 	},
-	mounted(this: SliceCanvasOptions) {
-		this.stateManager.on("loaded", async (state) => {
+	mounted(this: SliceCanvasOptions & Vue) {
+		this.stateManager.on(StateManagerEventType.Loaded, async (state) => {
 			this.managedState = state;
-			this.slices = getDefaultSlices(this.stateManager);
 
 			const api = new RendererAPI({
 				[ClientRequestType.GetLibraries]: (_req, res) => {
 					return res.success(this.stateManager.getLibraries());
 				},
+				[ClientRequestType.GetActiveSlice]: (req, res) => {
+					this.stateManager.setActiveSlice(req.data);
+
+					return res.success(this.stateManager.getActiveSlice());
+				},
 				[ClientRequestType.SetSliceZone]: (req, res) => {
-					this.slices = req.data;
+					this.stateManager.setSliceZone(req.data);
 
 					return res.success();
 				},
 				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-					this.slices = this.stateManager.getSliceZoneFromSliceIDs(req.data);
+					this.stateManager.setSliceZoneFromSliceIDs(req.data);
 
 					return res.success();
 				},
@@ -58,6 +63,9 @@ export const SliceCanvasRenderer = {
 			} catch (error) {
 				console.error(error);
 			}
+		});
+		this.stateManager.on(StateManagerEventType.Slices, (slices) => {
+			this.slices = slices;
 		});
 
 		this.stateManager.load(this.state);

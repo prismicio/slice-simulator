@@ -1,6 +1,6 @@
 import { SliceZone } from "@prismicio/types";
 
-import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
+import { ActiveSlice, LibrarySummary } from "@prismicio/slice-canvas-renderer";
 
 import { RequestMessage, ResponseMessage, Transaction } from "./channel";
 
@@ -11,6 +11,7 @@ export type APITransactions = Record<string, never>;
 export enum ClientRequestType {
 	Ping = "ping",
 	GetLibraries = "getLibraries",
+	GetActiveSlice = "getActiveSlice",
 	SetSliceZone = "setSliceZone",
 	SetSliceZoneFromSliceIDs = "setSliceZoneFromSliceIDs",
 }
@@ -24,6 +25,11 @@ export type ClientTransactions = {
 	[ClientRequestType.GetLibraries]: Transaction<
 		RequestMessage<ClientRequestType.GetLibraries>,
 		ResponseMessage<LibrarySummary[]>
+	>;
+
+	[ClientRequestType.GetActiveSlice]: Transaction<
+		RequestMessage<ClientRequestType.GetActiveSlice, { x: number; y: number }>,
+		ResponseMessage<ActiveSlice | null>
 	>;
 
 	[ClientRequestType.SetSliceZone]: Transaction<

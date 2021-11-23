@@ -3,6 +3,18 @@ import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
 import type { StateManager } from "./StateManager";
 
+export enum StateManagerEventType {
+	Loaded = "loaded",
+	Slices = "slices",
+	ActiveSlice = "activeSlice",
+}
+
+export type StateManagerEvents = {
+	[StateManagerEventType.Loaded]: ManagedState;
+	[StateManagerEventType.Slices]: SliceZone;
+	[StateManagerEventType.ActiveSlice]: ActiveSlice | null;
+};
+
 export const enum StateManagerStatus {
 	Pending = "pending",
 	Loaded = "loaded",
@@ -13,6 +25,13 @@ export type ManagedState = {
 	data: LibrariesState.Libraries | null;
 	status: StateManagerStatus;
 	error: Error | null;
+};
+
+export type ActiveSlice = {
+	rect: DOMRect;
+	sliceID: string;
+	variationID: string;
+	index: number;
 };
 
 export interface SliceCanvasProps {
@@ -27,6 +46,7 @@ export interface SliceCanvasData {
 	stateManager: StateManager;
 	managedState: ManagedState;
 	slices: SliceZone;
+	activeSlice: ActiveSlice | null;
 }
 
 export type SliceCanvasOptions = SliceCanvasProps & SliceCanvasData;

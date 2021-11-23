@@ -37,6 +37,15 @@ export class RendererClient
 		return await this.postFormattedRequest(ClientRequestType.GetLibraries);
 	};
 
+	[ClientRequestType.GetActiveSlice]: TransactionMethod<
+		ClientTransactions[ClientRequestType.GetActiveSlice]
+	> = async (data) => {
+		return await this.postFormattedRequest(
+			ClientRequestType.GetActiveSlice,
+			data,
+		);
+	};
+
 	[ClientRequestType.SetSliceZone]: TransactionMethod<
 		ClientTransactions[ClientRequestType.SetSliceZone]
 	> = async (data) => {
