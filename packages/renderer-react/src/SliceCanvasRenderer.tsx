@@ -11,7 +11,9 @@ import {
 } from "@prismicio/slice-canvas-renderer";
 
 export type SliceCanvasRendererProps = {
-	sliceZone: (slices: SliceCanvasData["slices"]) => React.ComponentType;
+	sliceZone: (args: {
+		slices: SliceCanvasData["slices"];
+	}) => React.ComponentType;
 } & SliceCanvasProps;
 
 export const SliceCanvasRenderer = (
@@ -72,7 +74,7 @@ export const SliceCanvasRenderer = (
 		>
 			{managedState.data && slices.length ? (
 				// TODO: Temporary solution to mimic Storybook iframe interface
-				<div id="root">{props.sliceZone(slices)}</div>
+				<div id="root">{props.sliceZone({ slices })}</div>
 			) : null}
 		</div>
 	);
