@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-vue@0.0.3...@prismicio/slice-canvas-renderer-vue@0.0.4) (2021-11-29)
+
+
+### Chore
+
+* **deps:** update dependencies ([742ce06](https://github.com/prismicio/slice-canvas/commit/742ce06b281bbaf018c2d2e33420b9a0f9f135da))
+
 ### [0.0.3](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-vue@0.0.2...@prismicio/slice-canvas-renderer-vue@0.0.3) (2021-11-16)
 
 
