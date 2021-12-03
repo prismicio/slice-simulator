@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-com@0.0.5...@prismicio/slice-canvas-com@0.0.6) (2021-12-03)
+
+
+### Bug Fixes
+
+* **com:** aknowledge ready only after connection ([b937886](https://github.com/prismicio/slice-canvas/commit/b937886e652a5d218bcc5da88402707bfb34a011))
+* **com:** type error ([575947a](https://github.com/prismicio/slice-canvas/commit/575947a588f01a301404fb92129fa8acce0ca2c4))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([602c7f6](https://github.com/prismicio/slice-canvas/commit/602c7f66291c432ae8c08f8291fc1c274446b411))
+
+
+### Refactor
+
+* centralize renderer API to avoid duplication ([c5be8d5](https://github.com/prismicio/slice-canvas/commit/c5be8d5e3b381bd925a7004739387a7664d72dd5))
+
 ### [0.0.5](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-com@0.0.4...@prismicio/slice-canvas-com@0.0.5) (2021-11-29)
 
 

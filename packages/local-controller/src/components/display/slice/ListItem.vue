@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-import { SliceSummary } from "@prismicio/slice-canvas-renderer";
+import { SliceSummary } from "@prismicio/slice-canvas-com";
 
 import { state as rendererState, setCurrent } from "~/store/renderer";
 

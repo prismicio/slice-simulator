@@ -92,7 +92,7 @@ export abstract class ChannelEmitter<
 		this.disconnect();
 		// If changing origin we'll need to wait for receiver to be ready again
 		if (newOrigin) {
-			this._receiverReady = false;
+			this._receiverReady = "";
 		}
 
 		// Handshake promise

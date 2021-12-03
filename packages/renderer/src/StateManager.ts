@@ -100,7 +100,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		});
 
 		try {
-			const res = await this._api.ready();
+			await this._api.ready();
 
 			// TODO: Experimental
 			const _resize = (data: Parameters<typeof this._api.resize>[0]) => {
@@ -167,10 +167,12 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		}
 
 		return Object.entries(this.managedState.data).map(
-			([libraryPath, slices]) => {
+			([libraryPath, library]) => {
+				const sliceMap = library.components;
+
 				return {
 					path: libraryPath,
-					slices: Object.values(slices).map((slice) => {
+					slices: Object.values(sliceMap).map((slice) => {
 						return {
 							id: slice.id,
 							name: slice.name || slice.id,
@@ -211,7 +213,9 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		const allMocks = Object.values(this.managedState.data).reduce<
 			Record<string, Record<string, SharedSlice>>
-		>((acc, sliceMap) => {
+		>((acc, library) => {
+			const sliceMap = library.components;
+
 			Object.values(sliceMap).forEach((slice) => {
 				acc[keyed(slice.id)] = Object.values(slice.mocks).reduce<
 					Record<string, SharedSlice>
