@@ -1,6 +1,6 @@
 {
 	"name": "@prismicio/slice-canvas-com",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",
