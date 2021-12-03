@@ -6,10 +6,11 @@ import {
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
+	StateManagerEventType,
+	SliceCanvasProps,
 	SliceCanvasData,
 	SliceCanvasOptions,
-	SliceCanvasProps,
-	StateManagerEventType,
+	SliceCanvasCSSClass,
 } from "@prismicio/slice-canvas-renderer";
 
 export const SliceCanvasRenderer = {
@@ -43,7 +44,11 @@ export const SliceCanvasRenderer = {
 		this.stateManager.load(this.state);
 	},
 	render(this: SliceCanvasOptions & Vue, h: CreateElement) {
-		const children: VNodeChildren = [];
+		const children: VNodeChildren = [
+			h("style", {
+				domProps: { innerHTML: "html { overflow: hidden; }" },
+			}),
+		];
 
 		if (
 			this.managedState.data &&
@@ -63,7 +68,7 @@ export const SliceCanvasRenderer = {
 		return h(
 			"div",
 			{
-				class: "slice-canvas-renderer",
+				class: SliceCanvasCSSClass,
 				style: {
 					zIndex: this.zIndex,
 					position: "fixed",
@@ -72,7 +77,7 @@ export const SliceCanvasRenderer = {
 					width: "100%",
 					height: "100vh",
 					overflow: "auto",
-					background: "#fefefe",
+					background: "#ffffff",
 				},
 			},
 			children,

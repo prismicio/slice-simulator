@@ -1,15 +1,25 @@
 import {
 	AllChannelReceiverOptions,
 	ChannelReceiver,
+	TransactionMethod,
 	TransactionsHandlers,
+	TransactionsMethods,
 } from "./channel";
-import { ClientRequestType, ClientTransactions } from "./types";
+import {
+	APIRequestType,
+	APITransactions,
+	ClientRequestType,
+	ClientTransactions,
+} from "./types";
 
 export const rendererAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
 	requestIDPrefix: "renderer-",
 };
 
-export class RendererAPI extends ChannelReceiver<ClientTransactions> {
+export class RendererAPI
+	extends ChannelReceiver<ClientTransactions>
+	implements TransactionsMethods<APITransactions>
+{
 	constructor(
 		requestHandlers: Omit<
 			TransactionsHandlers<ClientTransactions>,
@@ -39,4 +49,12 @@ export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 			},
 		);
 	}
+
+	[APIRequestType.Resize]: TransactionMethod<
+		APITransactions[APIRequestType.Resize]
+	> = async ({ height }) => {
+		return await this.postFormattedRequest(APIRequestType.Resize, {
+			height,
+		});
+	};
 }

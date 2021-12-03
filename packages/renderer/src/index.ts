@@ -10,7 +10,11 @@ export { getDefaultManagedState } from "./getDefaultManagedState";
 export { getDefaultSlices } from "./getDefaultSlices";
 
 // Types
-export { StateManagerEventType, StateManagerStatus } from "./types";
+export {
+	StateManagerEventType,
+	StateManagerStatus,
+	SliceCanvasCSSClass,
+} from "./types";
 export type {
 	StateManagerEvents,
 	ManagedState,

@@ -18,9 +18,15 @@ export type LibrarySummary = {
 	slices: SliceSummary[];
 };
 
-export enum APIRequestType {}
+export enum APIRequestType {
+	Resize = "resize",
+}
 
-export type APITransactions = Record<string, never>;
+export type APITransactions = {
+	[APIRequestType.Resize]: Transaction<
+		RequestMessage<APIRequestType.Resize, { height: number }>
+	>;
+};
 
 export enum ClientRequestType {
 	Ping = "ping",

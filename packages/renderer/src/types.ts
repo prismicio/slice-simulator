@@ -40,3 +40,5 @@ export interface SliceCanvasData {
 }
 
 export type SliceCanvasOptions = SliceCanvasProps & SliceCanvasData;
+
+export const SliceCanvasCSSClass = "slice-canvas-renderer";

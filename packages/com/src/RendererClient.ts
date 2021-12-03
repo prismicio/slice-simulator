@@ -5,6 +5,7 @@ import {
 	TransactionsMethods,
 } from "./channel";
 import {
+	APIRequestType,
 	APITransactions,
 	ClientRequestType,
 	ClientTransactions,
@@ -22,7 +23,17 @@ export class RendererClient
 		target: HTMLIFrameElement,
 		options?: Partial<AllChannelEmitterOptions>,
 	) {
-		super(target, {}, { ...rendererClientDefaultOptions, ...options });
+		super(
+			target,
+			{
+				[APIRequestType.Resize]: (req, res) => {
+					target.style.height = `${req.data.height}px`;
+
+					return res.success();
+				},
+			},
+			{ ...rendererClientDefaultOptions, ...options },
+		);
 	}
 
 	[ClientRequestType.Ping]: TransactionMethod<

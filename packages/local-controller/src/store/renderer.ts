@@ -4,7 +4,7 @@ import {
 	LibrarySummary,
 	SliceSummary,
 	VariationSummary,
-} from "@prismicio/slice-canvas-renderer";
+} from "@prismicio/slice-canvas-com";
 
 export const state = ref<{
 	libraries: LibrarySummary[] | null;
@@ -12,9 +12,14 @@ export const state = ref<{
 		slice: SliceSummary;
 		variation: VariationSummary;
 	} | null;
+	history: {
+		slice: SliceSummary;
+		variation: VariationSummary;
+	}[];
 }>({
 	libraries: null,
 	current: null,
+	history: [],
 });
 
 export const setLibraries = (libraries: LibrarySummary[]): void => {
@@ -29,4 +34,8 @@ export const setCurrent = (
 		slice: unref(slice),
 		variation: unref(variation),
 	};
+	state.value.history.push({
+		slice: unref(slice),
+		variation: unref(variation),
+	});
 };

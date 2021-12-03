@@ -1,11 +1,13 @@
 <template>
 	<div class="slice-iframe">
 		<h3 class="heading-h2">{{ names.slice }}</h3>
-		<figure class="mt-2 text-black-300 rounded border border-gray min-h-[calc(100vh-120px)] flex flex-col">
+		<figure class="mt-2 text-black-300 rounded border border-gray h-[calc(100vh-120px)] flex flex-col">
 			<figcaption class="h-12 flex items-center px-4 border-b border-gray">
 				<h4 class="font-medium text-sm">{{ names.variation }}</h4>
 			</figcaption>
-			<iframe ref="iframe" :src="src" frameborder="0" class="w-full flex-1"></iframe>
+			<div ref="container" class="w-full flex-1 relative overflow-auto">
+				<iframe ref="iframe" :src="src" frameborder="0" class="w-full pointer-events-none"></iframe>
+			</div>
 		</figure>
 	</div>
 </template>
@@ -48,10 +50,14 @@ onMounted(async () => {
 
 watch(rendererState, async () => {
 	if (client) {
-		await client.setSliceZoneFromSliceIDs([{
-			sliceID: rendererState.value.current.slice.id,
-			variationID: rendererState.value.current.variation.id,
-		}]);
+		await client.setSliceZoneFromSliceIDs(
+			rendererState.value.history.map(({ slice, variation }) => {
+				return {
+					sliceID: slice.id,
+					variationID: variation.id,
+				};
+			})
+		);
 	}
 }, { deep: true });
 
@@ -68,6 +74,4 @@ const names = computed(() => {
 		};
 	}
 })
-
-defineExpose({ iframe, names });
 </script>

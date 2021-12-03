@@ -13,10 +13,12 @@ import {
 	StateManagerStatus,
 	StateManagerEvents,
 	StateManagerEventType,
+	SliceCanvasCSSClass,
 } from "./types";
 import { getDefaultManagedState } from "./getDefaultManagedState";
 import { EventEmitter } from "./lib/EventEmitter";
 import { getDefaultSlices } from "./getDefaultSlices";
+import { throttle } from "./lib/throttle";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	public managedState: ManagedState;
@@ -100,6 +102,23 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		try {
 			const res = await this._api.ready();
 
+			// TODO: Experimental
+			const _resize = (data: Parameters<typeof this._api.resize>[0]) => {
+				this._api?.resize(data);
+			};
+			const resize = throttle(_resize, 100);
+
+			const resizeObserver = new ResizeObserver((entries) => {
+				console.log(entries[0].target.scrollHeight);
+				console.log(entries[0].target.clientHeight);
+				resize({
+					height: entries[0].target.scrollHeight,
+				});
+			});
+
+			resizeObserver.observe(
+				document.querySelector(`.${SliceCanvasCSSClass}`)!,
+			);
 		} catch (error) {
 			console.error(error);
 		}
