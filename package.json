@@ -5,7 +5,7 @@
 	"license": "Apache-2.0",
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"scripts": {
-		"build": "npm-run-all build:renderer build:com --parallel build:local-controller build:renderer-*",
+		"build": "npm-run-all build:com build:renderer --parallel build:local-controller build:renderer-*",
 		"build:local-controller": "npm run build --w packages/local-controller",
 		"build:com": "npm run build --w packages/com",
 		"build:renderer": "npm run build --w packages/renderer",
@@ -36,8 +36,8 @@
 	},
 	"//": "Order matters!",
 	"workspaces": [
-		"packages/renderer",
 		"packages/com",
+		"packages/renderer",
 		"packages/renderer-vue",
 		"packages/renderer-react",
 		"packages/local-controller"

@@ -27,4 +27,10 @@ export type {
 } from "./channel";
 
 export { APIRequestType, ClientRequestType } from "./types";
-export type { APITransactions, ClientTransactions } from "./types";
+export type {
+	VariationSummary,
+	SliceSummary,
+	LibrarySummary,
+	APITransactions,
+	ClientTransactions,
+} from "./types";

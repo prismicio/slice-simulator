@@ -1,8 +1,22 @@
 import { SliceZone } from "@prismicio/types";
 
-import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
-
 import { RequestMessage, ResponseMessage, Transaction } from "./channel";
+
+export type VariationSummary = {
+	name: string;
+	id: string;
+};
+
+export type SliceSummary = {
+	name: string;
+	id: string;
+	variations: VariationSummary[];
+};
+
+export type LibrarySummary = {
+	path: string;
+	slices: SliceSummary[];
+};
 
 export enum APIRequestType {}
 

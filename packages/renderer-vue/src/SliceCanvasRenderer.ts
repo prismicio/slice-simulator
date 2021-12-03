@@ -1,7 +1,6 @@
 import Vue, { PropType, VNodeChildren } from "vue";
 import { CreateElement, ExtendedVue } from "vue/types/vue";
 
-import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
 	getDefaultManagedState,
@@ -10,6 +9,7 @@ import {
 	SliceCanvasData,
 	SliceCanvasOptions,
 	SliceCanvasProps,
+	StateManagerEventType,
 } from "@prismicio/slice-canvas-renderer";
 
 export const SliceCanvasRenderer = {
@@ -33,31 +33,11 @@ export const SliceCanvasRenderer = {
 		};
 	},
 	mounted(this: SliceCanvasOptions) {
-		this.stateManager.on("loaded", async (state) => {
+		this.stateManager.on(StateManagerEventType.Loaded, (state) => {
 			this.managedState = state;
-			this.slices = getDefaultSlices(this.stateManager);
-
-			const api = new RendererAPI({
-				[ClientRequestType.GetLibraries]: (_req, res) => {
-					return res.success(this.stateManager.getLibraries());
-				},
-				[ClientRequestType.SetSliceZone]: (req, res) => {
-					this.slices = req.data;
-
-					return res.success();
-				},
-				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-					this.slices = this.stateManager.getSliceZoneFromSliceIDs(req.data);
-
-					return res.success();
-				},
-			});
-
-			try {
-				await api.ready();
-			} catch (error) {
-				console.error(error);
-			}
+		});
+		this.stateManager.on(StateManagerEventType.Slices, (slices) => {
+			this.slices = slices;
 		});
 
 		this.stateManager.load(this.state);

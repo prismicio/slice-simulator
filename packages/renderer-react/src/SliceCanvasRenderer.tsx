@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { RendererAPI, ClientRequestType } from "@prismicio/slice-canvas-com";
 import {
 	createStateManager,
 	getDefaultManagedState,
@@ -8,6 +7,7 @@ import {
 	getDefaultSlices,
 	SliceCanvasData,
 	SliceCanvasProps,
+	StateManagerEventType,
 } from "@prismicio/slice-canvas-renderer";
 
 export type SliceCanvasRendererProps = {
@@ -28,31 +28,11 @@ export const SliceCanvasRenderer = (
 	const [slices, setSlices] = React.useState(getDefaultSlices());
 
 	React.useEffect(() => {
-		stateManager.on("loaded", async (state) => {
+		stateManager.on(StateManagerEventType.Loaded, (state) => {
 			setManagedState(state);
-			setSlices(getDefaultSlices(stateManager));
-
-			const api = new RendererAPI({
-				[ClientRequestType.GetLibraries]: (req, res) => {
-					return res.success(stateManager.getLibraries());
-				},
-				[ClientRequestType.SetSliceZone]: (req, res) => {
-					setSlices(req.data);
-
-					return res.success();
-				},
-				[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-					setSlices(stateManager.getSliceZoneFromSliceIDs(req.data));
-
-					return res.success();
-				},
-			});
-
-			try {
-				await api.ready();
-			} catch (error) {
-				console.error(error);
-			}
+		});
+		stateManager.on(StateManagerEventType.Slices, (slices) => {
+			setSlices(slices);
 		});
 
 		stateManager.load(props.state);

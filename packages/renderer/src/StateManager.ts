@@ -1,23 +1,56 @@
 import { SharedSlice, SliceZone } from "@prismicio/types";
 import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
-import { SliceCanvasProps, LibrarySummary } from "./types";
+import {
+	ClientRequestType,
+	LibrarySummary,
+	RendererAPI,
+} from "@prismicio/slice-canvas-com";
+
+import {
+	SliceCanvasProps,
+	ManagedState,
+	StateManagerStatus,
+	StateManagerEvents,
+	StateManagerEventType,
+} from "./types";
 import { getDefaultManagedState } from "./getDefaultManagedState";
 import { EventEmitter } from "./lib/EventEmitter";
-
-import { ManagedState, StateManagerStatus } from "./types";
-
-export type StateManagerEvents = {
-	loaded: ManagedState;
-};
+import { getDefaultSlices } from "./getDefaultSlices";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	public managedState: ManagedState;
 
-	constructor(managedState: ManagedState = getDefaultManagedState()) {
+	private _slices: SliceZone;
+	protected set slices(slices: SliceZone) {
+		this._slices = slices;
+		this.emit(StateManagerEventType.Slices, slices);
+	}
+
+	private api = new RendererAPI({
+		[ClientRequestType.GetLibraries]: (_req, res) => {
+			return res.success(this.getLibraries());
+		},
+		[ClientRequestType.SetSliceZone]: (req, res) => {
+			this.setSliceZone(req.data);
+
+			return res.success();
+		},
+		[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
+			this.setSliceZoneFromSliceIDs(req.data);
+
+			return res.success();
+		},
+	});
+
+	constructor(
+		managedState: ManagedState = getDefaultManagedState(),
+		slices: SliceZone = getDefaultSlices(),
+	) {
 		super();
 
 		this.managedState = managedState;
+		this._slices = slices;
 	}
 
 	async load(state: SliceCanvasProps["state"]): Promise<void> {
@@ -37,6 +70,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 				status: StateManagerStatus.Loaded,
 				error: null,
 			};
+			this.setDefaultSlices();
 		} catch (error) {
 			console.error(error);
 
@@ -47,8 +81,43 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			};
 		}
 
-		this.emit("loaded", this.managedState);
+		this.emit(StateManagerEventType.Loaded, this.managedState);
+
+		try {
+			await this.api.ready();
+		} catch (error) {
+			console.error(error);
+		}
 	}
+
+	setDefaultSlices(): void {
+		// TODO: Temporary solution to mimic Storybook iframe interface
+		if (
+			this.managedState.status === StateManagerStatus.Loaded &&
+			typeof window !== "undefined" &&
+			window.location.hash.startsWith("#/iframe.html")
+		) {
+			const query = decodeURIComponent(
+				window.location.hash.replace(/^#\/iframe.html\?/i, ""),
+			)
+				.split("&")
+				.reduce<Record<string, string>>((acc, current) => {
+					const [key, value] = current.split("=");
+
+					return { ...acc, [key]: value };
+				}, {});
+
+			if ("id" in query) {
+				const [sliceID, variationID] = query.id
+					.replace(/^slices-/, "")
+					.split("--");
+
+				this.setSliceZoneFromSliceIDs([{ sliceID, variationID }], true);
+			}
+		}
+	}
+
+	// COM API Handlers:
 
 	// TODO: Temporary solution, should be refactored
 	getLibraries(): LibrarySummary[] {
@@ -80,8 +149,12 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		);
 	}
 
+	setSliceZone(slices: SliceZone): void {
+		this.slices = slices;
+	}
+
 	// TODO: Temporary solution, should be refactored
-	getSliceZoneFromSliceIDs(
+	setSliceZoneFromSliceIDs(
 		slices: {
 			sliceID: string;
 			variationID: string;

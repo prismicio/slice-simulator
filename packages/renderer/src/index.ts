@@ -1,17 +1,20 @@
-export { getDefaultProps } from "./getDefaultProps";
-
+// Main
 export { StateManager } from "./StateManager";
 export { createStateManager } from "./createStateManager";
+
+// Props
+export { getDefaultProps } from "./getDefaultProps";
+
+// Data
 export { getDefaultManagedState } from "./getDefaultManagedState";
 export { getDefaultSlices } from "./getDefaultSlices";
 
-export { StateManagerStatus } from "./types";
+// Types
+export { StateManagerEventType, StateManagerStatus } from "./types";
 export type {
+	StateManagerEvents,
 	ManagedState,
 	SliceCanvasProps,
 	SliceCanvasData,
 	SliceCanvasOptions,
-	VariationSummary,
-	SliceSummary,
-	LibrarySummary,
 } from "./types";
