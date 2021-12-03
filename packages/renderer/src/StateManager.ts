@@ -27,21 +27,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this.emit(StateManagerEventType.Slices, slices);
 	}
 
-	private api = new RendererAPI({
-		[ClientRequestType.GetLibraries]: (_req, res) => {
-			return res.success(this.getLibraries());
-		},
-		[ClientRequestType.SetSliceZone]: (req, res) => {
-			this.setSliceZone(req.data);
-
-			return res.success();
-		},
-		[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
-			this.setSliceZoneFromSliceIDs(req.data);
-
-			return res.success();
-		},
-	});
+	private _api: RendererAPI | null;
 
 	constructor(
 		managedState: ManagedState = getDefaultManagedState(),
@@ -51,13 +37,21 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		this.managedState = managedState;
 		this._slices = slices;
+		this._api = null;
 	}
 
 	async load(state: SliceCanvasProps["state"]): Promise<void> {
 		try {
 			const raw = await (typeof state === "function" ? state() : state);
 
-			const res = LibrariesState.Libraries.decode(raw);
+			// TODO: Figure out why @slicemachine/core is broken
+			const res =
+				typeof LibrariesState !== "undefined"
+					? LibrariesState.Libraries.decode(raw)
+					: ({
+							right: raw as LibrariesState.Libraries,
+							_tag: "Right",
+					  } as const);
 			if (res._tag === "Left") {
 				console.error(res.left);
 				throw new Error(
@@ -83,8 +77,29 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		this.emit(StateManagerEventType.Loaded, this.managedState);
 
+		await this.initAPI();
+	}
+
+	async initAPI(): Promise<void> {
+		this._api = new RendererAPI({
+			[ClientRequestType.GetLibraries]: (_req, res) => {
+				return res.success(this.getLibraries());
+			},
+			[ClientRequestType.SetSliceZone]: (req, res) => {
+				this.setSliceZone(req.data);
+
+				return res.success();
+			},
+			[ClientRequestType.SetSliceZoneFromSliceIDs]: (req, res) => {
+				this.setSliceZoneFromSliceIDs(req.data);
+
+				return res.success();
+			},
+		});
+
 		try {
-			await this.api.ready();
+			const res = await this._api.ready();
+
 		} catch (error) {
 			console.error(error);
 		}
@@ -122,10 +137,14 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 	// TODO: Temporary solution, should be refactored
 	getLibraries(): LibrarySummary[] {
 		if (
-			this.managedState.status !== StateManagerStatus.Loaded ||
+			this.managedState.status === StateManagerStatus.Pending ||
 			!this.managedState.data
 		) {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
+		} else if (this.managedState.status === StateManagerStatus.Error) {
+			throw new Error(
+				"State is in error state, try troubleshooting above errors first",
+			);
 		}
 
 		return Object.entries(this.managedState.data).map(
@@ -160,7 +179,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			variationID: string;
 		}[],
 		loose = false, // TODO: Temporary solution to mimic Storybook iframe interface
-	): SliceZone {
+	): void {
 		if (
 			this.managedState.status !== StateManagerStatus.Loaded ||
 			!this.managedState.data
@@ -188,7 +207,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			return acc;
 		}, {});
 
-		return slices
+		this.slices = slices
 			.map((slice) => {
 				const sliceID = keyed(slice.sliceID);
 				const variationID = keyed(slice.variationID);
