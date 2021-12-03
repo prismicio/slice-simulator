@@ -61,7 +61,7 @@ export abstract class ChannelEmitter<
 			this.port = null;
 		}
 	}
-	private _receiverReady = false;
+	private _receiverReady = "";
 	private _receiverReadyCallback: (() => Promise<void>) | null = null;
 	private _connected = false;
 	public get connected(): boolean {
@@ -136,6 +136,16 @@ export abstract class ChannelEmitter<
 							]);
 						});
 
+						// Finish by aknowledging ready
+						this.postResponse(
+							createSuccessResponseMessage(this._receiverReady, undefined),
+							(response) => {
+								// Target content window is checked in previous statement
+								// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+								this._target.contentWindow!.postMessage(response, "*");
+							},
+						);
+
 						// If post request succeed, we're connected
 						this._connected = true;
 
@@ -183,19 +193,9 @@ export abstract class ChannelEmitter<
 
 				switch (message.type) {
 					case InternalReceiverRequestType.Ready:
-						this.postResponse(
-							createSuccessResponseMessage(message.requestID, undefined),
-							(response) => {
-								(event.source as WindowProxy).postMessage(
-									response,
-									event.origin,
-								);
-							},
-						);
+						this._receiverReady = message.requestID;
 
-						this._receiverReady = true;
-
-						// If emitter if waiting for receiver to be ready
+						// If emitter is waiting for receiver to be ready
 						if (this._receiverReadyCallback) {
 							await this._receiverReadyCallback();
 							this._receiverReadyCallback = null;
