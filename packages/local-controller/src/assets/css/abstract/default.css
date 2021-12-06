@@ -28,6 +28,10 @@ body {
 	@apply w-full overflow-x-auto;
 }
 
+a {
+	pointer-events: none;
+}
+
 a:focus-visible {
 	/* TODO: custom behavior */
 }
