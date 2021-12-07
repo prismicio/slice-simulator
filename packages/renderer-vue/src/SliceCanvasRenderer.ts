@@ -58,8 +58,8 @@ export const SliceCanvasRenderer = {
 					{
 						attrs: { id: "root" },
 						on: {
-							click: onClickHandler,
-							submit: disableEventHandler,
+							"!click": onClickHandler,
+							"!submit": disableEventHandler,
 						},
 					},
 					[

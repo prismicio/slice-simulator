@@ -57,8 +57,10 @@ export const SliceCanvasRenderer = (
 			{managedState.data && slices.length ? (
 				<div
 					id="root"
-					onClick={onClickHandler as unknown as React.MouseEventHandler}
-					onSubmit={disableEventHandler as unknown as React.FormEventHandler}
+					onClickCapture={onClickHandler as unknown as React.MouseEventHandler}
+					onSubmitCapture={
+						disableEventHandler as unknown as React.FormEventHandler
+					}
 				>
 					{props.sliceZone({ slices })}
 				</div>
