@@ -9,6 +9,10 @@ export { getDefaultProps } from "./getDefaultProps";
 export { getDefaultManagedState } from "./getDefaultManagedState";
 export { getDefaultSlices } from "./getDefaultSlices";
 
+// Events
+export { disableEventHandler } from "./disableEventHandler";
+export { onClickHandler } from "./onClickHandler";
+
 // Types
 export { StateManagerEventType, StateManagerStatus } from "./types";
 export type {

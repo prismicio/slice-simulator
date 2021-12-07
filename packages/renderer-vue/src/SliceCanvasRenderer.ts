@@ -6,6 +6,8 @@ import {
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
+	onClickHandler,
+	disableEventHandler,
 	SliceCanvasData,
 	SliceCanvasOptions,
 	SliceCanvasProps,
@@ -50,13 +52,22 @@ export const SliceCanvasRenderer = {
 			this.slices.length &&
 			this.$scopedSlots.default
 		) {
-			// TODO: Temporary solution to mimic Storybook iframe interface
 			children.push(
-				h("div", { attrs: { id: "root" } }, [
-					this.$scopedSlots.default({
-						slices: this.slices,
-					}),
-				]),
+				h(
+					"div",
+					{
+						attrs: { id: "root" },
+						on: {
+							click: onClickHandler,
+							submit: disableEventHandler,
+						},
+					},
+					[
+						this.$scopedSlots.default({
+							slices: this.slices,
+						}),
+					],
+				),
 			);
 		}
 

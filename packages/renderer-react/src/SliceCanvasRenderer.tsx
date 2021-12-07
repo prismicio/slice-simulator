@@ -5,6 +5,8 @@ import {
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
+	onClickHandler,
+	disableEventHandler,
 	SliceCanvasData,
 	SliceCanvasProps,
 	StateManagerEventType,
@@ -53,8 +55,13 @@ export const SliceCanvasRenderer = (
 			}}
 		>
 			{managedState.data && slices.length ? (
-				// TODO: Temporary solution to mimic Storybook iframe interface
-				<div id="root">{props.sliceZone({ slices })}</div>
+				<div
+					id="root"
+					onClick={onClickHandler as unknown as React.MouseEventHandler}
+					onSubmit={disableEventHandler as unknown as React.FormEventHandler}
+				>
+					{props.sliceZone({ slices })}
+				</div>
 			) : null}
 		</div>
 	);
