@@ -105,28 +105,22 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 	}
 
 	setDefaultSlices(): void {
-		// TODO: Temporary solution to mimic Storybook iframe interface
+		// Set default slice to URL query params (lid, sid, vid)
 		if (
 			this.managedState.status === StateManagerStatus.Loaded &&
-			typeof window !== "undefined" &&
-			window.location.hash.startsWith("#/iframe.html")
+			typeof window !== "undefined"
 		) {
-			const query = decodeURIComponent(
-				window.location.hash.replace(/^#\/iframe.html\?/i, ""),
-			)
-				.split("&")
-				.reduce<Record<string, string>>((acc, current) => {
-					const [key, value] = current.split("=");
+			const url = new URL(window.location.href);
 
-					return { ...acc, [key]: value };
-				}, {});
-
-			if ("id" in query) {
-				const [sliceID, variationID] = query.id
-					.replace(/^slices-/, "")
-					.split("--");
-
-				this.setSliceZoneFromSliceIDs([{ sliceID, variationID }], true);
+			if (url.searchParams.has("sid") && url.searchParams.has("vid")) {
+				this.setSliceZoneFromSliceIDs([
+					{
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						sliceID: url.searchParams.get("sid")!,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						variationID: url.searchParams.get("vid")!,
+					},
+				]);
 			}
 		}
 	}
@@ -179,7 +173,6 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			sliceID: string;
 			variationID: string;
 		}[],
-		loose = false, // TODO: Temporary solution to mimic Storybook iframe interface
 	): void {
 		if (
 			this.managedState.status !== StateManagerStatus.Loaded ||
@@ -188,20 +181,17 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			throw new Error("State is not loaded, use `StateManager.load()` first");
 		}
 
-		const keyed = (str: string) =>
-			loose ? str.toLowerCase().replace(/[-_]/g, "") : str;
-
 		const allMocks = Object.values(this.managedState.data).reduce<
 			Record<string, Record<string, SharedSlice>>
 		>((acc, library) => {
 			const sliceMap = library.components;
 
 			Object.values(sliceMap).forEach((slice) => {
-				acc[keyed(slice.id)] = Object.values(slice.mocks).reduce<
+				acc[slice.id] = Object.values(slice.mocks).reduce<
 					Record<string, SharedSlice>
 				>((acc, mock) => {
 					// TODO: Type definition from Slice Machine core is incomplete
-					acc[keyed(mock.variation)] = mock as unknown as SharedSlice;
+					acc[mock.variation] = mock as unknown as SharedSlice;
 
 					return acc;
 				}, {});
@@ -212,8 +202,8 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		this.slices = slices
 			.map((slice) => {
-				const sliceID = keyed(slice.sliceID);
-				const variationID = keyed(slice.variationID);
+				const sliceID = slice.sliceID;
+				const variationID = slice.variationID;
 
 				if (sliceID in allMocks && variationID in allMocks[sliceID]) {
 					return allMocks[sliceID][variationID];
