@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-vue@0.0.5...@prismicio/slice-canvas-renderer-vue@0.0.6) (2021-12-08)
+
+
+### Features
+
+* prevent clicks on links and form submissions ([21189a1](https://github.com/prismicio/slice-canvas/commit/21189a1a1135fd5d05ba4e548fc61ecd798ca004))
+
+
+### Bug Fixes
+
+* use capture events to also capture client side routing ([896e953](https://github.com/prismicio/slice-canvas/commit/896e9534fe3be1d19af04138b00e7fc25bc4213e))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([0ec926b](https://github.com/prismicio/slice-canvas/commit/0ec926bad7eb9d73ef65f729502e719b19216349))
+
 ### [0.0.5](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-vue@0.0.4...@prismicio/slice-canvas-renderer-vue@0.0.5) (2021-12-03)
 
 
