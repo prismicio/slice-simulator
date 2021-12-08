@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.4...@prismicio/slice-canvas-renderer@0.0.5) (2021-12-08)
+
+
+### Features
+
+* prevent clicks on links and form submissions ([21189a1](https://github.com/prismicio/slice-canvas/commit/21189a1a1135fd5d05ba4e548fc61ecd798ca004))
+
+
+### Refactor
+
+* **renderer:** set default slices according to query params ([c9d3c23](https://github.com/prismicio/slice-canvas/commit/c9d3c2337abbbea39fa6906a81efd82634d5835d))
+
 ### [0.0.4](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.3...@prismicio/slice-canvas-renderer@0.0.4) (2021-12-03)
 
 
