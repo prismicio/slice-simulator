@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.6...@prismicio/slice-canvas-renderer@0.0.7) (2021-12-10)
+
+
+### Features
+
+* **renderer,renderer-react,renderer-vue:** add error message when accessing canvas directly ([238d428](https://github.com/prismicio/slice-canvas/commit/238d428a162f48f10bf32740574d7aa1e120139f))
+
 ### [0.0.6](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.5...@prismicio/slice-canvas-renderer@0.0.6) (2021-12-10)
 
 
