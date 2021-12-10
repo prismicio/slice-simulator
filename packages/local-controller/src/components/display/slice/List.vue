@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { LibrarySummary } from "@prismicio/slice-canvas-renderer";
+import { LibrarySummary } from "@prismicio/slice-canvas-com";
 
 import SliceListItem from "~/components/display/slice/ListItem.vue"
 

@@ -39,7 +39,7 @@
 		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava"
 	},
 	"dependencies": {
-		"@prismicio/slice-canvas-renderer": "^0.0.6"
+		"@prismicio/slice-canvas-renderer": "^0.0.7"
 	},
 	"devDependencies": {
 		"@types/react": "^17.0.37",

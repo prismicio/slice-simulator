@@ -4,7 +4,7 @@ import {
 	LibrarySummary,
 	SliceSummary,
 	VariationSummary,
-} from "@prismicio/slice-canvas-renderer";
+} from "@prismicio/slice-canvas-com";
 
 export const state = ref<{
 	libraries: LibrarySummary[] | null;
