@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.5...@prismicio/slice-canvas-renderer@0.0.6) (2021-12-10)
+
+
+### Bug Fixes
+
+* disable validator while unstable ([fc7416d](https://github.com/prismicio/slice-canvas/commit/fc7416d2c05b4c7843456edacb8ae3354acfb51f))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([a4b595b](https://github.com/prismicio/slice-canvas/commit/a4b595b8e39058c4148e994ed35158793ba77cba))
+
 ### [0.0.5](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.4...@prismicio/slice-canvas-renderer@0.0.5) (2021-12-08)
 
 
