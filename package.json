@@ -11,7 +11,7 @@
 		"build:renderer": "npm run build --w packages/renderer",
 		"build:renderer-react": "npm run build --w packages/renderer-react",
 		"build:renderer-vue": "npm run build --w packages/renderer-vue",
-		"dev": "npm-run-all --parallel dev:*",
+		"dev": "npm-run-all --parallel dev:com dev:renderer dev:renderer-* dev:local-controller",
 		"dev:local-controller": "npm run dev --w packages/local-controller",
 		"dev:com": "npm run dev --w packages/com",
 		"dev:renderer": "npm run dev --w packages/renderer",
