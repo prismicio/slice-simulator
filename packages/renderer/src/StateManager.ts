@@ -46,7 +46,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 			// TODO: Figure out why @slicemachine/core is broken
 			const res =
-				typeof LibrariesState !== "undefined"
+				typeof LibrariesState !== "undefined" && false // TODO: Will use again once stabilized
 					? LibrariesState.Libraries.decode(raw)
 					: ({
 							right: raw as LibrariesState.Libraries,
