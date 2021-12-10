@@ -6,6 +6,7 @@ import {
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
+	getDefaultMessage,
 	onClickHandler,
 	disableEventHandler,
 	SliceCanvasData,
@@ -32,6 +33,7 @@ export const SliceCanvasRenderer = {
 			stateManager: createStateManager(),
 			managedState: getDefaultManagedState(),
 			slices: getDefaultSlices(),
+			message: getDefaultMessage(),
 		};
 	},
 	mounted(this: SliceCanvasOptions) {
@@ -41,13 +43,24 @@ export const SliceCanvasRenderer = {
 		this.stateManager.on(StateManagerEventType.Slices, (slices) => {
 			this.slices = slices;
 		});
+		this.stateManager.on(StateManagerEventType.Message, (message) => {
+			this.message = message;
+		});
 
 		this.stateManager.load(this.state);
 	},
 	render(this: SliceCanvasOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];
 
-		if (
+		if (this.message) {
+			children.push(
+				h("article", {
+					domProps: {
+						innerHTML: this.message,
+					},
+				}),
+			);
+		} else if (
 			this.managedState.data &&
 			this.slices.length &&
 			this.$scopedSlots.default

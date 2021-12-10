@@ -6,11 +6,13 @@ import type { StateManager } from "./StateManager";
 export enum StateManagerEventType {
 	Loaded = "loaded",
 	Slices = "slices",
+	Message = "message",
 }
 
 export type StateManagerEvents = {
 	[StateManagerEventType.Loaded]: ManagedState;
 	[StateManagerEventType.Slices]: SliceZone;
+	[StateManagerEventType.Message]: string;
 };
 
 export const enum StateManagerStatus {
@@ -37,6 +39,7 @@ export interface SliceCanvasData {
 	stateManager: StateManager;
 	managedState: ManagedState;
 	slices: SliceZone;
+	message: string;
 }
 
 export type SliceCanvasOptions = SliceCanvasProps & SliceCanvasData;

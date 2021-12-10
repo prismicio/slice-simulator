@@ -5,6 +5,7 @@ import {
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
+	getDefaultMessage,
 	onClickHandler,
 	disableEventHandler,
 	SliceCanvasData,
@@ -28,6 +29,7 @@ export const SliceCanvasRenderer = (
 		getDefaultManagedState(),
 	);
 	const [slices, setSlices] = React.useState(getDefaultSlices());
+	const [message, setMessage] = React.useState(getDefaultMessage());
 
 	React.useEffect(() => {
 		stateManager.on(StateManagerEventType.Loaded, (state) => {
@@ -35,6 +37,9 @@ export const SliceCanvasRenderer = (
 		});
 		stateManager.on(StateManagerEventType.Slices, (slices) => {
 			setSlices(slices);
+		});
+		stateManager.on(StateManagerEventType.Message, (message) => {
+			setMessage(message);
 		});
 
 		stateManager.load(props.state);
@@ -54,7 +59,9 @@ export const SliceCanvasRenderer = (
 				background: "#fefefe",
 			}}
 		>
-			{managedState.data && slices.length ? (
+			{message ? (
+				<article dangerouslySetInnerHTML={{ __html: message }} />
+			) : managedState.data && slices.length ? (
 				<div
 					id="root"
 					onClickCapture={onClickHandler as unknown as React.MouseEventHandler}

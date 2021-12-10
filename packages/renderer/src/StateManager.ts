@@ -17,6 +17,7 @@ import {
 import { getDefaultManagedState } from "./getDefaultManagedState";
 import { EventEmitter } from "./lib/EventEmitter";
 import { getDefaultSlices } from "./getDefaultSlices";
+import { sliceCanvasAccessedDirectly } from "./messages";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	public managedState: ManagedState;
@@ -24,7 +25,14 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 	private _slices: SliceZone;
 	protected set slices(slices: SliceZone) {
 		this._slices = slices;
+		this.message = "";
 		this.emit(StateManagerEventType.Slices, slices);
+	}
+
+	private _message: string;
+	protected set message(message: string) {
+		this._message = message;
+		this.emit(StateManagerEventType.Message, message);
 	}
 
 	private _api: RendererAPI | null;
@@ -37,6 +45,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		this.managedState = managedState;
 		this._slices = slices;
+		this._message = "";
 		this._api = null;
 	}
 
@@ -100,6 +109,13 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		try {
 			await this._api.ready();
 		} catch (error) {
+			if (
+				error instanceof Error &&
+				error.message === "Receiver is currently not embedded as an iframe" &&
+				!this._slices.length
+			) {
+				this.message = sliceCanvasAccessedDirectly;
+			}
 			console.error(error);
 		}
 	}

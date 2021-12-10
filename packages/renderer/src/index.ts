@@ -8,6 +8,7 @@ export { getDefaultProps } from "./getDefaultProps";
 // Data
 export { getDefaultManagedState } from "./getDefaultManagedState";
 export { getDefaultSlices } from "./getDefaultSlices";
+export { getDefaultMessage } from "./getDefaultMessage";
 
 // Events
 export { disableEventHandler } from "./disableEventHandler";
