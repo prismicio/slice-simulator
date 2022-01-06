@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-react@0.0.7...@prismicio/slice-canvas-renderer-react@0.0.8) (2022-01-06)
+
+
+### Chore
+
+* **deps:** bump @prismicio/slice-canvas-* ([cd8e072](https://github.com/prismicio/slice-canvas/commit/cd8e0725e9adc0c3ab1f955ae80988989666afef))
+
 ### [0.0.7](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer-react@0.0.6...@prismicio/slice-canvas-renderer-react@0.0.7) (2021-12-10)
 
 
