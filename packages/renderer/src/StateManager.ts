@@ -18,6 +18,7 @@ import { getDefaultManagedState } from "./getDefaultManagedState";
 import { EventEmitter } from "./lib/EventEmitter";
 import { getDefaultSlices } from "./getDefaultSlices";
 import { sliceCanvasAccessedDirectly } from "./messages";
+import { throttle } from "./lib/throttle";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	public managedState: ManagedState;
@@ -37,6 +38,11 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 	private _api: RendererAPI | null;
 
+	private _mouse: {
+		x: number;
+		y: number;
+	};
+
 	constructor(
 		managedState: ManagedState = getDefaultManagedState(),
 		slices: SliceZone = getDefaultSlices(),
@@ -47,6 +53,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this._slices = slices;
 		this._message = "";
 		this._api = null;
+		this._mouse = { x: 0, y: 0 };
 	}
 
 	async load(state: SliceCanvasProps["state"]): Promise<void> {
@@ -108,6 +115,20 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		try {
 			await this._api.ready();
+
+			// Keep track of mouse position and find active slice
+			window.addEventListener("mousemove", (event) => {
+				this._mouse = { x: event.clientX, y: event.clientY };
+
+				this.setActiveSlice();
+			});
+
+			// Listen to events that may alter displayed slices rendering
+			window.addEventListener("resize", this.setActiveSlice.bind(this));
+			window.addEventListener("mousewheel", () => {
+				setTimeout(this.setActiveSlice.bind(this), 200);
+			});
+			this.on(StateManagerEventType.Slices, this.setActiveSlice.bind(this));
 		} catch (error) {
 			if (
 				error instanceof Error &&
@@ -140,6 +161,87 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 			}
 		}
 	}
+
+	// TODO: Temporary solution, does not play well when there's a not found slice in production
+	private _setActiveSlice(): void {
+		// If there's no slices, abort
+		if (this._slices.length === 0) {
+			this._api?.setActiveSlice(null);
+
+			return;
+		}
+
+		// Get path starting from the SliceCanvasRenderer element
+		const self =
+			document.querySelector(".slice-canvas-renderer #root") ||
+			document.querySelector(".slice-canvas-renderer");
+		let path = document.elementsFromPoint(this._mouse.x, this._mouse.y);
+		path = path
+			.slice(
+				0,
+				Math.min(
+					path.length,
+					Math.max(
+						path.findIndex((el) => el === self),
+						0,
+					),
+				),
+			)
+			.slice(-6)
+			.reverse(); // Keep only first 6 elements starting from `self`
+
+		// Abort if no path is found
+		if (!path.length) {
+			this._api?.setActiveSlice(null);
+
+			return;
+		}
+
+		// Find the slice
+		if (this._slices.length === 1) {
+			// One slice case
+			this._api?.setActiveSlice({
+				rect: path[0].getBoundingClientRect(),
+				sliceID: (this._slices[0] as SharedSlice).slice_type,
+				variationID: (this._slices[0] as SharedSlice).variation,
+				index: 0,
+			});
+
+			return;
+		} else {
+			// Multiple slices case
+			for (let i = 0; i < path.length - 1; i++) {
+				const $maybeSliceZone = path[i];
+
+				// If element has the same amount of children as the slice zone has slices
+				if ($maybeSliceZone.children.length === this._slices.length) {
+					// Assume it's the slice zone and that next item is the hovered slice
+					const $maybeSlice = path[i + 1];
+
+					// Determine slice index in slice zone according ot the DOM
+					const index = Array.from($maybeSliceZone.children).findIndex(
+						($el) => $el === $maybeSlice,
+					);
+
+					if (index < 0 || index >= this._slices.length) {
+						// If index is invalid
+						this._api?.setActiveSlice(null);
+					} else {
+						// Index is valid
+						this._api?.setActiveSlice({
+							rect: $maybeSlice.getBoundingClientRect(),
+							sliceID: (this._slices[index] as SharedSlice).slice_type,
+							variationID: (this._slices[index] as SharedSlice).variation,
+							index,
+						});
+					}
+
+					return;
+				}
+			}
+		}
+	}
+	setActiveSlice = throttle(this._setActiveSlice, 16);
 
 	// COM API Handlers:
 
