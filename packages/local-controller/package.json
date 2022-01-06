@@ -31,7 +31,7 @@
   },
   "devDependencies": {
 		"@fontsource/ibm-plex-sans": "^4.5.1",
-		"@prismicio/slice-canvas-com": "^0.0.6",
+		"@prismicio/slice-canvas-com": "^0.1.0",
 		"@vitejs/plugin-vue": "^1.10.1",
 		"autoprefixer": "^10.4.0",
 		"ava": "^3.15.0",
