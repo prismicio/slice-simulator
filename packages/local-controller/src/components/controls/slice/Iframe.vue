@@ -5,7 +5,28 @@
 			<figcaption class="h-12 flex items-center px-4 border-b border-gray">
 				<h4 class="font-medium text-sm">{{ names.variation }}</h4>
 			</figcaption>
-			<iframe ref="iframe" :src="src" frameborder="0" class="w-full flex-1"></iframe>
+			<div class="flex-1 relative flex overflow-hidden">
+				<div v-if="activeSlice" class="absolute border-2 border-[#ff0000] pointer-events-none" :style="{
+					top: `${activeSlice.rect.top}px`,
+					left: `${activeSlice.rect.left}px`,
+					width: `${activeSlice.rect.width}px`,
+					height: `${activeSlice.rect.height}px`,
+				}">
+					<form action="#" method="GET" @submit.prevent class="pointer-events-auto absolute top-1 right-1 gap-1 flex">
+						<button class="rounded bg-gray w-6 h-6" @click="action('up')">
+							&#8593;
+						</button>
+						<button class="rounded bg-gray w-6 h-6" @click="action('down')">
+							&#8595;
+						</button>
+						<button class="rounded bg-gray w-6 h-6" @click="action('delete')">&times;</button>
+					</form>
+					<small class="absolute bottom-1 left-1 text-xs text-[#ff0000]">
+						{{ activeSlice.sliceID }} - {{ activeSlice.variationID }} - {{ activeSlice.index }}
+					</small>
+				</div>
+				<iframe ref="iframe" :src="src" frameborder="0" class="w-full"></iframe>
+			</div>
 		</figure>
 	</div>
 </template>
@@ -13,9 +34,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, toRaw, watch, watchEffect } from "vue";
 
-import { RendererClient } from "@prismicio/slice-canvas-com";
+import { ActiveSlice, RendererClient } from "@prismicio/slice-canvas-com";
 
-import { state as rendererState, setLibraries, setCurrent } from "~/store/renderer";
+import { state as rendererState, setLibraries, setCurrent, setHistory } from "~/store/renderer";
 
 interface Props {
 	src: string;
@@ -23,6 +44,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const iframe = ref<HTMLIFrameElement | null>(null);
+
+const activeSlice = ref<ActiveSlice | null>(null);
 
 let client: RendererClient | null = null;
 
@@ -37,7 +60,13 @@ const updateClient = async (newOrigin = false) => {
 
 onMounted(async () => {
 	if (iframe.value) {
-		client = new RendererClient(iframe.value, { debug: true });
+		client = new RendererClient(iframe.value, {
+			setActiveSlice: (req, res) => {
+				activeSlice.value = req.data;
+
+				return res.success();
+			}
+		}, { debug: true });
 
 		watch(() => props.src, () => updateClient(true));
 		await updateClient();
@@ -48,10 +77,14 @@ onMounted(async () => {
 
 watch(rendererState, async () => {
 	if (client) {
-		await client.setSliceZoneFromSliceIDs([{
-			sliceID: rendererState.value.current.slice.id,
-			variationID: rendererState.value.current.variation.id,
-		}]);
+		await client.setSliceZoneFromSliceIDs(
+			rendererState.value.history.map(({ slice, variation }) => {
+				return {
+					sliceID: slice.id,
+					variationID: variation.id,
+				};
+			})
+		);
 	}
 }, { deep: true });
 
@@ -68,6 +101,31 @@ const names = computed(() => {
 		};
 	}
 })
+
+const action = (type: "up" | "down" | "delete") => {
+	if (!activeSlice.value) {
+		return;
+	}
+	const activeSliceIndex = activeSlice.value.index;
+	let newHistory = rendererState.value.history.slice();
+
+	switch (type) {
+		case "up":
+			[newHistory[Math.max(0, activeSliceIndex - 1)], newHistory[activeSliceIndex]] = [newHistory[activeSliceIndex], newHistory[Math.max(0, activeSliceIndex - 1)]];
+
+			break;
+		case "down":
+			[newHistory[activeSliceIndex], newHistory[Math.min(activeSliceIndex + 1, newHistory.length - 1)]] = [newHistory[Math.min(activeSliceIndex + 1, newHistory.length - 1)], newHistory[activeSliceIndex]];
+
+			break;
+
+		case "delete":
+			newHistory = (newHistory as unknown[]).filter((_, index) => index !== activeSliceIndex);
+			break;
+	}
+
+	setHistory(newHistory);
+}
 
 defineExpose({ iframe, names });
 </script>

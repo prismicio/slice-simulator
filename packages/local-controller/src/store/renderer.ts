@@ -12,9 +12,14 @@ export const state = ref<{
 		slice: SliceSummary;
 		variation: VariationSummary;
 	} | null;
+	history: {
+		slice: SliceSummary;
+		variation: VariationSummary;
+	}[];
 }>({
 	libraries: null,
 	current: null,
+	history: [],
 });
 
 export const setLibraries = (libraries: LibrarySummary[]): void => {
@@ -29,4 +34,17 @@ export const setCurrent = (
 		slice: unref(slice),
 		variation: unref(variation),
 	};
+	state.value.history.push({
+		slice: unref(slice),
+		variation: unref(variation),
+	});
+};
+
+export const setHistory = (
+	history: {
+		slice: SliceSummary;
+		variation: VariationSummary;
+	}[],
+) => {
+	state.value.history = history;
 };

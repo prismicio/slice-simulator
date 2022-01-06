@@ -16,7 +16,8 @@ import WithSidebar from '~/components/layouts/WithSidebar.vue';
 import SliceList from "~/components/display/slice/List.vue";
 import SliceIframe from "~/components/controls/slice/Iframe.vue";
 
-const src = ref("http://localhost:3000/slice-canvas?debug=true");
+const src = ref("http://localhost:3000/slice-canvas");
+// const src = ref("http://localhost:3000/slice-canvas?debug=true");
 
 defineExpose({ rendererState, src });
 </script>
