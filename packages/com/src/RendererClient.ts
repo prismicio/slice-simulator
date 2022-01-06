@@ -3,8 +3,10 @@ import {
 	TransactionMethod,
 	AllChannelEmitterOptions,
 	TransactionsMethods,
+	TransactionsHandlers,
 } from "./channel";
 import {
+	APIRequestType,
 	APITransactions,
 	ClientRequestType,
 	ClientTransactions,
@@ -20,9 +22,19 @@ export class RendererClient
 {
 	constructor(
 		target: HTMLIFrameElement,
+		requestHandlers: Partial<TransactionsHandlers<APITransactions>>,
 		options?: Partial<AllChannelEmitterOptions>,
 	) {
-		super(target, {}, { ...rendererClientDefaultOptions, ...options });
+		super(
+			target,
+			{
+				[APIRequestType.SetActiveSlice]: (_req, res) => {
+					return res.success();
+				},
+				...requestHandlers,
+			},
+			{ ...rendererClientDefaultOptions, ...options },
+		);
 	}
 
 	[ClientRequestType.Ping]: TransactionMethod<

@@ -2,6 +2,13 @@ import { SliceZone } from "@prismicio/types";
 
 import { RequestMessage, ResponseMessage, Transaction } from "./channel";
 
+export type ActiveSlice = {
+	rect: DOMRect;
+	sliceID: string;
+	variationID: string;
+	index: number;
+};
+
 export type VariationSummary = {
 	name: string;
 	id: string;
@@ -18,9 +25,15 @@ export type LibrarySummary = {
 	slices: SliceSummary[];
 };
 
-export enum APIRequestType {}
+export enum APIRequestType {
+	SetActiveSlice = "setActiveSlice",
+}
 
-export type APITransactions = Record<string, never>;
+export type APITransactions = {
+	[APIRequestType.SetActiveSlice]: Transaction<
+		RequestMessage<APIRequestType.SetActiveSlice, ActiveSlice | null>
+	>;
+};
 
 export enum ClientRequestType {
 	Ping = "ping",

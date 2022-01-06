@@ -1,9 +1,15 @@
 import {
 	AllChannelReceiverOptions,
 	ChannelReceiver,
+	TransactionMethod,
 	TransactionsHandlers,
 } from "./channel";
-import { ClientRequestType, ClientTransactions } from "./types";
+import {
+	APIRequestType,
+	APITransactions,
+	ClientRequestType,
+	ClientTransactions,
+} from "./types";
 
 export const rendererAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
 	requestIDPrefix: "renderer-",
@@ -22,11 +28,9 @@ export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 	) {
 		super(
 			{
-				[ClientRequestType.Ping]:
-					requestHandlers[ClientRequestType.Ping] ||
-					((_req, res) => {
-						return res.success("pong");
-					}),
+				[ClientRequestType.Ping]: (_req, res) => {
+					return res.success("pong");
+				},
 				...requestHandlers,
 			},
 			{
@@ -39,4 +43,10 @@ export class RendererAPI extends ChannelReceiver<ClientTransactions> {
 			},
 		);
 	}
+
+	[APIRequestType.SetActiveSlice]: TransactionMethod<
+		APITransactions[APIRequestType.SetActiveSlice]
+	> = async (data) => {
+		return await this.postFormattedRequest(APIRequestType.SetActiveSlice, data);
+	};
 }
