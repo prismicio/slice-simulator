@@ -21,9 +21,11 @@
 		"prepare": "npm run build",
 		"lint": "eslint --ext .js,.ts .",
 		"unit": "npm run unit --workspaces --if-present",
-		"test": "npm run lint && npm run unit"
+		"size": "size-limit",
+		"test": "npm run lint && npm run unit && npm run build && npm run size"
 	},
 	"devDependencies": {
+		"@size-limit/preset-small-lib": "^7.0.5",
 		"@typescript-eslint/eslint-plugin": "^5.9.1",
 		"@typescript-eslint/parser": "^5.9.1",
 		"eslint": "^8.6.0",
@@ -32,7 +34,9 @@
 		"eslint-plugin-tsdoc": "^0.2.14",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.5.1",
-		"prettier-plugin-jsdoc": "^0.3.30"
+		"prettier-plugin-jsdoc": "^0.3.30",
+
+		"size-limit": "^7.0.5"
 	},
 	"//": "Order matters!",
 	"workspaces": [
