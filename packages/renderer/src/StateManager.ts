@@ -2,9 +2,11 @@ import { SharedSlice, SliceZone } from "@prismicio/types";
 import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
 import {
+	ActiveSlice,
 	ClientRequestType,
 	LibrarySummary,
 	RendererAPI,
+	ResponseError,
 } from "@prismicio/slice-canvas-com";
 
 import {
@@ -30,6 +32,12 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this.emit(StateManagerEventType.Slices, slices);
 	}
 
+	private _activeSlice: ActiveSlice | null;
+	protected set activeSlice(activeSlice: ActiveSlice | null) {
+		this._activeSlice = activeSlice;
+		this.emit(StateManagerEventType.ActiveSlice, activeSlice);
+	}
+
 	private _message: string;
 	protected set message(message: string) {
 		this._message = message;
@@ -51,6 +59,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		this.managedState = managedState;
 		this._slices = slices;
+		this._activeSlice = null;
 		this._message = "";
 		this._api = null;
 		this._mouse = { x: 0, y: 0 };
@@ -129,6 +138,18 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 				setTimeout(this.setActiveSlice.bind(this), 200);
 			});
 			this.on(StateManagerEventType.Slices, this.setActiveSlice.bind(this));
+			this.on(StateManagerEventType.ActiveSlice, async (activeSlice) => {
+				try {
+					await this._api?.setActiveSlice(activeSlice);
+				} catch (error) {
+					// Just log bad requests, throw everything else
+					if (error instanceof ResponseError && error.response.status === 400) {
+						console.error(error.response);
+					} else {
+						throw error;
+					}
+				}
+			});
 		} catch (error) {
 			if (
 				error instanceof Error &&
@@ -166,7 +187,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 	private _setActiveSlice(): void {
 		// If there's no slices, abort
 		if (this._slices.length === 0) {
-			this._api?.setActiveSlice(null);
+			this.activeSlice = null;
 
 			return;
 		}
@@ -192,7 +213,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 		// Abort if no path is found
 		if (!path.length) {
-			this._api?.setActiveSlice(null);
+			this.activeSlice = null;
 
 			return;
 		}
@@ -200,12 +221,12 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		// Find the slice
 		if (this._slices.length === 1) {
 			// One slice case
-			this._api?.setActiveSlice({
+			this.activeSlice = {
 				rect: path[0].getBoundingClientRect(),
 				sliceID: (this._slices[0] as SharedSlice).slice_type,
 				variationID: (this._slices[0] as SharedSlice).variation,
 				index: 0,
-			});
+			};
 
 			return;
 		} else {
@@ -225,15 +246,15 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 					if (index < 0 || index >= this._slices.length) {
 						// If index is invalid
-						this._api?.setActiveSlice(null);
+						this.activeSlice = null;
 					} else {
 						// Index is valid
-						this._api?.setActiveSlice({
+						this.activeSlice = {
 							rect: $maybeSlice.getBoundingClientRect(),
 							sliceID: (this._slices[index] as SharedSlice).slice_type,
 							variationID: (this._slices[index] as SharedSlice).variation,
 							index,
-						});
+						};
 					}
 
 					return;

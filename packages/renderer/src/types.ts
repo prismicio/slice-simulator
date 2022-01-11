@@ -1,17 +1,20 @@
 import { SliceZone } from "@prismicio/types";
 import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
+import { ActiveSlice } from "@prismicio/slice-canvas-com";
 
 import type { StateManager } from "./StateManager";
 
 export enum StateManagerEventType {
 	Loaded = "loaded",
 	Slices = "slices",
+	ActiveSlice = "activeSlice",
 	Message = "message",
 }
 
 export type StateManagerEvents = {
 	[StateManagerEventType.Loaded]: ManagedState;
 	[StateManagerEventType.Slices]: SliceZone;
+	[StateManagerEventType.ActiveSlice]: ActiveSlice | null;
 	[StateManagerEventType.Message]: string;
 };
 
