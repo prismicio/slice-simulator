@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.8...@prismicio/slice-canvas-renderer@0.0.9) (2022-01-11)
+
+
+### Bug Fixes
+
+* **renderer:** don't throw bad requests to allow cross version compatibility ([540ed12](https://github.com/prismicio/slice-canvas/commit/540ed12cf06026b6a48084764a818b9f3a864a10))
+
+
+### Chore
+
+* **deps:** configure size limit ([7dcb4f1](https://github.com/prismicio/slice-canvas/commit/7dcb4f1cec753fe1b0361f361958e318a721e47e))
+* **deps:** maintain dependencies ([8f5b9f9](https://github.com/prismicio/slice-canvas/commit/8f5b9f969b01bb4b4d6adf65ac957cb66dac9b4c))
+
 ### [0.0.8](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.7...@prismicio/slice-canvas-renderer@0.0.8) (2022-01-06)
 
 
