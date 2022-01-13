@@ -236,7 +236,7 @@ export abstract class ChannelEmitter<
 	): Promise<ExtractSuccessResponseMessage<TResponse>> {
 		if (!this._connected) {
 			throw new NotReadyError(
-				"Sender is not connected, use `ChannelSender.connect()` first",
+				"Emitter is not connected, use `ChannelEmitter.connect()` first",
 			);
 		}
 

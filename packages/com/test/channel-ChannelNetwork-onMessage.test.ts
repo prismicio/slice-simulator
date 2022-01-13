@@ -67,6 +67,25 @@ test.serial("warns on invalid message received", async (t) => {
 	consoleWarnStub.restore();
 });
 
+test.serial("throws on other errors", async (t) => {
+	const channelNetwork = new StandaloneChannelNetwork({}, {});
+
+	const pendingRequestStub = sinon
+		// @ts-expect-error - taking a shortcut by accessing private property
+		.stub(channelNetwork._pendingRequests, "has")
+		.throws(new Error(t.title));
+
+	const response = createSuccessResponseMessage(t.title, dummyData);
+
+	await t.throwsAsync(
+		// @ts-expect-error - taking a shortcut by accessing protected property
+		channelNetwork.onMessage({ data: response }),
+		{ message: t.title },
+	);
+
+	pendingRequestStub.restore();
+});
+
 test("returns request handler success response", async (t) => {
 	const channelNetwork = new StandaloneChannelNetwork<
 		Record<string, unknown>,

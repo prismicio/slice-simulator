@@ -164,8 +164,8 @@ export abstract class ChannelNetwork<
 			(resolve, reject) => {
 				const requestTimeout = setTimeout(() => {
 					if (this._pendingRequests.has(request.requestID)) {
-						reject(new RequestTimeoutError(request));
 						this._pendingRequests.delete(request.requestID);
+						reject(new RequestTimeoutError(request));
 					}
 				}, options.timeout || this.options.defaultTimeout);
 

@@ -50,7 +50,9 @@ export abstract class ChannelReceiver<
 	) {
 		super(requestHandlers, { ...channelReceiverDefaultOptions, ...options });
 
-		window.addEventListener("message", this._onPublicMessage.bind(this));
+		window.addEventListener("message", (event) => {
+			this._onPublicMessage(event);
+		});
 	}
 
 	/**
@@ -133,6 +135,7 @@ export abstract class ChannelReceiver<
 			if (error instanceof TypeError) {
 				// Ignore unknown messages
 			} else {
+				// Should not be possible, but who knows :shrug:
 				throw error;
 			}
 		}
