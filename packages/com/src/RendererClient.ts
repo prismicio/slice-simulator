@@ -22,7 +22,7 @@ export class RendererClient
 {
 	constructor(
 		target: HTMLIFrameElement,
-		requestHandlers: Partial<TransactionsHandlers<APITransactions>>,
+		requestHandlers?: Partial<TransactionsHandlers<APITransactions>>,
 		options?: Partial<AllChannelEmitterOptions>,
 	) {
 		super(
