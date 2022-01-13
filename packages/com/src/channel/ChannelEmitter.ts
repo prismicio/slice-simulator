@@ -9,7 +9,11 @@ import {
 	isRequestMessage,
 	validateMessage,
 } from "./messages";
-import { ConnectionTimeoutError, NotReadyError } from "./errors";
+import {
+	ChannelNotSetError,
+	ConnectionTimeoutError,
+	NotReadyError,
+} from "./errors";
 import {
 	RequestMessage,
 	ResponseMessage,
@@ -46,7 +50,7 @@ export abstract class ChannelEmitter<
 	private _channel: MessageChannel | null = null;
 	protected get channel(): MessageChannel {
 		if (!this._channel) {
-			throw new Error("Channel is not set");
+			throw new ChannelNotSetError();
 		}
 
 		return this._channel;
@@ -77,7 +81,9 @@ export abstract class ChannelEmitter<
 
 		this._target = target;
 
-		window.addEventListener("message", this._onPublicMessage.bind(this));
+		window.addEventListener("message", (event) => {
+			this._onPublicMessage(event);
+		});
 	}
 
 	/**
@@ -103,7 +109,7 @@ export abstract class ChannelEmitter<
 				() => {
 					// Throw if target doesn't allow access to content window
 					if (!this._target.contentWindow) {
-						throw new Error("Target window is not available");
+						return reject(new Error("Target window is not available"));
 					}
 
 					const receiverReadyTimeout = setTimeout(() => {

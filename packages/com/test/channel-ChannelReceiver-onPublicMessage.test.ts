@@ -40,7 +40,11 @@ test.serial("debug logs messages when on debug mode", (t) => {
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: request });
 
-	t.is(consoleDebugStub.callCount, 2); // 1 for the response, 1 for the request
+	t.is(
+		consoleDebugStub.callCount,
+		2,
+		"calls `console.debug` twice: 1 for the response, 1 for the request",
+	);
 	t.deepEqual(consoleDebugStub.getCall(0).args[0], request);
 
 	consoleDebugStub.restore();
@@ -90,7 +94,7 @@ test.serial("throws on other errors", (t) => {
 	consoleDebugStub.restore();
 });
 
-test("accepts connection requests", (t) => {
+test("accepts connect requests", (t) => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = sinon.stub(channelReceiver, "postResponse");
@@ -114,7 +118,7 @@ test("accepts connection requests", (t) => {
 	postResponseStub.restore();
 });
 
-test("rejects non connect requests", (t) => {
+test("rejects non-connect requests", (t) => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = sinon.stub(channelReceiver, "postResponse");
@@ -151,7 +155,7 @@ test("doesn't forward response messages to default message handler once ready", 
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = sinon.stub(channelReceiver, "onMessage");
-	// @ts-expect-error - taking a shortcut by accessing private property
+	// @ts-expect-error - taking a shortcut by setting private property
 	channelReceiver._ready = true;
 
 	const response = createSuccessResponseMessage(t.title, undefined);

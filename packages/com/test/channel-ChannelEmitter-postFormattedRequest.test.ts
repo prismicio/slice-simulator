@@ -1,36 +1,39 @@
 import test from "ava";
 import * as sinon from "sinon";
 
-import { ChannelReceiver, NotReadyError } from "../src/channel";
+import { ChannelEmitter, NotReadyError } from "../src/channel";
 
-class StandaloneChannelReceiver extends ChannelReceiver {}
+class StandaloneChannelEmitter extends ChannelEmitter {}
+
+const iframe = document.createElement("iframe");
 
 const dummyData = { foo: "bar" };
 
 test("throws when not ready", (t) => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	t.throws(
 		() => {
 			// @ts-expect-error - taking a shortcut by accessing protected property
-			channelReceiver.postFormattedRequest(t.title, dummyData);
+			channelEmitter.postFormattedRequest(t.title, dummyData);
 		},
 		{ instanceOf: NotReadyError },
 	);
 });
 
 test("forwards request to default post request handler once ready", (t) => {
-	const channelReceiver = new StandaloneChannelReceiver(
+	const channelEmitter = new StandaloneChannelEmitter(
+		iframe,
 		{},
 		{ requestIDPrefix: t.title },
 	);
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const postRequestStub = sinon.stub(channelReceiver, "postRequest");
+	const postRequestStub = sinon.stub(channelEmitter, "postRequest");
 	// @ts-expect-error - taking a shortcut by setting private property
-	channelReceiver._ready = true;
+	channelEmitter._connected = true;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	channelReceiver.postFormattedRequest(t.title, dummyData, { timeout: 1000 });
+	channelEmitter.postFormattedRequest(t.title, dummyData, { timeout: 1000 });
 
 	t.is(postRequestStub.callCount, 1);
 	t.is(

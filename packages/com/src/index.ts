@@ -16,6 +16,7 @@ export {
 	RequestTimeoutError,
 	NotReadyError,
 	PortNotSetError,
+	ChannelNotSetError,
 } from "./channel";
 export type {
 	RequestMessage,

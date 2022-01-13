@@ -45,3 +45,8 @@ export class PortNotSetError extends Error {
 		super("Port is not set");
 	}
 }
+export class ChannelNotSetError extends Error {
+	constructor() {
+		super("Channel is not set");
+	}
+}

@@ -37,6 +37,7 @@ export {
 	RequestTimeoutError,
 	NotReadyError,
 	PortNotSetError,
+	ChannelNotSetError,
 } from "./errors";
 
 export {
