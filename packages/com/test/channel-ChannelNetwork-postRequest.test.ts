@@ -136,6 +136,43 @@ test("posts valid requests to its partner and timeout after set specific timeout
 	});
 });
 
+// TODO: Not sure about how that behavior is possible, reads absurd
+test("posts valid requests to its partner and doesn't timeout if pending request has been fulfilled", async (t) => {
+	const channelNetwork = new StandaloneChannelNetwork(
+		{},
+		{ defaultTimeout: 100 },
+	);
+
+	const channel = new MessageChannel();
+
+	// @ts-expect-error - taking a shortcut by setting protected property
+	channelNetwork.port = channel.port2;
+
+	const request = channelNetwork.createRequestMessage(t.title, dummyData);
+
+	channel.port1.onmessage = (event) => {
+		t.deepEqual(event.data, request);
+		// @ts-expect-error - taking a shortcut by accessing private property
+		channelNetwork._pendingRequests.delete(request.requestID);
+	};
+
+	await new Promise<void>(async (resolve, reject) => {
+		const timeout = setTimeout(() => {
+			t.fail("default timeout is not honored");
+			reject();
+		}, 1000);
+
+		// @ts-expect-error - taking a shortcut by accessing protected property
+		await t.throwsAsync(channelNetwork.postRequest(request), {
+			instanceOf: RequestTimeoutError,
+		});
+
+		clearTimeout(timeout);
+
+		resolve();
+	});
+});
+
 test("throws when maximum request concurrency has been hit", async (t) => {
 	const channelNetwork = new StandaloneChannelNetwork(
 		{},
