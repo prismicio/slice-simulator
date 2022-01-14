@@ -120,6 +120,32 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 				return res.success();
 			},
+			[ClientRequestType.ScrollToSlice]: (req, res) => {
+				if (req.data.sliceIndex < 0) {
+					return res.error("`sliceIndex` must be > 0", 400);
+				} else if (req.data.sliceIndex >= this._slices.length) {
+					return res.error(
+						`\`sliceIndex\` must be <= ${this._slices.length} (\`<SliceZone />\` current length)`,
+						400,
+					);
+				}
+
+				const $sliceZone = this._getSliceZoneDOM();
+				if (!$sliceZone) {
+					return res.error("failed to find `<SliceZone />`", 500);
+				}
+
+				$sliceZone.children[req.data.sliceIndex].scrollIntoView({
+					behavior: req.data.behavior,
+					block: req.data.block,
+					inline: req.data.inline,
+				});
+
+				// Update active slice after scrolling
+				setTimeout(this.setActiveSlice.bind(this), 300);
+
+				return res.success();
+			},
 		});
 
 		try {
@@ -162,25 +188,26 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		}
 	}
 
-	setDefaultSlices(): void {
-		// Set default slice to URL query params (lid, sid, vid)
-		if (
-			this.managedState.status === StateManagerStatus.Loaded &&
-			typeof window !== "undefined"
-		) {
-			const url = new URL(window.location.href);
+	private _getSliceZoneDOM(): Element | null {
+		let node =
+			document.querySelector(".slice-canvas-renderer #root") ||
+			document.querySelector(".slice-canvas-renderer");
 
-			if (url.searchParams.has("sid") && url.searchParams.has("vid")) {
-				this.setSliceZoneFromSliceIDs([
-					{
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						sliceID: url.searchParams.get("sid")!,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						variationID: url.searchParams.get("vid")!,
-					},
-				]);
+		if (!node || !node.children.length) {
+			return null;
+		}
+
+		for (let i = 0; i < 5; i++) {
+			if (node.children.length === this._slices.length) {
+				return node;
+			} else if (node.children.length) {
+				node = node.children[0];
+			} else {
+				break;
 			}
 		}
+
+		return null;
 	}
 
 	// TODO: Temporary solution, does not play well when there's a not found slice in production
@@ -263,6 +290,27 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		}
 	}
 	setActiveSlice = throttle(this._setActiveSlice, 16);
+
+	setDefaultSlices(): void {
+		// Set default slice to URL query params (lid, sid, vid)
+		if (
+			this.managedState.status === StateManagerStatus.Loaded &&
+			typeof window !== "undefined"
+		) {
+			const url = new URL(window.location.href);
+
+			if (url.searchParams.has("sid") && url.searchParams.has("vid")) {
+				this.setSliceZoneFromSliceIDs([
+					{
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						sliceID: url.searchParams.get("sid")!,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						variationID: url.searchParams.get("vid")!,
+					},
+				]);
+			}
+		}
+	}
 
 	// COM API Handlers:
 

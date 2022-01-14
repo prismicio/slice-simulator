@@ -66,4 +66,13 @@ export class RendererClient
 			data,
 		);
 	};
+
+	[ClientRequestType.ScrollToSlice]: TransactionMethod<
+		ClientTransactions[ClientRequestType.ScrollToSlice]
+	> = async (data) => {
+		return await this.postFormattedRequest(
+			ClientRequestType.ScrollToSlice,
+			data,
+		);
+	};
 }

@@ -40,6 +40,7 @@ export enum ClientRequestType {
 	GetLibraries = "getLibraries",
 	SetSliceZone = "setSliceZone",
 	SetSliceZoneFromSliceIDs = "setSliceZoneFromSliceIDs",
+	ScrollToSlice = "scrollToSlice",
 }
 
 export type ClientTransactions = {
@@ -61,6 +62,18 @@ export type ClientTransactions = {
 		RequestMessage<
 			ClientRequestType.SetSliceZoneFromSliceIDs,
 			{ sliceID: string; variationID: string }[]
+		>
+	>;
+
+	[ClientRequestType.ScrollToSlice]: Transaction<
+		RequestMessage<
+			ClientRequestType.ScrollToSlice,
+			{
+				sliceIndex: number;
+				behavior?: "auto" | "smooth";
+				block?: "start" | "center" | "end" | "nearest";
+				inline?: "start" | "center" | "end" | "nearest";
+			}
 		>
 	>;
 };

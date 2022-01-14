@@ -19,6 +19,7 @@
 						<button class="rounded bg-gray w-6 h-6" @click="action('down')">
 							&#8595;
 						</button>
+						<button class="rounded bg-gray w-6 h-6" @click="action('focus')">&plus;</button>
 						<button class="rounded bg-gray w-6 h-6" @click="action('delete')">&times;</button>
 					</form>
 					<small class="absolute bottom-1 left-1 text-xs text-[#ff0000]">
@@ -102,7 +103,7 @@ const names = computed(() => {
 	}
 })
 
-const action = (type: "up" | "down" | "delete") => {
+const action = (type: "up" | "down" | "delete" | "focus") => {
 	if (!activeSlice.value) {
 		return;
 	}
@@ -118,6 +119,10 @@ const action = (type: "up" | "down" | "delete") => {
 			[newHistory[activeSliceIndex], newHistory[Math.min(activeSliceIndex + 1, newHistory.length - 1)]] = [newHistory[Math.min(activeSliceIndex + 1, newHistory.length - 1)], newHistory[activeSliceIndex]];
 
 			break;
+
+		case "focus":
+			client && client.scrollToSlice({ sliceIndex: activeSliceIndex, behavior: "smooth", block: "center" });
+			return;
 
 		case "delete":
 			newHistory = (newHistory as unknown[]).filter((_, index) => index !== activeSliceIndex);

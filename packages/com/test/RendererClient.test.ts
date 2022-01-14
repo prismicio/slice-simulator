@@ -80,5 +80,6 @@ test(callsPostFormattedRequestCorrectly, ClientRequestType.Ping, undefined);
 test(callsPostFormattedRequestCorrectly, ClientRequestType.GetLibraries, undefined);
 test(callsPostFormattedRequestCorrectly, ClientRequestType.SetSliceZone, []);
 test(callsPostFormattedRequestCorrectly, ClientRequestType.SetSliceZoneFromSliceIDs, []);
+test(callsPostFormattedRequestCorrectly, ClientRequestType.ScrollToSlice, { sliceIndex: 0});
 
 /* eslint-enable prettier/prettier */
