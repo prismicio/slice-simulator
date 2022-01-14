@@ -154,7 +154,7 @@ test("returns request handler error response", async (t) => {
 	});
 });
 
-test("returns a bad request upon bad request", async (t) => {
+test("returns not implemented when request handler is not found", async (t) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
 	const channel = new MessageChannel();
@@ -172,7 +172,7 @@ test("returns a bad request upon bad request", async (t) => {
 		const response = createErrorResponseMessage(
 			request.requestID,
 			undefined,
-			400,
+			501,
 		);
 
 		channel.port1.onmessage = (event) => {

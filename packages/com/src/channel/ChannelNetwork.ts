@@ -100,7 +100,7 @@ export abstract class ChannelNetwork<
 			if (isRequestMessage(message)) {
 				if (!this.requestHandlers[message.type]) {
 					this.postResponse(
-						createErrorResponseMessage(message.requestID, undefined, 400),
+						createErrorResponseMessage(message.requestID, undefined, 501),
 					);
 				} else {
 					try {
