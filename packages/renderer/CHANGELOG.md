@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.9...@prismicio/slice-canvas-renderer@0.0.10) (2022-01-14)
+
+
+### Features
+
+* **com,renderer,local-controller:** support `scrollToSlice` method ([992d68e](https://github.com/prismicio/slice-canvas/commit/992d68ed28b4f4c743be9883164d7c393423f231))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([4d4dcfa](https://github.com/prismicio/slice-canvas/commit/4d4dcfa92bea6eb5d64131cf30b6096503b3914a))
+
 ### [0.0.9](https://github.com/prismicio/slice-canvas/compare/@prismicio/slice-canvas-renderer@0.0.8...@prismicio/slice-canvas-renderer@0.0.9) (2022-01-11)
 
 
