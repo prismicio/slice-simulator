@@ -1,14 +1,14 @@
 <!--
 
 Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- @prismicio/slice-simulator
+- @prismicio/slice-simulator-react
 - Preview and develop Prismic slices fast with minimal configuration
 - prismicio/slice-simulator
 - slice-simulator
 
 -->
 
-# @prismicio/slice-simulator
+# @prismicio/slice-simulator-react
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -21,18 +21,31 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
 - 🛠 &nbsp;Minimal configuration;
 - 🖥 &nbsp;Preview and develop slices locally;
-- 🈂 &nbsp;Compatible with [React][react] & [Vue][vue].
+- 🈂 &nbsp;Compatible with [React][react].
 
 ## Install
 
 ```bash
-npm install @prismicio/slice-simulator-* # `react` or `vue`
+npm install @prismicio/slice-simulator-react
 ```
 
-For further details, refer to each packages' READMEs:
+Then create a page for Slice Simulator:
+```jsx
+// e.g. ~/pages/slice-simulator.jsx
+import { SliceSimulator } from "@prismicio/slice-simulator-react";
+import SliceZone from "next-slicezone";
 
-- [@prismicio/slice-simulator-react](./packages/react/README.md#install)
-- [@prismicio/slice-simulator-vue](./packages/vue/README.md#install)
+import state from "../.slicemachine/libraries-state.json";
+import resolver from  "../sm-resolver";
+
+const SliceSimulator = () => (<SliceSimulator
+	// The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
+	sliceZone={({ slices }) => <SliceZone slices={slices} resolver={resolver} />}
+	state={state}
+/>);
+
+export default SliceSimulator;
+```
 
 ## Documentation
 
@@ -80,7 +93,6 @@ For more clarity on this project and its structure you can also check out the de
 [changelog]: ./CHANGELOG.md
 [contributing]: ./CONTRIBUTING.md
 [react]: https://reactjs.org
-[vue]: https://vuejs.org
 
 <!-- TODO: Replace link with a more useful one if available -->
 
@@ -91,15 +103,15 @@ For more clarity on this project and its structure you can also check out the de
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-core/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-core.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-react/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-react
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-react.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-react
 [github-actions-ci-src]: https://github.com/prismicio/slice-simulator/workflows/ci/badge.svg
 [github-actions-ci-href]: https://github.com/prismicio/slice-simulator/actions?query=workflow%3Aci
 [codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-simulator.svg
 [codecov-href]: https://codecov.io/gh/prismicio/slice-simulator
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-core.svg
-[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-react.svg
+[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-react

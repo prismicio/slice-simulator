@@ -1,14 +1,14 @@
 <!--
 
 Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- @prismicio/slice-simulator
+- @prismicio/slice-simulator-core
 - Preview and develop Prismic slices fast with minimal configuration
 - prismicio/slice-simulator
 - slice-simulator
 
 -->
 
-# @prismicio/slice-simulator
+# @prismicio/slice-simulator-core
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -19,20 +19,15 @@ Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.jso
 
 Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
-- 🛠 &nbsp;Minimal configuration;
-- 🖥 &nbsp;Preview and develop slices locally;
-- 🈂 &nbsp;Compatible with [React][react] & [Vue][vue].
+- 🛠 &nbsp;Abstracted core's logic;
+- 🐎 &nbsp;Quick-to-implement logic;
+- 🈂 &nbsp;Fully typed interface.
 
 ## Install
 
 ```bash
-npm install @prismicio/slice-simulator-* # `react` or `vue`
+npm install @prismicio/slice-simulator-core
 ```
-
-For further details, refer to each packages' READMEs:
-
-- [@prismicio/slice-simulator-react](./packages/react/README.md#install)
-- [@prismicio/slice-simulator-vue](./packages/vue/README.md#install)
 
 ## Documentation
 
@@ -79,8 +74,6 @@ For more clarity on this project and its structure you can also check out the de
 [prismic-docs]: https://prismic.io/docs
 [changelog]: ./CHANGELOG.md
 [contributing]: ./CONTRIBUTING.md
-[react]: https://reactjs.org
-[vue]: https://vuejs.org
 
 <!-- TODO: Replace link with a more useful one if available -->
 

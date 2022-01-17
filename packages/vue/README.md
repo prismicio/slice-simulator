@@ -1,14 +1,14 @@
 <!--
 
 Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- @prismicio/slice-simulator
+- @prismicio/slice-simulator-vue
 - Preview and develop Prismic slices fast with minimal configuration
 - prismicio/slice-simulator
 - slice-simulator
 
 -->
 
-# @prismicio/slice-simulator
+# @prismicio/slice-simulator-vue
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -21,18 +21,46 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
 - 🛠 &nbsp;Minimal configuration;
 - 🖥 &nbsp;Preview and develop slices locally;
-- 🈂 &nbsp;Compatible with [React][react] & [Vue][vue].
+- 🈂 &nbsp;Compatible with [Vue][vue].
 
 ## Install
 
 ```bash
-npm install @prismicio/slice-simulator-* # `react` or `vue`
+npm install @prismicio/slice-simulator-vue
 ```
 
-For further details, refer to each packages' READMEs:
+Then create a page for Slice Simulator:
+```vue
+<!-- e.g. ~/pages/slice-simulator.vue -->
+<template>
+	<SliceSimulator :state="state" #default="{ slices }">
+		<SliceZone :slices="slices" />
+	</SliceSimulator>
+</template>
 
-- [@prismicio/slice-simulator-react](./packages/react/README.md#install)
-- [@prismicio/slice-simulator-vue](./packages/vue/README.md#install)
+<script>
+import { SliceSimulator } from "@prismicio/slice-simulator-vue";
+import SliceZone from "vue-slicezone";
+
+import state from "~~/.slicemachine/libraries-state.json";
+
+export default {
+	components: {
+		SliceSimulator,
+		SliceZone
+	},
+	data() {
+		return { state };
+	}
+}
+</script>
+```
+
+⚠ &nbsp;Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that, update the import to use CJS instead:
+```diff
+- import { SliceSimulator } from "@prismicio/slice-simulator-vue";
++ import { SliceSimulator } from "@prismicio/slice-simulator-vue/dist/index.cjs";
+```
 
 ## Documentation
 
@@ -79,7 +107,6 @@ For more clarity on this project and its structure you can also check out the de
 [prismic-docs]: https://prismic.io/docs
 [changelog]: ./CHANGELOG.md
 [contributing]: ./CONTRIBUTING.md
-[react]: https://reactjs.org
 [vue]: https://vuejs.org
 
 <!-- TODO: Replace link with a more useful one if available -->
@@ -91,15 +118,15 @@ For more clarity on this project and its structure you can also check out the de
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-core/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-core.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-vue/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-vue
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-vue.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-vue
 [github-actions-ci-src]: https://github.com/prismicio/slice-simulator/workflows/ci/badge.svg
 [github-actions-ci-href]: https://github.com/prismicio/slice-simulator/actions?query=workflow%3Aci
 [codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-simulator.svg
 [codecov-href]: https://codecov.io/gh/prismicio/slice-simulator
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-core.svg
-[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-vue.svg
+[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-vue

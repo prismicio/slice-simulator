@@ -16,7 +16,7 @@ assignees: ""
 
 ### Versions
 
-- @prismicio/slice-canvas-<!-- package in use, e.g. "vue" -->: <!-- ex: v0.1.0 -->
+- @prismicio/slice-simulator-<!-- package in use, e.g. "vue" -->: <!-- ex: v0.1.0 -->
 - node: <!-- ex: v12.14.0 -->
 
 ### Reproduction

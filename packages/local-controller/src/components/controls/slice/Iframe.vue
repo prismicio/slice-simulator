@@ -35,9 +35,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, toRaw, watch, watchEffect } from "vue";
 
-import { ActiveSlice, RendererClient } from "@prismicio/slice-canvas-com";
+import { ActiveSlice, SimulatorClient } from "@prismicio/slice-simulator-com";
 
-import { state as rendererState, setLibraries, setCurrent, setHistory } from "~/store/renderer";
+import { state as simulatorState, setLibraries, setCurrent, setHistory } from "~/store/simulator";
 
 interface Props {
 	src: string;
@@ -48,7 +48,7 @@ const iframe = ref<HTMLIFrameElement | null>(null);
 
 const activeSlice = ref<ActiveSlice | null>(null);
 
-let client: RendererClient | null = null;
+let client: SimulatorClient | null = null;
 
 const updateClient = async (newOrigin = false) => {
 	await client!.connect(newOrigin);
@@ -61,7 +61,7 @@ const updateClient = async (newOrigin = false) => {
 
 onMounted(async () => {
 	if (iframe.value) {
-		client = new RendererClient(iframe.value, {
+		client = new SimulatorClient(iframe.value, {
 			setActiveSlice: (req, res) => {
 				activeSlice.value = req.data;
 
@@ -76,10 +76,10 @@ onMounted(async () => {
 	}
 });
 
-watch(rendererState, async () => {
+watch(simulatorState, async () => {
 	if (client) {
 		await client.setSliceZoneFromSliceIDs(
-			rendererState.value.history.map(({ slice, variation }) => {
+			simulatorState.value.history.map(({ slice, variation }) => {
 				return {
 					sliceID: slice.id,
 					variationID: variation.id,
@@ -90,15 +90,15 @@ watch(rendererState, async () => {
 }, { deep: true });
 
 const names = computed(() => {
-	if (!rendererState.value.current) {
+	if (!simulatorState.value.current) {
 		return {
 			slice: "Loading...",
 			variation: "Loading...",
 		};
 	} else {
 		return {
-			slice: rendererState.value.current.slice.name,
-			variation: rendererState.value.current.variation.name,
+			slice: simulatorState.value.current.slice.name,
+			variation: simulatorState.value.current.variation.name,
 		};
 	}
 })
@@ -108,7 +108,7 @@ const action = (type: "up" | "down" | "delete" | "focus") => {
 		return;
 	}
 	const activeSliceIndex = activeSlice.value.index;
-	let newHistory = rendererState.value.history.slice();
+	let newHistory = simulatorState.value.history.slice();
 
 	switch (type) {
 		case "up":

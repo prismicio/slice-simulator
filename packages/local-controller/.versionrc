@@ -21,6 +21,6 @@
 			"section": "Chore"
 		}
 	],
-	"tagPrefix": "@prismicio/slice-canvas-local-controller@",
+	"tagPrefix": "@prismicio/slice-simulator-local-controller@",
 	"path": "."
 }

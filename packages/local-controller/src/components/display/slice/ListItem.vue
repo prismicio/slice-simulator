@@ -17,7 +17,7 @@
 				<li v-for="variation in slice.variations" :key="variation.id">
 					<button
 						class="text-gray-600 hover:bg-gray font-medium px-2 py-1 rounded-sm w-full text-left"
-						:class="{ 'bg-gray': isActiveRenderer && currentVariationID === variation.id }"
+						:class="{ 'bg-gray': isActiveSimulator && currentVariationID === variation.id }"
 						@click="setCurrent(slice, variation)"
 					>
 						{{ variation.name }}
@@ -31,9 +31,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-import { SliceSummary } from "@prismicio/slice-canvas-com";
+import { SliceSummary } from "@prismicio/slice-simulator-com";
 
-import { state as rendererState, setCurrent } from "~/store/renderer";
+import { state as simulatorState, setCurrent } from "~/store/simulator";
 
 interface Props {
 	slice: SliceSummary
@@ -46,15 +46,15 @@ const toggleActive = (): void => {
 	active.value = !active.value;
 };
 
-const isActiveRenderer = computed(() => {
-	return rendererState.value.current.slice.id === props.slice.id;
+const isActiveSimulator = computed(() => {
+	return simulatorState.value.current.slice.id === props.slice.id;
 });
 const isActive = computed(() => {
-	return active.value || isActiveRenderer.value;
+	return active.value || isActiveSimulator.value;
 });
 const currentVariationID = computed(() => {
-	return rendererState.value.current.variation.id;
+	return simulatorState.value.current.variation.id;
 });
 
-defineExpose({ isActiveRenderer, isActive, toggleActive, currentVariationID, setCurrent });
+defineExpose({ isActiveSimulator, isActive, toggleActive, currentVariationID, setCurrent });
 </script>

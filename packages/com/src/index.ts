@@ -1,6 +1,9 @@
-export { RendererClient, rendererClientDefaultOptions } from "./RendererClient";
+export {
+	SimulatorClient,
+	simulatorClientDefaultOptions,
+} from "./SimulatorClient";
 
-export { RendererAPI, rendererAPIDefaultOptions } from "./RendererAPI";
+export { SimulatorAPI, simulatorAPIDefaultOptions } from "./SimulatorAPI";
 
 export {
 	// Validators

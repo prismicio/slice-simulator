@@ -1,14 +1,14 @@
 <!--
 
 Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.json):
-- @prismicio/slice-canvas-com
+- @prismicio/slice-simulator-com
 - Preview and develop Prismic slices fast with minimal configuration
-- prismicio/slice-canvas
-- slice-canvas
+- prismicio/slice-simulator
+- slice-simulator
 
 -->
 
-# @prismicio/slice-canvas-com
+# @prismicio/slice-simulator-com
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -26,7 +26,7 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 ## Install
 
 ```bash
-npm install @prismicio/slice-canvas-com
+npm install @prismicio/slice-simulator-com
 ```
 
 ## Documentation
@@ -78,21 +78,21 @@ For more clarity on this project and its structure you can also check out the de
 <!-- TODO: Replace link with a more useful one if available -->
 
 [forum-question]: https://community.prismic.io
-[repo-bug-report]: https://github.com/prismicio/slice-canvas/issues/new?assignees=&labels=bug&template=bug_report.md&title=
-[repo-feature-request]: https://github.com/prismicio/slice-canvas/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
-[repo-pull-requests]: https://github.com/prismicio/slice-canvas/pulls
+[repo-bug-report]: https://github.com/prismicio/slice-simulator/issues/new?assignees=&labels=bug&template=bug_report.md&title=
+[repo-feature-request]: https://github.com/prismicio/slice-simulator/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=
+[repo-pull-requests]: https://github.com/prismicio/slice-simulator/pulls
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-canvas-com/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/slice-canvas-com
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-canvas-com.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-canvas-com
-[github-actions-ci-src]: https://github.com/prismicio/slice-canvas/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/prismicio/slice-canvas/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-canvas.svg
-[codecov-href]: https://codecov.io/gh/prismicio/slice-canvas
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-com/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-com
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-com.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-com
+[github-actions-ci-src]: https://github.com/prismicio/slice-simulator/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/prismicio/slice-simulator/actions?query=workflow%3Aci
+[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-simulator.svg
+[codecov-href]: https://codecov.io/gh/prismicio/slice-simulator
 [conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/slice-canvas-com.svg
-[license-href]: https://npmjs.com/package/@prismicio/slice-canvas-com
+[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-com.svg
+[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-com

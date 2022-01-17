@@ -1,17 +1,17 @@
 # Changelog
 
-Prismic Slice Canvas is a collection of npm packages with their own versions and changelogs, each listed below.
+Prismic Slice Simulator is a collection of npm packages with their own versions and changelogs, each listed below.
 
-## Renderers
+## Simulators
 
-- [@prismicio/slice-canvas-renderer](./packages/renderer/CHANGELOG.md)
-- [@prismicio/slice-canvas-renderer-react](./packages/renderer-react/CHANGELOG.md)
-- [@prismicio/slice-canvas-renderer-vue](./packages/renderer-vue/CHANGELOG.md)
+- [@prismicio/slice-simulator-core](./packages/core/CHANGELOG.md)
+- [@prismicio/slice-simulator-react](./packages/react/CHANGELOG.md)
+- [@prismicio/slice-simulator-vue](./packages/vue/CHANGELOG.md)
 
 ## Communication
 
-- [@prismicio/slice-canvas-com](./packages/com/CHANGELOG.md)
+- [@prismicio/slice-simulator-com](./packages/com/CHANGELOG.md)
 
 ## Controllers
 
-- [@prismicio/slice-canvas-local-controller](./packages/local-controller/CHANGELOG.md)
+- [@prismicio/slice-simulator-local-controller](./packages/local-controller/CHANGELOG.md)

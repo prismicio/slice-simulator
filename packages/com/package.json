@@ -1,5 +1,5 @@
 {
-	"name": "@prismicio/slice-canvas-com",
+	"name": "@prismicio/slice-simulator-com",
 	"version": "0.1.1",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
@@ -8,7 +8,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "ssh://git@github.com/prismicio/slice-canvas.git",
+		"url": "ssh://git@github.com/prismicio/slice-simulator.git",
 		"directory": "packages/com"
 	},
 	"license": "Apache-2.0",
