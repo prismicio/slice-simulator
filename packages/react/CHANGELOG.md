@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-canvas-renderer-react@0.0.10...@prismicio/slice-simulator-react@0.1.0) (2022-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename project from `slice-canvas` to `slice-simulator`
+
+### Refactor
+
+* rename project from `slice-canvas` to `slice-simulator` ([0749a55](https://github.com/prismicio/slice-simulator/commit/0749a55dcd7a7088a86cf47ef43079f21303f266))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([5dc02f0](https://github.com/prismicio/slice-simulator/commit/5dc02f04e5489db1879584958745509634cf0992))
+
 ### [0.0.10](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-canvas-renderer-react@0.0.9...@prismicio/slice-canvas-renderer-react@0.0.10) (2022-01-14)
 
 
