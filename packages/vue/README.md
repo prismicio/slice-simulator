@@ -40,9 +40,10 @@ Then create a page for Slice Simulator:
 
 <script>
 import { SliceSimulator } from "@prismicio/slice-simulator-vue";
-import SliceZone from "vue-slicezone";
+import { SliceZone } from "@prismicio/vue/components";
 
 import state from "~~/.slicemachine/libraries-state.json";
+import components from "~~/slices/components";
 
 export default {
 	components: {
@@ -50,7 +51,7 @@ export default {
 		SliceZone
 	},
 	data() {
-		return { state };
+		return { state, components };
 	}
 }
 </script>
