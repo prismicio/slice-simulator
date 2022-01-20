@@ -26,13 +26,14 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 ## Install
 
 ```bash
-npm install @prismicio/slice-simulator-* # `react` or `vue`
+npm install @prismicio/slice-simulator-* # `react`, `vue`, or `vue3`
 ```
 
 For further details, refer to each packages' READMEs:
 
 - [@prismicio/slice-simulator-react](./packages/react/README.md#install)
 - [@prismicio/slice-simulator-vue](./packages/vue/README.md#install)
+- [@prismicio/slice-simulator-vue3](./packages/vue3/README.md#install)
 
 ## Documentation
 
