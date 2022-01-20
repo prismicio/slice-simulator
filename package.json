@@ -5,18 +5,20 @@
 	"license": "Apache-2.0",
 	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"scripts": {
-		"build": "npm-run-all build:com build:core --parallel build:local-controller build:react build:vue",
+		"build": "npm-run-all build:com build:core --parallel build:local-controller build:react build:vue build:vue3",
 		"build:local-controller": "npm run build --w packages/local-controller",
 		"build:com": "npm run build --w packages/com",
 		"build:core": "npm run build --w packages/core",
 		"build:react": "npm run build --w packages/react",
 		"build:vue": "npm run build --w packages/vue",
-		"dev": "npm-run-all --parallel dev:com dev:core dev:react dev:vue dev:local-controller",
+		"build:vue3": "npm run build --w packages/vue3",
+		"dev": "npm-run-all --parallel dev:com dev:core dev:react dev:vue dev:vue3 dev:local-controller",
 		"dev:local-controller": "npm run dev --w packages/local-controller",
 		"dev:com": "npm run dev --w packages/com",
 		"dev:core": "npm run dev --w packages/core",
 		"dev:react": "npm run dev --w packages/react",
 		"dev:vue": "npm run dev --w packages/vue",
+		"dev:vue3": "npm run dev --w packages/vue3",
 		"format": "prettier --write .",
 		"prepare": "npm run build",
 		"lint": "eslint --ext .js,.ts .",
@@ -41,8 +43,9 @@
 	"workspaces": [
 		"packages/com",
 		"packages/core",
-		"packages/vue",
 		"packages/react",
+		"packages/vue",
+		"packages/vue3",
 		"packages/local-controller"
 	],
 	"engines": {
