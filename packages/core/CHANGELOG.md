@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.1.0...@prismicio/slice-simulator-core@0.1.1) (2022-01-20)
+
+
+### Bug Fixes
+
+* **core:** support wrapperless slicezones ([c20250b](https://github.com/prismicio/slice-simulator/commit/c20250be49209eeb51e45f1482bb356bdb279d5d))
+
 ## [0.1.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-canvas-renderer@0.0.10...@prismicio/slice-simulator-core@0.1.0) (2022-01-17)
 
 
