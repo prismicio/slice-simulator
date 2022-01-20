@@ -220,9 +220,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		}
 
 		// Get path starting from the `<SliceSimulator />` element
-		const self =
-			document.querySelector(".slice-simulator #root") ||
-			document.querySelector(".slice-simulator");
+		const self = document.querySelector(".slice-simulator");
 		let path = document.elementsFromPoint(this._mouse.x, this._mouse.y);
 		path = path
 			.slice(
