@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue@0.1.0...@prismicio/slice-simulator-vue@0.1.1) (2022-01-20)
+
+
+### Documentation
+
+* **vue:** use new slicezone ([1b40707](https://github.com/prismicio/slice-simulator/commit/1b407079da6981a40d9265a240966095b1d34d54))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([84e77c4](https://github.com/prismicio/slice-simulator/commit/84e77c4bc364580cac0396a13dd51524bf7a0efc))
+
 ## [0.1.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-canvas-renderer-vue@0.0.10...@prismicio/slice-simulator-vue@0.1.0) (2022-01-17)
 
 
