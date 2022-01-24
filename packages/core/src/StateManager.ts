@@ -125,7 +125,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 					return res.error("`sliceIndex` must be > 0", 400);
 				} else if (req.data.sliceIndex >= this._slices.length) {
 					return res.error(
-						`\`sliceIndex\` must be <= ${this._slices.length} (\`<SliceZone />\` current length)`,
+						`\`sliceIndex\` must be < ${this._slices.length} (\`<SliceZone />\` current length)`,
 						400,
 					);
 				}
