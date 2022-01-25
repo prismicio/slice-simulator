@@ -26,6 +26,11 @@ export class SimulatorClient
 		requestHandlers?: Partial<TransactionsHandlers<APITransactions>>,
 		options?: Partial<AllChannelEmitterOptions>,
 	) {
+		// True if `options.debug` is true or `debug=true` is among query parameters
+		const debug =
+			options?.debug ||
+			/[\?&]debug=true/i.test(decodeURIComponent(window.location.search));
+
 		super(
 			target,
 			{
@@ -34,8 +39,26 @@ export class SimulatorClient
 				},
 				...requestHandlers,
 			},
-			{ ...simulatorClientDefaultOptions, ...options },
+			{
+				...simulatorClientDefaultOptions,
+				...options,
+				debug,
+			},
 		);
+
+		// Append client to window object
+		if (debug) {
+			type ClientWindow = typeof window & {
+				prismic: { sliceSimulator?: { client?: SimulatorClient[] } };
+			};
+
+			(window as ClientWindow).prismic ||= {};
+			(window as ClientWindow).prismic.sliceSimulator ||= {};
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			(window as ClientWindow).prismic.sliceSimulator!.client ||= [];
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			(window as ClientWindow).prismic.sliceSimulator!.client!.push(this);
+		}
 	}
 
 	[ClientRequestType.Ping]: TransactionMethod<

@@ -30,6 +30,11 @@ export class SimulatorAPI
 			>,
 		options?: Partial<AllChannelReceiverOptions>,
 	) {
+		// True if `options.debug` is true or `debug=true` is among query parameters
+		const debug =
+			options?.debug ||
+			/[\?&]debug=true/i.test(decodeURIComponent(window.location.search));
+
 		super(
 			{
 				[ClientRequestType.Ping]: (_req, res) => {
@@ -39,11 +44,8 @@ export class SimulatorAPI
 			},
 			{
 				...simulatorAPIDefaultOptions,
-				// True if `debug=true` is among query parameters
-				debug: /[\?&]debug=true/i.test(
-					decodeURIComponent(window.location.search),
-				),
 				...options,
+				debug,
 			},
 		);
 	}

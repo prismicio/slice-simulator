@@ -39,6 +39,23 @@ test("instantiates correctly with defaults", (t) => {
 	t.is(res.error.callCount, 0);
 });
 
+test("registers instance on window object", (t) => {
+	t.false("prismic" in window);
+
+	const simulatorClient = new SimulatorClient(iframe, {}, { debug: true });
+
+	type ClientWindow = typeof window & {
+		prismic?: { sliceSimulator: { client: SimulatorClient[] } };
+	};
+
+	t.is(
+		(window as ClientWindow).prismic?.sliceSimulator.client[0],
+		simulatorClient,
+	);
+
+	delete (window as ClientWindow).prismic;
+});
+
 const callsPostFormattedRequestCorrectly = async <
 	TRequestType extends ClientRequestType,
 >(
