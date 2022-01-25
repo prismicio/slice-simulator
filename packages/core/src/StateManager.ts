@@ -135,6 +135,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 					return res.error("failed to find `<SliceZone />`", 500);
 				}
 
+				this.activeSlice = null;
 				$sliceZone.children[req.data.sliceIndex].scrollIntoView({
 					behavior: req.data.behavior,
 					block: req.data.block,
@@ -142,7 +143,7 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 				});
 
 				// Update active slice after scrolling
-				setTimeout(this.setActiveSlice.bind(this), 300);
+				setTimeout(this.setActiveSlice.bind(this), 750);
 
 				return res.success();
 			},
