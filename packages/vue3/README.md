@@ -47,6 +47,13 @@ import components from "../../slices/components";
 </script>
 ```
 
+⚠ &nbsp;Vite HMR can cause issues with Slice Simulator, try adding the following snippet before the end of your `<script>` tag if you're experiencing any:
+```javascript
+if (import.meta.hot) {
+	import.meta.hot.accept("../../.slicemachine/libraries-state.json", () => {});
+}
+```
+
 ## Documentation
 
 To discover what's new on this package check out [the changelog][changelog]. For full documentation, visit the [official Prismic documentation][prismic-docs].
