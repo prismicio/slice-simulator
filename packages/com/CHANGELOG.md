@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.2.0...@prismicio/slice-simulator-com@0.2.1) (2022-01-25)
+
+
+### Features
+
+* **com:** allow enabling debug mode through url query params ([df421d9](https://github.com/prismicio/slice-simulator/commit/df421d930362ed5cce92babf5d96b4c11984c92a))
+
 ## [0.2.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-canvas-com@0.1.1...@prismicio/slice-simulator-com@0.2.0) (2022-01-17)
 
 
