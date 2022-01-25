@@ -13,6 +13,7 @@ import {
 	SliceSimulatorOptions,
 	SliceSimulatorProps as _SliceSimulatorProps,
 	StateManagerEventType,
+	StateManagerStatus,
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = _SliceSimulatorProps;
@@ -62,16 +63,16 @@ export const SliceSimulator = {
 					},
 				}),
 			);
-		} else if (
-			this.managedState.data &&
-			this.slices.length &&
-			this.$scopedSlots.default
-		) {
+		} else if (this.slices.length && this.$scopedSlots.default) {
 			children.push(
 				h(
 					"div",
 					{
 						attrs: { id: "root" },
+						style:
+							this.managedState.status !== StateManagerStatus.Loaded
+								? { display: "none" }
+								: undefined,
 						on: {
 							"!click": onClickHandler,
 							"!submit": disableEventHandler,

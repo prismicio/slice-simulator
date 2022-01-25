@@ -11,6 +11,7 @@ import {
 	SliceSimulatorData,
 	SliceSimulatorProps as _SliceSimulatorProps,
 	StateManagerEventType,
+	StateManagerStatus,
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = {
@@ -59,9 +60,14 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 		>
 			{message ? (
 				<article dangerouslySetInnerHTML={{ __html: message }} />
-			) : managedState.data && slices.length ? (
+			) : slices.length ? (
 				<div
 					id="root"
+					style={
+						managedState.status !== StateManagerStatus.Loaded
+							? { display: "none" }
+							: undefined
+					}
 					onClickCapture={onClickHandler as unknown as React.MouseEventHandler}
 					onSubmitCapture={
 						disableEventHandler as unknown as React.FormEventHandler

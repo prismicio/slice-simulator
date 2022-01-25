@@ -89,6 +89,23 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 				status: StateManagerStatus.Loaded,
 				error: null,
 			};
+
+			// Download all slices chunks once
+			this.setSliceZoneFromSliceIDs(
+				this.getLibraries()
+					.map((library) => {
+						return library.slices.map((slice) => {
+							return {
+								sliceID: slice.id,
+								variationID: slice.variations[0].id,
+							};
+						});
+					})
+					.flat(),
+			);
+			await new Promise((resolve) => setTimeout(resolve, 0));
+			this.slices = [];
+
 			this.setDefaultSlices();
 		} catch (error) {
 			console.error(error);
