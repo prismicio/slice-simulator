@@ -47,13 +47,13 @@ const toggleActive = (): void => {
 };
 
 const isActiveSimulator = computed(() => {
-	return simulatorState.value.current.slice.id === props.slice.id;
+	return simulatorState.value.current && simulatorState.value.current.slice.id === props.slice.id;
 });
 const isActive = computed(() => {
 	return active.value || isActiveSimulator.value;
 });
 const currentVariationID = computed(() => {
-	return simulatorState.value.current.variation.id;
+	return simulatorState.value.current && simulatorState.value.current.variation.id;
 });
 
 defineExpose({ isActiveSimulator, isActive, toggleActive, currentVariationID, setCurrent });

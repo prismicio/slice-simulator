@@ -56,7 +56,7 @@ const updateClient = async (newOrigin = false) => {
 
 	const { data: libraries } = await client!.getLibraries();
 	setLibraries(libraries);
-	setCurrent(libraries[0].slices[0], libraries[0].slices[0].variations[0]);
+	// setCurrent(libraries[0].slices[0], libraries[0].slices[0].variations[0]);
 }
 
 onMounted(async () => {
@@ -67,7 +67,7 @@ onMounted(async () => {
 
 				return res.success();
 			}
-		}, { debug: true });
+		}, { debug: false });
 
 		watch(() => props.src, () => updateClient(true));
 		await updateClient();
@@ -77,8 +77,8 @@ onMounted(async () => {
 });
 
 watch(simulatorState, async () => {
-	if (client) {
-		await client.setSliceZoneFromSliceIDs(
+	if (client && simulatorState.value.history) {
+		client.setSliceZoneFromSliceIDs(
 			simulatorState.value.history.map(({ slice, variation }) => {
 				return {
 					sliceID: slice.id,
@@ -86,6 +86,9 @@ watch(simulatorState, async () => {
 				};
 			})
 		);
+		if (simulatorState.value.history.length) {
+			await client.scrollToSlice({ sliceIndex: simulatorState.value.history.length - 1, behavior: "smooth", block: "start" });
+		}
 	}
 }, { deep: true });
 
@@ -125,6 +128,7 @@ const action = (type: "up" | "down" | "delete" | "focus") => {
 			return;
 
 		case "delete":
+			console.log("delete", activeSliceIndex, newHistory);
 			newHistory = (newHistory as unknown[]).filter((_, index) => index !== activeSliceIndex);
 			break;
 	}
