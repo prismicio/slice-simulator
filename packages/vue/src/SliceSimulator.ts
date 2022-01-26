@@ -30,6 +30,11 @@ export const SliceSimulator = {
 			default: getDefaultProps().zIndex,
 			required: false,
 		},
+		background: {
+			type: String as PropType<Required<SliceSimulatorProps["background"]>>,
+			default: getDefaultProps().background,
+			required: false,
+		},
 	},
 	data() {
 		return {
@@ -99,7 +104,7 @@ export const SliceSimulator = {
 					width: "100%",
 					height: "100vh",
 					overflow: "auto",
-					background: "#fefefe",
+					background: this.background,
 				},
 			},
 			children,

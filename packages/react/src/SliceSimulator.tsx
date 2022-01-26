@@ -48,14 +48,20 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 		<div
 			className="slice-simulator"
 			style={{
-				zIndex: props.zIndex || defaultProps.zIndex,
+				zIndex:
+					typeof props.zIndex === "undefined"
+						? defaultProps.zIndex
+						: props.zIndex ?? undefined,
 				position: "fixed",
 				top: 0,
 				left: 0,
 				width: "100%",
 				height: "100vh",
 				overflow: "auto",
-				background: "#fefefe",
+				background:
+					typeof props.background === "undefined"
+						? defaultProps.background
+						: props.background ?? undefined,
 			}}
 		>
 			{message ? (

@@ -37,6 +37,11 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 			default: getDefaultProps().zIndex,
 			required: false,
 		},
+		background: {
+			type: String as PropType<Required<SliceSimulatorProps["background"]>>,
+			default: getDefaultProps().background,
+			required: false,
+		},
 	},
 	setup(props, { slots }) {
 		const stateManager = createStateManager();
@@ -101,7 +106,7 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 						width: "100%",
 						height: "100vh",
 						overflow: "auto",
-						background: "#fefefe",
+						background: props.background,
 					},
 				},
 				children,
