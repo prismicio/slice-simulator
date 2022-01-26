@@ -15,6 +15,7 @@ import {
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = {
+	className?: string;
 	sliceZone: (args: {
 		slices: SliceSimulatorData["slices"];
 	}) => React.ComponentType;
@@ -46,7 +47,7 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 
 	return (
 		<div
-			className="slice-simulator"
+			className={["slice-simulator", props.className].filter(Boolean).join(" ")}
 			style={{
 				zIndex:
 					typeof props.zIndex === "undefined"
