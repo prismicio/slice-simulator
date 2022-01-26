@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.1.2...@prismicio/slice-simulator-core@0.1.3) (2022-01-26)
+
+
+### Features
+
+* support top level background prop for convenience [#4](https://github.com/prismicio/slice-simulator/issues/4) ([5bc05f5](https://github.com/prismicio/slice-simulator/commit/5bc05f5f7657a7c350c9313dfc22cf9abaac12b8))
+
+
+### Bug Fixes
+
+* adapt messages color to background ([4441218](https://github.com/prismicio/slice-simulator/commit/4441218e9d2280a09b5781a37ea152e50b04b88a))
+
 ### [0.1.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.1.1...@prismicio/slice-simulator-core@0.1.2) (2022-01-25)
 
 
