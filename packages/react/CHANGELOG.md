@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.1.2...@prismicio/slice-simulator-react@0.1.3) (2022-01-26)
+
+
+### Features
+
+* support className prop for utility-based css frameworks ([be559e0](https://github.com/prismicio/slice-simulator/commit/be559e08c6b9b2fa3968780a4d80472b39685fd7))
+* support top level background prop for convenience [#4](https://github.com/prismicio/slice-simulator/issues/4) ([5bc05f5](https://github.com/prismicio/slice-simulator/commit/5bc05f5f7657a7c350c9313dfc22cf9abaac12b8))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([c60e3b3](https://github.com/prismicio/slice-simulator/commit/c60e3b323beafa2c1eacd504770d08c2c7aab6a7))
+
 ### [0.1.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.1.1...@prismicio/slice-simulator-react@0.1.2) (2022-01-25)
 
 
