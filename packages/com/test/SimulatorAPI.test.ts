@@ -62,6 +62,36 @@ test("instantiates correctly with defaults", (t) => {
 	t.is(res.error.callCount, 0);
 });
 
+test("registers instance on window object", (t) => {
+	t.false("prismic" in window);
+
+	const simulatorClient = new SimulatorAPI(
+		{
+			[ClientRequestType.GetLibraries]: (_req, res) => {
+				return res.success([]);
+			},
+			[ClientRequestType.SetSliceZone]: (_req, res) => {
+				return res.success();
+			},
+			[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
+				return res.success();
+			},
+			[ClientRequestType.ScrollToSlice]: (_req, res) => {
+				return res.success();
+			},
+		},
+		{ debug: true },
+	);
+
+	type APIWindow = typeof window & {
+		prismic?: { sliceSimulator: { api: SimulatorAPI[] } };
+	};
+
+	t.is((window as APIWindow).prismic?.sliceSimulator.api[0], simulatorClient);
+
+	delete (window as APIWindow).prismic;
+});
+
 const callsPostFormattedRequestCorrectly = async <
 	TRequestType extends APIRequestType,
 >(
