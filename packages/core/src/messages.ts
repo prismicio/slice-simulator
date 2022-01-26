@@ -1,5 +1,5 @@
 const div = (content: string) =>
-	`<div style="word-spacing: initial; white-space: pre; line-height: initial; font-family: monospace; padding: 1rem; font-size: 1rem;">${content}</div>`;
+	`<div style="word-spacing: initial; white-space: pre; line-height: initial; font-family: monospace; color: #ffffff; mix-blend-mode: difference; padding: 1rem; font-size: 1rem;">${content}</div>`;
 
 const a = (href: string, label?: string) =>
 	`<a href="${href}" style="text-decoration: underline;">${label || href}<a>`;
