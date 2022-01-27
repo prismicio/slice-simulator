@@ -32,6 +32,41 @@ npm install @prismicio/slice-simulator-react
 Then create a page for Slice Simulator:
 ```jsx
 // e.g. ~/pages/slice-simulator.jsx
+import { SliceSimulator } from "@prismicio/slice-simulator-react";
+import SliceZone from "next-slicezone";
+
+import state from "../.slicemachine/libraries-state.json";
+import resolver from  "../sm-resolver";
+
+const SliceSimulatorPage = () => (<SliceSimulator
+	// The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
+	sliceZone={({ slices }) => <SliceZone slices={slices} resolver={resolver} />}
+	state={state}
+/>);
+
+export default SliceSimulatorPage;
+```
+
+### Slice Simulator props
+
+| prop         | type       | description                                                                         |
+| ------------ | ---------- | ----------------------------------------------------------------------------------- |
+| `sliceZone`  | `function` | A function that receives slices and renders them using a `<SliceZone />` component. |
+| `state`      | `object`   | The libraries state.                                                                |
+| `zIndex`     | `number`   | The z-index of Slice Simulator, defaults to `100`.                                  |
+| `background` | `string`   | The background color of Slice Simulator, defaults to `#ffffff`.                   |
+| `className`  | `string`   | Class names to apply to the Slice Simulator component.                              |
+
+### Troubleshooting
+
+<details>
+<summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
+<br />
+
+If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+
+```jsx
+// e.g. ~/pages/slice-simulator.jsx
 import * as React from "react";
 import { SliceSimulator } from "@prismicio/slice-simulator-react";
 import SliceZone from "next-slicezone";
@@ -67,6 +102,8 @@ const SliceSimulatorPage = () => {
 
 export default SliceSimulatorPage;
 ```
+
+</details>
 
 ## Documentation
 

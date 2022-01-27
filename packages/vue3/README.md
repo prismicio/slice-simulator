@@ -39,6 +39,39 @@ Then create a page for Slice Simulator:
 </template>
 
 <script setup>
+import { SliceSimulator } from "@prismicio/slice-simulator-vue3";
+import { SliceZone } from "@prismicio/vue";
+
+import state from "../../.slicemachine/libraries-state.json";
+import components from "../../slices/components";
+</script>
+```
+
+### Slice Simulator props
+
+| prop         | type       | description                                                       |
+| ------------ | ---------- | ----------------------------------------------------------------- |
+| `state`      | `object`   | The libraries state.                                              |
+| `zIndex`     | `number`   | The z-index of Slice Simulator, defaults to `100`.                |
+| `background` | `string`   | The background color of Slice Simulator, defaults to `#ffffff`. |
+
+### Troubleshooting
+
+<details>
+<summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
+<br />
+
+If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+
+```vue
+<!-- e.g. ~/pages/slice-simulator.vue -->
+<template>
+	<SliceSimulator :state="state" #default="{ slices }">
+		<SliceZone :slices="slices" :components="components" />
+	</SliceSimulator>
+</template>
+
+<script setup>
 import { ref } from "vue";
 import { SliceSimulator } from "@prismicio/slice-simulator-vue3";
 import { SliceZone } from "@prismicio/vue";
@@ -57,6 +90,8 @@ if (import.meta.hot) {
 }
 </script>
 ```
+
+</details>
 
 ## Documentation
 

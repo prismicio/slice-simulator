@@ -52,6 +52,62 @@ export default {
 	},
 	data() {
 		return { state, components };
+	}
+};
+</script>
+```
+
+### Slice Simulator props
+
+| prop         | type       | description                                                       |
+| ------------ | ---------- | ----------------------------------------------------------------- |
+| `state`      | `object`   | The libraries state.                                              |
+| `zIndex`     | `number`   | The z-index of Slice Simulator, defaults to `100`.                |
+| `background` | `string`   | The background color of Slice Simulator, defaults to `#ffffff`. |
+
+### Troubleshooting
+
+<details>
+<summary>⚠ &nbsp;In case of issue with ESM/CJS modules</summary>
+<br />
+
+Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that, update the import to use CJS instead:
+
+```diff
+- import { SliceSimulator } from "@prismicio/slice-simulator-vue";
++ import { SliceSimulator } from "@prismicio/slice-simulator-vue/dist/index.cjs";
+```
+
+</details>
+
+<details>
+<summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
+<br />
+
+If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+
+```vue
+<!-- e.g. ~/pages/slice-simulator.vue -->
+<template>
+	<SliceSimulator :state="state" #default="{ slices }">
+		<SliceZone :slices="slices" />
+	</SliceSimulator>
+</template>
+
+<script>
+import { SliceSimulator } from "@prismicio/slice-simulator-vue";
+import { SliceZone } from "@prismicio/vue/components";
+
+import state from "~~/.slicemachine/libraries-state.json";
+import components from "~~/slices/components";
+
+export default {
+	components: {
+		SliceSimulator,
+		SliceZone
+	},
+	data() {
+		return { state, components };
 	},
 	// If using Webpack, add the following mounted hook for HMR full support:
 	mounted() {
@@ -66,11 +122,7 @@ export default {
 </script>
 ```
 
-⚠ &nbsp;Some versions of Webpack fails to resolve ESM modules correctly, to mitigate that, update the import to use CJS instead:
-```diff
-- import { SliceSimulator } from "@prismicio/slice-simulator-vue";
-+ import { SliceSimulator } from "@prismicio/slice-simulator-vue/dist/index.cjs";
-```
+</details>
 
 ## Documentation
 
