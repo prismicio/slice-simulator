@@ -4,7 +4,7 @@ export const getSliceZoneDOM = (
 	expectedNumberOfChildren: number,
 ): Element | null => {
 	// If SliceZone has been tagged (#5)
-	let node = document.querySelector("[data-slice-zone]");
+	let node = document.querySelector(`.${simulatorClass} [data-slice-zone]`);
 	if (node) {
 		if (node.children.length !== expectedNumberOfChildren) {
 			console.warn(
