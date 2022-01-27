@@ -17,11 +17,11 @@ import { throttle } from "./lib/throttle";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	private _managedState: ManagedState;
-	protected set managedState(managedState: ManagedState) {
+	public set managedState(managedState: ManagedState) {
 		this._managedState = managedState;
 		this.emit(StateManagerEventType.ManagedState, managedState);
 	}
-	protected get managedState(): ManagedState {
+	public get managedState(): ManagedState {
 		return this._managedState;
 	}
 
