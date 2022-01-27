@@ -16,9 +16,7 @@ import WithSidebar from '~/components/layouts/WithSidebar.vue';
 import SliceList from "~/components/display/slice/List.vue";
 import SliceIframe from "~/components/controls/slice/Iframe.vue";
 
-const src = ref("http://localhost:3000/canvas");
-// const src = ref("https://slice-library-essential-slices-nuxt.netlify.app/canvas");
-// const src = ref("http://localhost:3000/slice-simulator");
+const src = ref("http://localhost:3000/slice-simulator");
 // const src = ref("http://localhost:3000/slice-simulator?debug=true");
 
 defineExpose({ simulatorState, src });
