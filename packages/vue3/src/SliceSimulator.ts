@@ -8,19 +8,21 @@ import {
 	AllowedComponentProps,
 	ComponentCustomProps,
 	VNodeProps,
+	watch,
 } from "vue";
 
 import {
-	createStateManager,
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
 	getDefaultMessage,
 	onClickHandler,
 	disableEventHandler,
+	simulatorClass,
 	SliceSimulatorProps as _SliceSimulatorProps,
 	StateManagerEventType,
 	StateManagerStatus,
+	CoreManager,
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = _SliceSimulatorProps;
@@ -44,24 +46,35 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 		},
 	},
 	setup(props, { slots }) {
-		const stateManager = createStateManager();
+		const coreManager = new CoreManager();
 		const managedState = ref(getDefaultManagedState());
 		const slices = ref(getDefaultSlices());
 		const message = ref(getDefaultMessage());
 
 		onMounted(() => {
-			stateManager.on(StateManagerEventType.Loaded, (state) => {
-				managedState.value = state;
-			});
-			stateManager.on(StateManagerEventType.Slices, (_slices) => {
+			coreManager.stateManager.on(
+				StateManagerEventType.ManagedState,
+				(_managedState) => {
+					managedState.value = _managedState;
+				},
+			);
+			coreManager.stateManager.on(StateManagerEventType.Slices, (_slices) => {
 				slices.value = _slices;
 			});
-			stateManager.on(StateManagerEventType.Message, (_message) => {
+			coreManager.stateManager.on(StateManagerEventType.Message, (_message) => {
 				message.value = _message;
 			});
 
-			stateManager.load(props.state);
+			coreManager.init(props.state);
 		});
+
+		// Update state on HMR
+		watch(
+			() => props.state,
+			() => {
+				coreManager.stateManager.reload(props.state);
+			},
+		);
 
 		return () => {
 			const children: VNodeArrayChildren = [];
@@ -97,7 +110,7 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 			return h(
 				"div",
 				{
-					class: "slice-simulator",
+					class: simulatorClass,
 					style: {
 						zIndex: props.zIndex,
 						position: "fixed",

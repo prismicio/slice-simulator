@@ -52,8 +52,17 @@ export default {
 	},
 	data() {
 		return { state, components };
+	},
+	// If using Webpack, add the following mounted hook for HMR full support:
+	mounted() {
+		if (module.hot) {
+			// Path should be the same as your libraries state import
+			module.hot.accept("~~/.slicemachine/libraries-state.json", () => {
+				this.state = state;
+			});
+		}
 	}
-}
+};
 </script>
 ```
 

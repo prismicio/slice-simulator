@@ -32,17 +32,38 @@ npm install @prismicio/slice-simulator-react
 Then create a page for Slice Simulator:
 ```jsx
 // e.g. ~/pages/slice-simulator.jsx
+import * as React from "react";
 import { SliceSimulator } from "@prismicio/slice-simulator-react";
 import SliceZone from "next-slicezone";
 
-import state from "../.slicemachine/libraries-state.json";
+import _state from "../.slicemachine/libraries-state.json";
 import resolver from  "../sm-resolver";
 
-const SliceSimulatorPage = () => (<SliceSimulator
-	// The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
-	sliceZone={({ slices }) => <SliceZone slices={slices} resolver={resolver} />}
-	state={state}
-/>);
+const SliceSimulatorPage = () => {
+	const [state, setState] = React.useState(_state);
+
+	// If using Webpack, add the following mounted hook for full HMR support:
+	if (module.hot) {
+		// Path should be the same as your libraries state import
+		module.hot.accept("../.slicemachine/libraries-state.json", () => {
+			setState(_state);
+		});
+	}
+
+	// If using Vite, add the following mounted hook for full HMR support:
+	// if (import.meta.hot) {
+	// 	// Path should be the same as your libraries state import
+	// 	import.meta.hot.accept("../.slicemachine/libraries-state.json", (m) => {
+	// 		setState(m.default);
+	// 	});
+	// }
+	
+	return (<SliceSimulator
+		// The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
+		sliceZone={({ slices }) => <SliceZone slices={slices} resolver={resolver} />}
+		state={state}
+	/>);
+}
 
 export default SliceSimulatorPage;
 ```

@@ -39,19 +39,23 @@ Then create a page for Slice Simulator:
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { SliceSimulator } from "@prismicio/slice-simulator-vue3";
 import { SliceZone } from "@prismicio/vue";
 
-import state from "../../.slicemachine/libraries-state.json";
+import _state from "../../.slicemachine/libraries-state.json";
 import components from "../../slices/components";
-</script>
-```
 
-⚠ &nbsp;Vite HMR can cause issues with Slice Simulator, try adding the following snippet before the end of your `<script>` tag if you're experiencing any:
-```javascript
+const state = ref(_state);
+
+// If using Vite, add the following hook for full HMR support:
 if (import.meta.hot) {
-	import.meta.hot.accept("../../.slicemachine/libraries-state.json", () => {});
+	// Path should be the same as your libraries state import
+	import.meta.hot.accept("../../.slicemachine/libraries-state.json", (m) => {
+		state.value = m.default;
+	});
 }
+</script>
 ```
 
 ## Documentation

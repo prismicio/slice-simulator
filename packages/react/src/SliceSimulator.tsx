@@ -1,30 +1,32 @@
 import * as React from "react";
 
 import {
-	createStateManager,
 	getDefaultManagedState,
 	getDefaultProps,
 	getDefaultSlices,
 	getDefaultMessage,
 	onClickHandler,
 	disableEventHandler,
-	SliceSimulatorData,
+	simulatorClass,
 	SliceSimulatorProps as _SliceSimulatorProps,
+	SliceSimulatorState,
 	StateManagerEventType,
 	StateManagerStatus,
+	CoreManager,
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = {
 	className?: string;
 	sliceZone: (args: {
-		slices: SliceSimulatorData["slices"];
+		slices: SliceSimulatorState["slices"];
 	}) => React.ComponentType;
 } & _SliceSimulatorProps;
+
+const coreManager = new CoreManager();
 
 export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 	const defaultProps = getDefaultProps();
 
-	const stateManager = createStateManager();
 	const [managedState, setManagedState] = React.useState(
 		getDefaultManagedState(),
 	);
@@ -32,22 +34,35 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 	const [message, setMessage] = React.useState(getDefaultMessage());
 
 	React.useEffect(() => {
-		stateManager.on(StateManagerEventType.Loaded, (state) => {
-			setManagedState(state);
+		coreManager.stateManager.on(
+			StateManagerEventType.ManagedState,
+			(_managedState) => {
+				setManagedState(_managedState);
+			},
+		);
+		coreManager.stateManager.on(StateManagerEventType.Slices, (_slices) => {
+			setSlices(_slices);
 		});
-		stateManager.on(StateManagerEventType.Slices, (slices) => {
-			setSlices(slices);
-		});
-		stateManager.on(StateManagerEventType.Message, (message) => {
-			setMessage(message);
+		coreManager.stateManager.on(StateManagerEventType.Message, (_message) => {
+			setMessage(_message);
 		});
 
-		stateManager.load(props.state);
+		coreManager.init(props.state);
 	}, []);
+
+	// Update state on HMR
+	const didMount = React.useRef(false);
+	React.useEffect(() => {
+		if (didMount.current) {
+			coreManager.stateManager.reload(props.state);
+		} else {
+			didMount.current = true;
+		}
+	}, [props.state]);
 
 	return (
 		<div
-			className={["slice-simulator", props.className].filter(Boolean).join(" ")}
+			className={[simulatorClass, props.className].filter(Boolean).join(" ")}
 			style={{
 				zIndex:
 					typeof props.zIndex === "undefined"
