@@ -2,6 +2,7 @@ import statuses from "statuses";
 
 import {
 	RequestMessage,
+	ResponseMessage,
 	SuccessResponseMessage,
 	ErrorResponseMessage,
 	UnknownMessage,
@@ -94,7 +95,7 @@ export const isRequestMessage = (
 
 export const isResponseMessage = (
 	message: UnknownMessage,
-): message is RequestMessage => {
+): message is ResponseMessage => {
 	return !("type" in message);
 };
 
