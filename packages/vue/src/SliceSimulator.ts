@@ -19,6 +19,8 @@ import {
 
 export type SliceSimulatorProps = _SliceSimulatorProps;
 
+const coreManager = new CoreManager();
+
 export const SliceSimulator = {
 	name: "SliceSimulator",
 	props: {
@@ -39,7 +41,7 @@ export const SliceSimulator = {
 	},
 	data() {
 		return {
-			coreManager: new CoreManager(),
+			coreManager,
 			managedState: getDefaultManagedState(),
 			slices: getDefaultSlices(),
 			message: getDefaultMessage(),

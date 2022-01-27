@@ -27,6 +27,8 @@ import {
 
 export type SliceSimulatorProps = _SliceSimulatorProps;
 
+const coreManager = new CoreManager();
+
 export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 	name: "SliceSimulator",
 	props: {
@@ -46,7 +48,6 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 		},
 	},
 	setup(props, { slots }) {
-		const coreManager = new CoreManager();
 		const managedState = ref(getDefaultManagedState());
 		const slices = ref(getDefaultSlices());
 		const message = ref(getDefaultMessage());
