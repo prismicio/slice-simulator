@@ -1,18 +1,27 @@
 // Main
+export { CoreManager } from "./CoreManager";
 export { StateManager } from "./StateManager";
-export { createStateManager } from "./createStateManager";
 
-// Props
-export { getDefaultProps } from "./getDefaultProps";
+// Defaults
+export {
+	getDefaultProps,
+	getDefaultManagedState,
+	getDefaultSlices,
+	getDefaultMessage,
+} from "./getDefault";
 
-// Data
-export { getDefaultManagedState } from "./getDefaultManagedState";
-export { getDefaultSlices } from "./getDefaultSlices";
-export { getDefaultMessage } from "./getDefaultMessage";
+// DOMHelpers
+export {
+	simulatorClass,
+	getSliceZoneDOM,
+	getActiveSliceDOM,
+} from "./DOMHelpers";
 
 // Events
-export { disableEventHandler } from "./disableEventHandler";
-export { onClickHandler } from "./onClickHandler";
+export { disableEventHandler, onClickHandler } from "./eventHandlers";
+
+// Messages
+export { sliceSimulatorAccessedDirectly } from "./messages";
 
 // Types
 export { StateManagerEventType, StateManagerStatus } from "./types";
@@ -20,6 +29,6 @@ export type {
 	StateManagerEvents,
 	ManagedState,
 	SliceSimulatorProps,
-	SliceSimulatorData,
+	SliceSimulatorState,
 	SliceSimulatorOptions,
 } from "./types";
