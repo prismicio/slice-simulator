@@ -47,6 +47,64 @@ const SliceSimulatorPage = () => (<SliceSimulator
 export default SliceSimulatorPage;
 ```
 
+### Slice Simulator props
+
+| prop         | type       | description                                                                         |
+| ------------ | ---------- | ----------------------------------------------------------------------------------- |
+| `sliceZone`  | `function` | A function that receives slices and renders them using a `<SliceZone />` component. |
+| `state`      | `object`   | The libraries state.                                                                |
+| `zIndex`     | `number`   | The z-index of Slice Simulator, defaults to `100`.                                  |
+| `background` | `string`   | The background color of Slice Simulator, defaults to `#ffffff`.                   |
+| `className`  | `string`   | Class names to apply to the Slice Simulator component.                              |
+
+### Troubleshooting
+
+<details>
+<summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
+<br />
+
+If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+
+```jsx
+// e.g. ~/pages/slice-simulator.jsx
+import * as React from "react";
+import { SliceSimulator } from "@prismicio/slice-simulator-react";
+import SliceZone from "next-slicezone";
+
+import _state from "../.slicemachine/libraries-state.json";
+import resolver from  "../sm-resolver";
+
+const SliceSimulatorPage = () => {
+	const [state, setState] = React.useState(_state);
+
+	// If using Webpack, add the following mounted hook for full HMR support:
+	if (module.hot) {
+		// Path should be the same as your libraries state import
+		module.hot.accept("../.slicemachine/libraries-state.json", () => {
+			setState(_state);
+		});
+	}
+
+	// If using Vite, add the following mounted hook for full HMR support:
+	// if (import.meta.hot) {
+	// 	// Path should be the same as your libraries state import
+	// 	import.meta.hot.accept("../.slicemachine/libraries-state.json", (m) => {
+	// 		setState(m.default);
+	// 	});
+	// }
+	
+	return (<SliceSimulator
+		// The `sliceZone` prop should be a function receiving slices and rendering them using your `SliceZone` component.
+		sliceZone={({ slices }) => <SliceZone slices={slices} resolver={resolver} />}
+		state={state}
+	/>);
+}
+
+export default SliceSimulatorPage;
+```
+
+</details>
+
 ## Documentation
 
 To discover what's new on this package check out [the changelog][changelog]. For full documentation, visit the [official Prismic documentation][prismic-docs].

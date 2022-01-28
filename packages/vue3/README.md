@@ -47,12 +47,51 @@ import components from "../../slices/components";
 </script>
 ```
 
-⚠ &nbsp;Vite HMR can cause issues with Slice Simulator, try adding the following snippet before the end of your `<script>` tag if you're experiencing any:
-```javascript
+### Slice Simulator props
+
+| prop         | type       | description                                                       |
+| ------------ | ---------- | ----------------------------------------------------------------- |
+| `state`      | `object`   | The libraries state.                                              |
+| `zIndex`     | `number`   | The z-index of Slice Simulator, defaults to `100`.                |
+| `background` | `string`   | The background color of Slice Simulator, defaults to `#ffffff`. |
+
+### Troubleshooting
+
+<details>
+<summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
+<br />
+
+If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+
+```vue
+<!-- e.g. ~/pages/slice-simulator.vue -->
+<template>
+	<SliceSimulator :state="state" #default="{ slices }">
+		<SliceZone :slices="slices" :components="components" />
+	</SliceSimulator>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { SliceSimulator } from "@prismicio/slice-simulator-vue3";
+import { SliceZone } from "@prismicio/vue";
+
+import _state from "../../.slicemachine/libraries-state.json";
+import components from "../../slices/components";
+
+const state = ref(_state);
+
+// If using Vite, add the following hook for full HMR support:
 if (import.meta.hot) {
-	import.meta.hot.accept("../../.slicemachine/libraries-state.json", () => {});
+	// Path should be the same as your libraries state import
+	import.meta.hot.accept("../../.slicemachine/libraries-state.json", (m) => {
+		state.value = m.default;
+	});
 }
+</script>
 ```
+
+</details>
 
 ## Documentation
 

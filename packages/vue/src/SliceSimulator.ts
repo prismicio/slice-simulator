@@ -2,21 +2,25 @@ import Vue, { PropType, VNodeChildren } from "vue";
 import { CreateElement, ExtendedVue } from "vue/types/vue";
 
 import {
-	createStateManager,
-	getDefaultManagedState,
 	getDefaultProps,
+	getDefaultManagedState,
 	getDefaultSlices,
 	getDefaultMessage,
 	onClickHandler,
 	disableEventHandler,
-	SliceSimulatorData,
+	simulatorClass,
+	simulatorRootClass,
+	SliceSimulatorState,
 	SliceSimulatorOptions,
 	SliceSimulatorProps as _SliceSimulatorProps,
 	StateManagerEventType,
 	StateManagerStatus,
+	CoreManager,
 } from "@prismicio/slice-simulator-core";
 
 export type SliceSimulatorProps = _SliceSimulatorProps;
+
+const coreManager = new CoreManager();
 
 export const SliceSimulator = {
 	name: "SliceSimulator",
@@ -38,24 +42,56 @@ export const SliceSimulator = {
 	},
 	data() {
 		return {
-			stateManager: createStateManager(),
+			coreManager,
 			managedState: getDefaultManagedState(),
 			slices: getDefaultSlices(),
 			message: getDefaultMessage(),
 		};
 	},
 	mounted(this: SliceSimulatorOptions) {
-		this.stateManager.on(StateManagerEventType.Loaded, (state) => {
-			this.managedState = state;
-		});
-		this.stateManager.on(StateManagerEventType.Slices, (slices) => {
-			this.slices = slices;
-		});
-		this.stateManager.on(StateManagerEventType.Message, (message) => {
-			this.message = message;
-		});
+		this.coreManager.stateManager.on(
+			StateManagerEventType.ManagedState,
+			(managedState) => {
+				this.managedState = managedState;
+			},
+			"simulator-managed-state",
+		);
+		this.coreManager.stateManager.on(
+			StateManagerEventType.Slices,
+			(slices) => {
+				this.slices = slices;
+			},
+			"simulator-slices",
+		);
+		this.coreManager.stateManager.on(
+			StateManagerEventType.Message,
+			(message) => {
+				this.message = message;
+			},
+			"simulator-message",
+		);
 
-		this.stateManager.load(this.state);
+		this.coreManager.init(this.state);
+	},
+	watch: {
+		// Update state on HMR
+		state(this: SliceSimulatorOptions) {
+			this.coreManager.stateManager.reload(this.state);
+		},
+	},
+	destroyed(this: SliceSimulatorOptions) {
+		this.coreManager.stateManager.off(
+			StateManagerEventType.ManagedState,
+			"simulator-managed-state",
+		);
+		this.coreManager.stateManager.off(
+			StateManagerEventType.Slices,
+			"simulator-slices",
+		);
+		this.coreManager.stateManager.off(
+			StateManagerEventType.Message,
+			"simulator-message",
+		);
 	},
 	render(this: SliceSimulatorOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];
@@ -74,6 +110,7 @@ export const SliceSimulator = {
 					"div",
 					{
 						attrs: { id: "root" },
+						class: simulatorRootClass,
 						style:
 							this.managedState.status !== StateManagerStatus.Loaded
 								? { display: "none" }
@@ -95,7 +132,7 @@ export const SliceSimulator = {
 		return h(
 			"div",
 			{
-				class: "slice-simulator",
+				class: simulatorClass,
 				style: {
 					zIndex: this.zIndex,
 					position: "fixed",
@@ -113,7 +150,7 @@ export const SliceSimulator = {
 	// This is some weird ass trick to get around `Vue.extend` messing up `this` context, don't do this at home kids
 } as unknown as ExtendedVue<
 	Vue,
-	SliceSimulatorData,
+	SliceSimulatorState,
 	Record<string, never>,
 	Record<string, never>,
 	SliceSimulatorProps

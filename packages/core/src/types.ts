@@ -1,18 +1,19 @@
 import { SliceZone } from "@prismicio/types";
 import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
+
 import { ActiveSlice } from "@prismicio/slice-simulator-com";
 
-import type { StateManager } from "./StateManager";
+import type { CoreManager } from "./CoreManager";
 
 export enum StateManagerEventType {
-	Loaded = "loaded",
+	ManagedState = "managedState",
 	Slices = "slices",
 	ActiveSlice = "activeSlice",
 	Message = "message",
 }
 
 export type StateManagerEvents = {
-	[StateManagerEventType.Loaded]: ManagedState;
+	[StateManagerEventType.ManagedState]: ManagedState;
 	[StateManagerEventType.Slices]: SliceZone;
 	[StateManagerEventType.ActiveSlice]: ActiveSlice | null;
 	[StateManagerEventType.Message]: string;
@@ -39,11 +40,11 @@ export interface SliceSimulatorProps {
 	background?: string | null;
 }
 
-export interface SliceSimulatorData {
-	stateManager: StateManager;
+export interface SliceSimulatorState {
+	coreManager: CoreManager;
 	managedState: ManagedState;
 	slices: SliceZone;
 	message: string;
 }
 
-export type SliceSimulatorOptions = SliceSimulatorProps & SliceSimulatorData;
+export type SliceSimulatorOptions = SliceSimulatorProps & SliceSimulatorState;

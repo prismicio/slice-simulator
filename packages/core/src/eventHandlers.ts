@@ -1,3 +1,8 @@
+export const disableEventHandler = (event: Event): void => {
+	event.preventDefault();
+	event.stopPropagation();
+};
+
 export const onClickHandler = (
 	event: MouseEvent & { path?: HTMLElement[] },
 ): void => {
