@@ -53,15 +53,21 @@ export const SliceSimulator = {
 			(managedState) => {
 				this.managedState = managedState;
 			},
+			"simulator-managed-state",
 		);
-		this.coreManager.stateManager.on(StateManagerEventType.Slices, (slices) => {
-			this.slices = slices;
-		});
+		this.coreManager.stateManager.on(
+			StateManagerEventType.Slices,
+			(slices) => {
+				this.slices = slices;
+			},
+			"simulator-slices",
+		);
 		this.coreManager.stateManager.on(
 			StateManagerEventType.Message,
 			(message) => {
 				this.message = message;
 			},
+			"simulator-message",
 		);
 
 		this.coreManager.init(this.state);
@@ -71,6 +77,20 @@ export const SliceSimulator = {
 		state(this: SliceSimulatorOptions) {
 			this.coreManager.stateManager.reload(this.state);
 		},
+	},
+	destroyed(this: SliceSimulatorOptions) {
+		this.coreManager.stateManager.off(
+			StateManagerEventType.ManagedState,
+			"simulator-managed-state",
+		);
+		this.coreManager.stateManager.off(
+			StateManagerEventType.Slices,
+			"simulator-slices",
+		);
+		this.coreManager.stateManager.off(
+			StateManagerEventType.Message,
+			"simulator-message",
+		);
 	},
 	render(this: SliceSimulatorOptions & Vue, h: CreateElement) {
 		const children: VNodeChildren = [];

@@ -39,15 +39,41 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 			(_managedState) => {
 				setManagedState(_managedState);
 			},
+			"simulator-managed-state",
 		);
-		coreManager.stateManager.on(StateManagerEventType.Slices, (_slices) => {
-			setSlices(_slices);
-		});
-		coreManager.stateManager.on(StateManagerEventType.Message, (_message) => {
-			setMessage(_message);
-		});
+		coreManager.stateManager.on(
+			StateManagerEventType.Slices,
+			(_slices) => {
+				setSlices(_slices);
+			},
+			"simulator-slices",
+		);
+		coreManager.stateManager.on(
+			StateManagerEventType.Message,
+			(_message) => {
+				setMessage(_message);
+			},
+			"simulator-message",
+		);
 
 		coreManager.init(props.state);
+
+		return () => {
+			coreManager.stateManager.off(
+				StateManagerEventType.ManagedState,
+				"simulator-managed-state",
+			);
+
+			coreManager.stateManager.off(
+				StateManagerEventType.Slices,
+				"simulator-slices",
+			);
+
+			coreManager.stateManager.off(
+				StateManagerEventType.Message,
+				"simulator-message",
+			);
+		};
 	}, []);
 
 	// Update state on HMR

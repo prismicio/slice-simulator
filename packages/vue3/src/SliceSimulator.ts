@@ -9,6 +9,7 @@ import {
 	ComponentCustomProps,
 	VNodeProps,
 	watch,
+	onUnmounted,
 } from "vue";
 
 import {
@@ -58,13 +59,22 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 				(_managedState) => {
 					managedState.value = _managedState;
 				},
+				"simulator-managed-state",
 			);
-			coreManager.stateManager.on(StateManagerEventType.Slices, (_slices) => {
-				slices.value = _slices;
-			});
-			coreManager.stateManager.on(StateManagerEventType.Message, (_message) => {
-				message.value = _message;
-			});
+			coreManager.stateManager.on(
+				StateManagerEventType.Slices,
+				(_slices) => {
+					slices.value = _slices;
+				},
+				"simulator-slices",
+			);
+			coreManager.stateManager.on(
+				StateManagerEventType.Message,
+				(_message) => {
+					message.value = _message;
+				},
+				"simulator-message",
+			);
 
 			coreManager.init(props.state);
 		});
@@ -76,6 +86,23 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 				coreManager.stateManager.reload(props.state);
 			},
 		);
+
+		onUnmounted(() => {
+			coreManager.stateManager.off(
+				StateManagerEventType.ManagedState,
+				"simulator-managed-state",
+			);
+
+			coreManager.stateManager.off(
+				StateManagerEventType.Slices,
+				"simulator-slices",
+			);
+
+			coreManager.stateManager.off(
+				StateManagerEventType.Message,
+				"simulator-message",
+			);
+		});
 
 		return () => {
 			const children: VNodeArrayChildren = [];
