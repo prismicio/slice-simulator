@@ -1,4 +1,5 @@
 export const simulatorClass = "slice-simulator";
+export const simulatorRootClass = "slice-simulator--root";
 
 export const getSliceZoneDOM = (
 	expectedNumberOfChildren: number,
@@ -16,7 +17,7 @@ export const getSliceZoneDOM = (
 	}
 
 	// Start searching
-	node = document.querySelector(`.${simulatorClass} #root`);
+	node = document.querySelector(`.${simulatorClass} .${simulatorRootClass}`);
 
 	if (!node || !node.children.length) {
 		return null;

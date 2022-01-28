@@ -8,6 +8,7 @@ import {
 	onClickHandler,
 	disableEventHandler,
 	simulatorClass,
+	simulatorRootClass,
 	SliceSimulatorProps as _SliceSimulatorProps,
 	SliceSimulatorState,
 	StateManagerEventType,
@@ -111,6 +112,7 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 			) : slices.length ? (
 				<div
 					id="root"
+					className={simulatorRootClass}
 					style={
 						managedState.status !== StateManagerStatus.Loaded
 							? { display: "none" }

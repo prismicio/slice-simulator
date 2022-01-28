@@ -13,6 +13,7 @@ export {
 // DOMHelpers
 export {
 	simulatorClass,
+	simulatorRootClass,
 	getSliceZoneDOM,
 	getActiveSliceDOM,
 } from "./DOMHelpers";

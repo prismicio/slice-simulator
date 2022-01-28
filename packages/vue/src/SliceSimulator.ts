@@ -9,6 +9,7 @@ import {
 	onClickHandler,
 	disableEventHandler,
 	simulatorClass,
+	simulatorRootClass,
 	SliceSimulatorState,
 	SliceSimulatorOptions,
 	SliceSimulatorProps as _SliceSimulatorProps,
@@ -109,6 +110,7 @@ export const SliceSimulator = {
 					"div",
 					{
 						attrs: { id: "root" },
+						class: simulatorRootClass,
 						style:
 							this.managedState.status !== StateManagerStatus.Loaded
 								? { display: "none" }
