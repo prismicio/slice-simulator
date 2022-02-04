@@ -12,7 +12,7 @@ import {
 	StateManagerStatus,
 } from "./types";
 import { LibrariesState } from "@slicemachine/core/build/src/models";
-import { getActiveSliceDOM, getSliceZoneDOM } from "./DOMHelpers";
+import { getActiveSliceDOM, getSliceZoneDOM } from "./domHelpers";
 import { throttle } from "./lib/throttle";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {

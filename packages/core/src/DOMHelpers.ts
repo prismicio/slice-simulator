@@ -19,7 +19,7 @@ export const getSliceZoneDOM = (
 	// Start searching
 	node = document.querySelector(`.${simulatorClass} .${simulatorRootClass}`);
 
-	if (!node || !node.children.length) {
+	if (!node) {
 		return null;
 	}
 

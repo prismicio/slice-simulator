@@ -6,7 +6,7 @@ import {
 import { SliceZone } from "@prismicio/types";
 
 import { getDefaultManagedState, getDefaultSlices } from "./getDefault";
-import { getSliceZoneDOM } from "./DOMHelpers";
+import { getSliceZoneDOM } from "./domHelpers";
 import { sliceSimulatorAccessedDirectly } from "./messages";
 import { StateManager } from "./StateManager";
 import {

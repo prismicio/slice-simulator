@@ -10,13 +10,13 @@ export {
 	getDefaultMessage,
 } from "./getDefault";
 
-// DOMHelpers
+// DOM helpers
 export {
 	simulatorClass,
 	simulatorRootClass,
 	getSliceZoneDOM,
 	getActiveSliceDOM,
-} from "./DOMHelpers";
+} from "./domHelpers";
 
 // Events
 export { disableEventHandler, onClickHandler } from "./eventHandlers";

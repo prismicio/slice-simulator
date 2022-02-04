@@ -5,7 +5,7 @@ export type EventMap = {
 };
 
 export abstract class EventEmitter<TEventMap = EventMap> {
-	private listeners: {
+	private _listeners: {
 		[K in keyof TEventMap]?: [Listener<TEventMap[K]>, string | null][];
 	} = {};
 
@@ -14,14 +14,17 @@ export abstract class EventEmitter<TEventMap = EventMap> {
 		listener: Listener<TEventMap[TEventType]>,
 		key: string | null = null,
 	): void {
-		this.listeners[event] = [...(this.listeners[event] ?? []), [listener, key]];
+		this._listeners[event] = [
+			...(this._listeners[event] ?? []),
+			[listener, key],
+		];
 	}
 
 	off<TEventType extends keyof TEventMap>(
 		event: TEventType,
 		listenerOrKey: Listener<TEventMap[TEventType]> | string,
 	): void {
-		this.listeners[event] = (this.listeners[event] ?? []).filter(
+		this._listeners[event] = (this._listeners[event] ?? []).filter(
 			([listener, key]) =>
 				typeof listenerOrKey === "function"
 					? listener !== listenerOrKey
@@ -33,6 +36,6 @@ export abstract class EventEmitter<TEventMap = EventMap> {
 		event: TEventType,
 		payload: TEventMap[TEventType],
 	): void {
-		(this.listeners[event] ?? []).forEach((listener) => listener[0](payload));
+		(this._listeners[event] ?? []).forEach((listener) => listener[0](payload));
 	}
 }
