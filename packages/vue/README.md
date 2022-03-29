@@ -34,7 +34,7 @@ Then create a page for Slice Simulator:
 <!-- e.g. ~/pages/slice-simulator.vue -->
 <template>
 	<SliceSimulator :state="state" #default="{ slices }">
-		<SliceZone :slices="slices" />
+		<SliceZone :slices="slices" :components="components" />
 	</SliceSimulator>
 </template>
 
