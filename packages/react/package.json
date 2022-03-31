@@ -1,6 +1,6 @@
 {
 	"name": "@prismicio/slice-simulator-react",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",

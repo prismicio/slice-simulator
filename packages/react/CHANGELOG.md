@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.2.0...@prismicio/slice-simulator-react@0.2.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* **react:** correct `sliceZone` prop type for `<SliceSimulator>` ([#8](https://github.com/prismicio/slice-simulator/issues/8)) ([3d99f08](https://github.com/prismicio/slice-simulator/commit/3d99f083cdd4045893b8f2607d85b3a9b2deef7c))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([9c8c39a](https://github.com/prismicio/slice-simulator/commit/9c8c39a1968c7f9a9b0733de877cd1e400b90efe))
+* update license ([2883add](https://github.com/prismicio/slice-simulator/commit/2883addcc503a7c64ccd9ba16e92f73aacbdf9a3))
+
 ## [0.2.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.1.3...@prismicio/slice-simulator-react@0.2.0) (2022-01-28)
 
 
