@@ -18,9 +18,7 @@ import {
 
 export type SliceSimulatorProps = {
 	className?: string;
-	sliceZone: (args: {
-		slices: SliceSimulatorState["slices"];
-	}) => React.ComponentType;
+	sliceZone: (props: { slices: SliceSimulatorState["slices"] }) => JSX.Element;
 } & _SliceSimulatorProps;
 
 const coreManager = new CoreManager();
