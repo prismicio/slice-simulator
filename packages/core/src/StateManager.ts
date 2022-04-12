@@ -5,13 +5,13 @@ import { ActiveSlice, LibrarySummary } from "@prismicio/slice-simulator-com";
 import { EventEmitter } from "./lib/EventEmitter";
 import { getDefaultManagedState, getDefaultSlices } from "./getDefault";
 import {
+	LibrariesStateLike,
 	ManagedState,
 	SliceSimulatorProps,
 	StateManagerEvents,
 	StateManagerEventType,
 	StateManagerStatus,
 } from "./types";
-import { LibrariesState } from "@slicemachine/core/build/src/models";
 import { getActiveSliceDOM, getSliceZoneDOM } from "./domHelpers";
 import { throttle } from "./lib/throttle";
 
@@ -95,8 +95,18 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		try {
 			const raw = await (typeof state === "function" ? state() : state);
 
+			const res = LibrariesStateLike.decode(raw);
+
+			if (res._tag === "Left") {
+				console.error(res.left);
+
+				throw new Error(
+					"State does not validate expected format, see console logs for detailed report",
+				);
+			}
+
 			return {
-				data: raw,
+				data: res.right,
 				status: StateManagerStatus.Loaded,
 				error: null,
 			};
@@ -118,9 +128,14 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 
 	private _throwIfNotLoaded(
 		methodName: string,
-	): asserts this is { managedState: { data: LibrariesState.Libraries } } {
-		if (
-			this.managedState.status !== StateManagerStatus.Loaded ||
+	): asserts this is { managedState: { data: LibrariesStateLike } } {
+		if (this.managedState.status === StateManagerStatus.Error) {
+			throw (
+				this.managedState.error ??
+				new Error("Unknown state error, see console logs for detailed report")
+			);
+		} else if (
+			this.managedState.status === StateManagerStatus.Pending ||
 			!this.managedState.data
 		) {
 			throw new Error(

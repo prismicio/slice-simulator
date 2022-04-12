@@ -1,9 +1,46 @@
+import * as t from "io-ts";
+
 import { SliceZone } from "@prismicio/types";
-import LibrariesState from "@slicemachine/core/build/src/models/LibrariesState";
 
 import { ActiveSlice } from "@prismicio/slice-simulator-com";
 
 import type { CoreManager } from "./CoreManager";
+
+export const LibrariesStateLike = t.record(
+	t.string,
+	t.intersection([
+		t.partial({
+			name: t.string,
+		}),
+		t.type({
+			components: t.record(
+				t.string,
+				t.intersection([
+					t.type({
+						id: t.string,
+						model: t.intersection([
+							t.type({
+								id: t.string,
+								variations: t.array(
+									t.intersection([
+										t.type({ id: t.string }),
+										t.partial({ name: t.string }),
+									]),
+								),
+							}),
+							t.partial({ name: t.string }),
+						]),
+						mocks: t.record(t.string, t.type({ variation: t.string })),
+					}),
+					t.partial({
+						name: t.string,
+					}),
+				]),
+			),
+		}),
+	]),
+);
+export type LibrariesStateLike = t.TypeOf<typeof LibrariesStateLike>;
 
 export enum StateManagerEventType {
 	ManagedState = "managedState",
@@ -26,16 +63,16 @@ export const enum StateManagerStatus {
 }
 
 export type ManagedState = {
-	data: LibrariesState.Libraries | null;
+	data: LibrariesStateLike | null;
 	status: StateManagerStatus;
 	error: Error | null;
 };
 
 export interface SliceSimulatorProps {
 	state:
-		| (() => Promise<LibrariesState.Libraries>)
-		| Promise<LibrariesState.Libraries>
-		| LibrariesState.Libraries;
+		| (() => Promise<LibrariesStateLike>)
+		| Promise<LibrariesStateLike>
+		| LibrariesStateLike;
 	zIndex?: number | null;
 	background?: string | null;
 }

@@ -23,8 +23,9 @@
 		"prepare": "npm run build",
 		"lint": "eslint --ext .js,.ts .",
 		"unit": "npm run unit --workspaces --if-present",
+		"types": "npm run types --workspaces --if-present",
 		"size": "size-limit",
-		"test": "npm run lint && npm run unit && npm run build && npm run size"
+		"test": "npm run lint && npm run types && npm run unit && npm run build && npm run size"
 	},
 	"devDependencies": {
 		"@size-limit/preset-small-lib": "^7.0.8",
