@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.1.0...@prismicio/slice-simulator-vue3@0.1.1) (2022-04-12)
+
+
+### Chore
+
+* **deps:** bump core ([079c634](https://github.com/prismicio/slice-simulator/commit/079c634b00a728dd9b70d34da0dc51ae22cbefa5))
+* **deps:** maintain dependencies ([dba276d](https://github.com/prismicio/slice-simulator/commit/dba276d545188b7c44ade245af4c2a7d713801d9))
+* update license ([2883add](https://github.com/prismicio/slice-simulator/commit/2883addcc503a7c64ccd9ba16e92f73aacbdf9a3))
+
 ## [0.1.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.0.3...@prismicio/slice-simulator-vue3@0.1.0) (2022-01-28)
 
 
