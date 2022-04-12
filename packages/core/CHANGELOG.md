@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.0...@prismicio/slice-simulator-core@0.2.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* loosen dependency with `@slicemachine/core` with a partial type ([5edbeda](https://github.com/prismicio/slice-simulator/commit/5edbedae4ec4f2c1e4136d12168a292a3c211f7d))
+
+
+### Chore
+
+* **core:** fix file name casing ([19846b5](https://github.com/prismicio/slice-simulator/commit/19846b564cf74aaf69f9cbaff502259f22e92fbc))
+* **deps:** bump com ([202e5c2](https://github.com/prismicio/slice-simulator/commit/202e5c21f6bef5f6a7ff5454b6983b1ea2b91e4c))
+* **deps:** maintain dependencies ([dba276d](https://github.com/prismicio/slice-simulator/commit/dba276d545188b7c44ade245af4c2a7d713801d9))
+* **deps:** maintain dependencies ([9c8c39a](https://github.com/prismicio/slice-simulator/commit/9c8c39a1968c7f9a9b0733de877cd1e400b90efe))
+* update license ([2883add](https://github.com/prismicio/slice-simulator/commit/2883addcc503a7c64ccd9ba16e92f73aacbdf9a3))
+
 ## [0.2.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.1.3...@prismicio/slice-simulator-core@0.2.0) (2022-01-28)
 
 
