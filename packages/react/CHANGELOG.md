@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.2.1...@prismicio/slice-simulator-react@0.2.2) (2022-04-12)
+
+
+### Chore
+
+* **deps:** bump core ([079c634](https://github.com/prismicio/slice-simulator/commit/079c634b00a728dd9b70d34da0dc51ae22cbefa5))
+* **deps:** maintain dependencies ([dba276d](https://github.com/prismicio/slice-simulator/commit/dba276d545188b7c44ade245af4c2a7d713801d9))
+
 ### [0.2.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-react@0.2.0...@prismicio/slice-simulator-react@0.2.1) (2022-03-31)
 
 
