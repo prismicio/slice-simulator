@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.3.0...@prismicio/slice-simulator-com@0.3.1) (2022-04-12)
+
+
+### Chore
+
+* **deps:** maintain dependencies ([dba276d](https://github.com/prismicio/slice-simulator/commit/dba276d545188b7c44ade245af4c2a7d713801d9))
+* **deps:** maintain dependencies ([9c8c39a](https://github.com/prismicio/slice-simulator/commit/9c8c39a1968c7f9a9b0733de877cd1e400b90efe))
+* update license ([2883add](https://github.com/prismicio/slice-simulator/commit/2883addcc503a7c64ccd9ba16e92f73aacbdf9a3))
+
 ## [0.3.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.2.1...@prismicio/slice-simulator-com@0.3.0) (2022-01-28)
 
 
