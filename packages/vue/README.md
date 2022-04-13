@@ -84,7 +84,9 @@ Some versions of Webpack fails to resolve ESM modules correctly, to mitigate tha
 <summary>⚠ &nbsp;In case of issue with HMR / For full HMR support</summary>
 <br />
 
-If you're having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+If you're using Nuxt, to just fix HMR issues, try first updating your config as stated there: https://github.com/nuxt/postcss8/issues/24
+
+If you're still having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
 
 ```vue
 <!-- e.g. ~/pages/slice-simulator.vue -->
