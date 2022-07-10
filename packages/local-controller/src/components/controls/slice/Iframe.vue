@@ -41,6 +41,7 @@ import { state as simulatorState, setLibraries, setCurrent, setHistory } from "~
 
 interface Props {
 	src: string;
+	model: string;
 };
 const props = defineProps<Props>();
 
@@ -56,6 +57,9 @@ const updateClient = async (newOrigin = false) => {
 
 	const { data: libraries } = await client!.getLibraries();
 	setLibraries(libraries);
+	setTimeout(async () => {
+		await client?.setSliceZone([JSON.parse(props.model)])
+	}, 100);
 	// setCurrent(libraries[0].slices[0], libraries[0].slices[0].variations[0]);
 }
 
@@ -70,6 +74,9 @@ onMounted(async () => {
 		}, { debug: false });
 
 		watch(() => props.src, () => updateClient(true));
+		watch(() => props.model, async () => {
+			await client?.setSliceZone([JSON.parse(props.model)])
+		})
 		await updateClient();
 	} else {
 		throw new Error("iframe not found");
