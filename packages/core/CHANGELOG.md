@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.1...@prismicio/slice-simulator-core@0.2.2) (2022-07-10)
+
+
+### Bug Fixes
+
+* add `fp-ts` as a dependency ([#9](https://github.com/prismicio/slice-simulator/issues/9)) ([7b547ff](https://github.com/prismicio/slice-simulator/commit/7b547ffbc6ee1d913a267dc8acebb2f154e3b484))
+
 ### [0.2.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.0...@prismicio/slice-simulator-core@0.2.1) (2022-04-12)
 
 
