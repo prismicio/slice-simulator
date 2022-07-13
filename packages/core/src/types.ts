@@ -56,7 +56,7 @@ export type StateManagerEvents = {
 	[StateManagerEventType.Message]: string;
 };
 
-export const enum StateManagerStatus {
+export enum StateManagerStatus {
 	Pending = "pending",
 	Loaded = "loaded",
 	Error = "error",
