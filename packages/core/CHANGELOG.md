@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.2...@prismicio/slice-simulator-core@0.2.3) (2022-07-13)
+
+
+### Bug Fixes
+
+* remove `const enum` patterns, enable `isolatedModules` option ([#11](https://github.com/prismicio/slice-simulator/issues/11)) ([9702a2a](https://github.com/prismicio/slice-simulator/commit/9702a2a77c175a3aa0f14687e6686cc12b502e9b))
+
 ### [0.2.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.1...@prismicio/slice-simulator-core@0.2.2) (2022-07-10)
 
 
