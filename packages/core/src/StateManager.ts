@@ -14,6 +14,7 @@ import {
 } from "./types";
 import { getActiveSliceDOM, getSliceZoneDOM } from "./domHelpers";
 import { throttle } from "./lib/throttle";
+import { __PRODUCTION__ } from "./lib/__PRODUCTION__";
 
 export class StateManager extends EventEmitter<StateManagerEvents> {
 	private _managedState: ManagedState;
@@ -78,10 +79,11 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		// Load state
 		this._managedState = await this.load(state);
 
-		if (process.env.NODE_ENV !== "development") {
-			// Load all slices at once to prevent any flickering
+		if (__PRODUCTION__) {
+			// Load all slice chunks at once to prevent any flickering in production
 			await this.forceSliceChunksDownload();
 		}
+
 		this.setDefaultSliceZone();
 
 		// Defering event to allow for chunks to load in background
