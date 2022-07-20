@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.3...@prismicio/slice-simulator-core@0.2.4) (2022-07-20)
+
+
+### Bug Fixes
+
+* force all slice chunk to load in production only ([#12](https://github.com/prismicio/slice-simulator/issues/12)) ([93a2a6c](https://github.com/prismicio/slice-simulator/commit/93a2a6cee8bc0e49ccc673911f4a264f6feb3c4d))
+
 ### [0.2.3](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.2...@prismicio/slice-simulator-core@0.2.3) (2022-07-13)
 
 
