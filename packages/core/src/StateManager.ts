@@ -78,8 +78,10 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		// Load state
 		this._managedState = await this.load(state);
 
-		// Init slice zone
-		await this.forceSliceChunksDownload();
+		if (process.env.NODE_ENV !== "development") {
+			// Load all slices at once to prevent any flickering
+			await this.forceSliceChunksDownload();
+		}
 		this.setDefaultSliceZone();
 
 		// Defering event to allow for chunks to load in background
