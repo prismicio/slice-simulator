@@ -1,5 +1,4 @@
-import { it, expect } from "vitest";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import {
 	ChannelNetwork,
@@ -19,80 +18,73 @@ class StandaloneChannelNetwork<
 
 const dummyData = { foo: "bar" };
 
-test.serial("debug logs messages when on debug mode", async (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
-	const consoleErrorStub = sinon.stub(console, "error");
+it("debug logs messages when on debug mode", async (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn(), error: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, { debug: true });
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	await channelNetwork.onMessage({ data: response });
 
-	t.is(consoleDebugStub.callCount, 1);
-	t.deepEqual(consoleDebugStub.getCall(0).args[0], response);
+	expect(console.debug).toHaveBeenCalledOnce();
+	expect(console.debug).toHaveBeenCalledWith(response);
 
-	consoleDebugStub.restore();
-	consoleErrorStub.restore();
+	vi.restoreAllMocks();
 });
 
-test.serial("doesn't debug log messages when not on debug mode", async (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
-	const consoleErrorStub = sinon.stub(console, "error");
+it("doesn't debug log messages when not on debug mode", async (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn(), error: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, { debug: false });
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	await channelNetwork.onMessage({ data: response });
 
-	t.is(consoleDebugStub.callCount, 0);
+	expect(console.debug).not.toHaveBeenCalled();
 
-	consoleDebugStub.restore();
-	consoleErrorStub.restore();
+	vi.restoreAllMocks();
 });
 
-test.serial("warns on invalid message received", async (t) => {
-	const consoleWarnStub = sinon.stub(console, "warn");
+it("warns on invalid message received", async () => {
+	vi.stubGlobal("console", { ...console, warn: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	await channelNetwork.onMessage({ data: {} });
 
-	t.is(consoleWarnStub.callCount, 1);
+	expect(console.warn).toHaveBeenCalledOnce();
 
-	consoleWarnStub.restore();
+	vi.restoreAllMocks();
 });
 
-test.serial("throws on other errors", async (t) => {
+it("throws on other errors", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
-	const pendingRequestStub = sinon
-		// @ts-expect-error - taking a shortcut by accessing private property
-		.stub(channelNetwork._pendingRequests, "has")
-		.throws(new Error(t.title));
+	// @ts-expect-error - taking a shortcut by accessing private property
+	vi.spyOn(channelNetwork._pendingRequests, "has").mockImplementation(() => {
+		throw new Error(ctx.meta.name);
+	});
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
-	await t.throwsAsync(
+	await expect(
 		// @ts-expect-error - taking a shortcut by accessing protected property
 		channelNetwork.onMessage({ data: response }),
-		{ message: t.title },
-	);
-
-	pendingRequestStub.restore();
+	).rejects.toThrowError(ctx.meta.name);
 });
 
-it("returns request handler success response", async (t) => {
+it("returns request handler success response", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork<
 		Record<string, unknown>,
 		{ foo: UnknownTransaction }
 	>(
 		{
-			foo: (_req, res) => res.success(t.title),
+			foo: (_req, res) => res.success(ctx.meta.name),
 		},
 		{},
 	);
@@ -104,29 +96,33 @@ it("returns request handler success response", async (t) => {
 
 	await new Promise<void>((resolve, reject) => {
 		const timeout = setTimeout(() => {
-			t.fail("response not received");
 			reject();
 		}, 1000);
 
 		const request = createRequestMessage("foo", dummyData);
-		const response = createSuccessResponseMessage(request.requestID, t.title);
+		const response = createSuccessResponseMessage(
+			request.requestID,
+			ctx.meta.name,
+		);
 
 		channel.port1.onmessage = (event) => {
-			t.deepEqual(event.data, response);
+			expect(event.data).toStrictEqual(response);
 			clearTimeout(timeout);
 			resolve();
 		};
 		channel.port1.postMessage(request);
 	});
+
+	expect.assertions(1);
 });
 
-it("returns request handler error response", async (t) => {
+it("returns request handler error response", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork<
 		Record<string, unknown>,
 		{ foo: UnknownTransaction }
 	>(
 		{
-			foo: (_req, res) => res.error(t.title),
+			foo: (_req, res) => res.error(ctx.meta.name),
 		},
 		{},
 	);
@@ -138,23 +134,27 @@ it("returns request handler error response", async (t) => {
 
 	await new Promise<void>((resolve, reject) => {
 		const timeout = setTimeout(() => {
-			t.fail("response not received");
 			reject();
 		}, 1000);
 
 		const request = createRequestMessage("foo", dummyData);
-		const response = createErrorResponseMessage(request.requestID, t.title);
+		const response = createErrorResponseMessage(
+			request.requestID,
+			ctx.meta.name,
+		);
 
 		channel.port1.onmessage = (event) => {
-			t.deepEqual(event.data, response);
+			expect(event.data).toStrictEqual(response);
 			clearTimeout(timeout);
 			resolve();
 		};
 		channel.port1.postMessage(request);
 	});
+
+	expect.assertions(1);
 });
 
-it("returns not implemented when request handler is not found", async (t) => {
+it("returns not implemented when request handler is not found", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
 	const channel = new MessageChannel();
@@ -164,11 +164,10 @@ it("returns not implemented when request handler is not found", async (t) => {
 
 	await new Promise<void>((resolve, reject) => {
 		const timeout = setTimeout(() => {
-			t.fail("response not received");
 			reject();
 		}, 1000);
 
-		const request = createRequestMessage(t.title, dummyData);
+		const request = createRequestMessage(ctx.meta.name, dummyData);
 		const response = createErrorResponseMessage(
 			request.requestID,
 			undefined,
@@ -176,22 +175,24 @@ it("returns not implemented when request handler is not found", async (t) => {
 		);
 
 		channel.port1.onmessage = (event) => {
-			t.deepEqual(event.data, response);
+			expect(event.data).toStrictEqual(response);
 			clearTimeout(timeout);
 			resolve();
 		};
 		channel.port1.postMessage(request);
 	});
+
+	expect.assertions(1);
 });
 
-it("returns internal server error when handler throws", async (t) => {
+it("returns internal server error when handler throws", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork<
 		Record<string, unknown>,
 		{ foo: UnknownTransaction }
 	>(
 		{
 			foo: (_req, _res) => {
-				throw new Error(t.title);
+				throw new Error(ctx.meta.name);
 			},
 		},
 		{},
@@ -204,38 +205,40 @@ it("returns internal server error when handler throws", async (t) => {
 
 	await new Promise<void>((resolve, reject) => {
 		const timeout = setTimeout(() => {
-			t.fail("response not received");
 			reject();
 		}, 1000);
 
 		const request = createRequestMessage("foo", dummyData);
 		const response = createErrorResponseMessage(
 			request.requestID,
-			new Error(t.title),
+			new Error(ctx.meta.name),
 			500,
 		);
 
 		channel.port1.onmessage = (event) => {
-			t.deepEqual(event.data, response);
+			expect(event.data).toStrictEqual(response);
 			clearTimeout(timeout);
 			resolve();
 		};
 		channel.port1.postMessage(request);
 	});
+
+	expect.assertions(1);
 });
 
-test.serial("logs error when unknown request ID is received", async (t) => {
-	const consoleErrorStub = sinon.stub(console, "error");
+it("logs error when unknown request ID is received", async (ctx) => {
+	vi.stubGlobal("console", { ...console, error: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, { debug: false });
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	await channelNetwork.onMessage({ data: response });
 
-	t.is(consoleErrorStub.callCount, 1);
-	t.true(consoleErrorStub.getCall(0).args[0].includes(response.requestID));
+	expect(console.error).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(console.error.calls[0][0].includes(response.requestID)).toBe(true);
 
-	consoleErrorStub.restore();
+	vi.restoreAllMocks();
 });

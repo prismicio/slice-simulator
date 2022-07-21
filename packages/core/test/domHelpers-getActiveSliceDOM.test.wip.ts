@@ -19,7 +19,7 @@ test.after((_t) => {
 	document.body.innerHTML = "";
 });
 
-it("returns null when Slice Zone is not part of raycast", (t) => {
+it("returns null when Slice Zone is not part of raycast", (ctx) => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -43,7 +43,7 @@ it("returns null when Slice Zone is not part of raycast", (t) => {
 	delete document.elementsFromPoint;
 });
 
-it("returns null when slice is not part of raycast", (t) => {
+it("returns null when slice is not part of raycast", (ctx) => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -69,7 +69,7 @@ it("returns null when slice is not part of raycast", (t) => {
 	delete document.elementsFromPoint;
 });
 
-it("returns slice when Slice is part of raycast", (t) => {
+it("returns slice when Slice is part of raycast", (ctx) => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion

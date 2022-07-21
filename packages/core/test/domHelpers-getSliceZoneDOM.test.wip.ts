@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import { getSliceZoneDOM, simulatorClass, simulatorRootClass } from "../src";
 
-it("returns flagged Slice Zone if any", (t) => {
+it("returns flagged Slice Zone if any", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
@@ -19,7 +19,7 @@ it("returns flagged Slice Zone if any", (t) => {
 
 test.serial(
 	"returns flagged Slice Zone if any and warn if number of children is off",
-	(t) => {
+	(ctx) => {
 		const consoleWarnStub = sinon.stub(console, "warn");
 		document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
 
@@ -43,7 +43,7 @@ test.serial(
 	},
 );
 
-it("returns null if simulator class is not found", (t) => {
+it("returns null if simulator class is not found", (ctx) => {
 	document.body.innerHTML = "";
 
 	const $sliceZone = getSliceZoneDOM(0);
@@ -53,7 +53,7 @@ it("returns null if simulator class is not found", (t) => {
 	document.body.innerHTML = "";
 });
 
-it("returns null if simulator root class is not found", (t) => {
+it("returns null if simulator root class is not found", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}"></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
@@ -63,7 +63,7 @@ it("returns null if simulator root class is not found", (t) => {
 	document.body.innerHTML = "";
 });
 
-it("returns null if simulator root has no children but children are expected", (t) => {
+it("returns null if simulator root has no children but children are expected", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(1);
@@ -73,7 +73,7 @@ it("returns null if simulator root has no children but children are expected", (
 	document.body.innerHTML = "";
 });
 
-it("returns simulator root when no children are expected", (t) => {
+it("returns simulator root when no children are expected", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
@@ -88,7 +88,7 @@ it("returns simulator root when no children are expected", (t) => {
 	document.body.innerHTML = "";
 });
 
-it("returns simulator root when matching the expected number of children", (t) => {
+it("returns simulator root when matching the expected number of children", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<section></section><section></section>
@@ -107,7 +107,7 @@ it("returns simulator root when matching the expected number of children", (t) =
 	document.body.innerHTML = "";
 });
 
-it("returns first element matching the expected number of children from simulator root", (t) => {
+it("returns first element matching the expected number of children from simulator root", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<div class="slicezone">
@@ -128,7 +128,7 @@ it("returns first element matching the expected number of children from simulato
 	document.body.innerHTML = "";
 });
 
-it("returns null when Slice Zone is too deep", (t) => {
+it("returns null when Slice Zone is too deep", (ctx) => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<div><div><div><div>

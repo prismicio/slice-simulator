@@ -6,7 +6,7 @@ import { onClickHandler } from "../src";
 const a = document.createElement("a");
 const div = document.createElement("div");
 
-it("does nothing when path is absent", (t) => {
+it("does nothing when path is absent", (ctx) => {
 	const event = {
 		preventDefault: sinon.spy(),
 		stopPropagation: sinon.spy(),
@@ -18,7 +18,7 @@ it("does nothing when path is absent", (t) => {
 	t.is(event.stopPropagation.callCount, 0);
 });
 
-it("prevents default and stops propagation when path contains a close HTMLAnchorElement", (t) => {
+it("prevents default and stops propagation when path contains a close HTMLAnchorElement", (ctx) => {
 	const event = {
 		preventDefault: sinon.spy(),
 		stopPropagation: sinon.spy(),
@@ -31,7 +31,7 @@ it("prevents default and stops propagation when path contains a close HTMLAnchor
 	t.is(event.stopPropagation.callCount, 1);
 });
 
-it("does nothing when path doesn't contain a close HTMLAnchorElement", (t) => {
+it("does nothing when path doesn't contain a close HTMLAnchorElement", (ctx) => {
 	const event = {
 		preventDefault: sinon.spy(),
 		stopPropagation: sinon.spy(),

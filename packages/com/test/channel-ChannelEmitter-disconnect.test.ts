@@ -6,7 +6,7 @@ class StandaloneChannelEmitter extends ChannelEmitter {}
 
 const iframe = document.createElement("iframe");
 
-it("disconnects emitter from receiver by killing channel", (t) => {
+it("disconnects emitter from receiver by killing channel", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	const channel = new MessageChannel();
@@ -17,12 +17,12 @@ it("disconnects emitter from receiver by killing channel", (t) => {
 	channelEmitter._connected = true;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(channelEmitter.channel, channel);
-	t.true(channelEmitter.connected);
+	expect(channelEmitter.channel).toBe(channel);
+	expect(channelEmitter.connected).toBe(true);
 
 	channelEmitter.disconnect();
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.throws(() => channelEmitter.channel, { instanceOf: ChannelNotSetError });
-	t.false(channelEmitter.connected);
+	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError);
+	expect(channelEmitter.connected).toBe(false);
 });

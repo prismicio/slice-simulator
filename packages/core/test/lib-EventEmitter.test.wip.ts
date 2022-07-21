@@ -5,7 +5,7 @@ import { EventEmitter } from "../src/lib/EventEmitter";
 
 class StandaloneEventEmitter extends EventEmitter<{ foo: "bar" }> {}
 
-it("registers event handler", (t) => {
+it("registers event handler", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();
@@ -16,7 +16,7 @@ it("registers event handler", (t) => {
 	t.is(eventEmitter._listeners.foo[0][0], listener);
 });
 
-it("registers event handler with key", (t) => {
+it("registers event handler with key", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();
@@ -29,7 +29,7 @@ it("registers event handler with key", (t) => {
 	t.is(eventEmitter._listeners.foo[0][1], "baz");
 });
 
-it("dispatches event", (t) => {
+it("dispatches event", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();
@@ -43,13 +43,13 @@ it("dispatches event", (t) => {
 	t.is(listener.callCount, 1);
 });
 
-it("doesn't fail to dispatch when no handler", (t) => {
+it("doesn't fail to dispatch when no handler", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	t.notThrows(() => eventEmitter.emit("foo", "bar"));
 });
 
-it("unregisters event handler", (t) => {
+it("unregisters event handler", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();
@@ -67,7 +67,7 @@ it("unregisters event handler", (t) => {
 	t.is(listener.callCount, 0);
 });
 
-it("unregisters event handler with key", (t) => {
+it("unregisters event handler with key", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();
@@ -85,7 +85,7 @@ it("unregisters event handler with key", (t) => {
 	t.is(listener.callCount, 0);
 });
 
-it("doesn't fail to unregister when no handler", (t) => {
+it("doesn't fail to unregister when no handler", (ctx) => {
 	const eventEmitter = new StandaloneEventEmitter();
 
 	const listener = sinon.spy();

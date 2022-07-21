@@ -5,7 +5,7 @@ import { sleep } from "./__testutils__/sleep";
 
 import { throttle } from "../src/lib/throttle";
 
-it("throttles function", async (t) => {
+it("throttles function", async (ctx) => {
 	const fn = sinon.spy();
 	const throttled = throttle(fn);
 
@@ -20,7 +20,7 @@ it("throttles function", async (t) => {
 	t.is(fn.callCount, 2, "if subsequent calls, calls last on tail");
 });
 
-it("throttles function consitently", async (t) => {
+it("throttles function consitently", async (ctx) => {
 	const fn = sinon.spy();
 	const throttled = throttle(fn, 50);
 

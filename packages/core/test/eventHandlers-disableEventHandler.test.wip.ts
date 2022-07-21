@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import { disableEventHandler } from "../src";
 
-it("prevents default and stops propagation", (t) => {
+it("prevents default and stops propagation", (ctx) => {
 	const event = {
 		preventDefault: sinon.spy(),
 		stopPropagation: sinon.spy(),

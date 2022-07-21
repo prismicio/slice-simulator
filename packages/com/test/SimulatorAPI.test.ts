@@ -1,5 +1,4 @@
-import { it, expect } from "vitest";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { createRequestMessage } from "../src/channel";
 import {
@@ -9,8 +8,8 @@ import {
 	SimulatorAPI,
 } from "../src";
 
-it("instantiates correctly", (t) => {
-	t.notThrows(
+it("instantiates correctly", () => {
+	expect(
 		() =>
 			new SimulatorAPI({
 				[ClientRequestType.Ping]: (_req, res) => {
@@ -29,10 +28,10 @@ it("instantiates correctly", (t) => {
 					return res.success();
 				},
 			}),
-	);
+	).not.toThrowError();
 });
 
-it("instantiates correctly with defaults", (t) => {
+it("instantiates correctly with defaults", () => {
 	const simulatorAPI = new SimulatorAPI({
 		[ClientRequestType.GetLibraries]: (_req, res) => {
 			return res.success([]);
@@ -51,19 +50,19 @@ it("instantiates correctly with defaults", (t) => {
 	const [req, res] = [
 		createRequestMessage(ClientRequestType.Ping, undefined),
 		{
-			success: sinon.spy(),
-			error: sinon.spy(),
+			success: vi.fn(),
+			error: vi.fn(),
 		},
 	];
 
 	simulatorAPI.requestHandlers[ClientRequestType.Ping](req, res);
 
-	t.is(res.success.callCount, 1);
-	t.is(res.error.callCount, 0);
+	expect(res.success).toHaveBeenCalledOnce();
+	expect(res.error).not.toHaveBeenCalled();
 });
 
-it("registers instance on window object", (t) => {
-	t.false("prismic" in window);
+it("registers instance on window object", () => {
+	expect("prismic" in window).toBe(false);
 
 	const simulatorClient = new SimulatorAPI(
 		{
@@ -87,59 +86,52 @@ it("registers instance on window object", (t) => {
 		prismic?: { sliceSimulator: { api: SimulatorAPI[] } };
 	};
 
-	t.is((window as APIWindow).prismic?.sliceSimulator.api[0], simulatorClient);
+	expect((window as APIWindow).prismic?.sliceSimulator.api[0]).toBe(
+		simulatorClient,
+	);
 
 	delete (window as APIWindow).prismic;
 });
 
-const callsPostFormattedRequestCorrectly = async <
+const callsPostFormattedRequestCorrectly = <
 	TRequestType extends APIRequestType,
 >(
-	t: ExecutionContext,
 	requestType: TRequestType,
 	requestData: APITransactions[TRequestType]["request"]["data"],
-) => {
-	const simulatorAPI = new SimulatorAPI({
-		[ClientRequestType.GetLibraries]: (_req, res) => {
-			return res.success([]);
-		},
-		[ClientRequestType.SetSliceZone]: (_req, res) => {
-			return res.success();
-		},
-		[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
-			return res.success();
-		},
-		[ClientRequestType.ScrollToSlice]: (_req, res) => {
-			return res.success();
-		},
-	});
+): [string, () => Promise<void>] => [
+	`\`SimulatorAPI.${requestType}()\` calls \`postFormattedRequest\` correctly`,
+	async () => {
+		const simulatorAPI = new SimulatorAPI({
+			[ClientRequestType.GetLibraries]: (_req, res) => {
+				return res.success([]);
+			},
+			[ClientRequestType.SetSliceZone]: (_req, res) => {
+				return res.success();
+			},
+			[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
+				return res.success();
+			},
+			[ClientRequestType.ScrollToSlice]: (_req, res) => {
+				return res.success();
+			},
+		});
 
-	const postFormattedRequestStub = sinon.stub(
-		simulatorAPI,
+		const postFormattedRequestStub = vi.fn();
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		"postFormattedRequest",
-	);
+		simulatorAPI.postFormattedRequest = postFormattedRequestStub;
 
-	await simulatorAPI[requestType](requestData);
+		await simulatorAPI[requestType](requestData);
 
-	t.is(postFormattedRequestStub.callCount, 1);
-	t.is(postFormattedRequestStub.getCall(0).args[0], requestType);
-	t.is(postFormattedRequestStub.getCall(0).args[1], requestData);
-
-	postFormattedRequestStub.restore();
-};
-callsPostFormattedRequestCorrectly.title = <
-	TRequestType extends APIRequestType,
->(
-	providedTitle = "",
-	requestType: TRequestType,
-	_requestData: APITransactions[TRequestType]["request"]["data"],
-) =>
-	providedTitle ||
-	`\`SimulatorAPI.${requestType}()\` calls \`postFormattedRequest\` correctly`;
+		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
+		// @ts-expect-error - type is broken
+		expect(postFormattedRequestStub.calls[0][0]).toBe(requestType);
+		// @ts-expect-error - type is broken
+		expect(postFormattedRequestStub.calls[0][1]).toBe(requestData);
+	},
+];
 
 /* eslint-disable prettier/prettier */
 
-it(callsPostFormattedRequestCorrectly, APIRequestType.SetActiveSlice, null);
+it(...callsPostFormattedRequestCorrectly(APIRequestType.SetActiveSlice, null));
 
 /* eslint-enable prettier/prettier */
