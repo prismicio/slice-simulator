@@ -1,4 +1,4 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import {
 	ChannelEmitter,
@@ -10,14 +10,14 @@ class StandaloneChannelEmitter extends ChannelEmitter {}
 
 const iframe = document.createElement("iframe");
 
-test("throws when accessing unset channel", (t) => {
+it("throws when accessing unset channel", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.throws(() => channelEmitter.channel, { instanceOf: ChannelNotSetError });
+	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError);
 });
 
-test("returns channel when channel is set", (t) => {
+it("returns channel when channel is set", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	const channel = new MessageChannel();
@@ -26,10 +26,10 @@ test("returns channel when channel is set", (t) => {
 	channelEmitter.channel = channel;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(channelEmitter.channel, channel);
+	expect(channelEmitter.channel).toBe(channel);
 });
 
-test("configures port from set channel", (t) => {
+it("configures port from set channel", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	const channel = new MessageChannel();
@@ -38,10 +38,10 @@ test("configures port from set channel", (t) => {
 	channelEmitter.channel = channel;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(channelEmitter.port, channel.port1);
+	expect(channelEmitter.port).toBe(channel.port1);
 });
 
-test("unsets port when channel is unset", (t) => {
+it("unsets port when channel is unset", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	const channel = new MessageChannel();
@@ -50,11 +50,11 @@ test("unsets port when channel is unset", (t) => {
 	channelEmitter.channel = channel;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(channelEmitter.port, channel.port1);
+	expect(channelEmitter.port).toBe(channel.port1);
 
 	// @ts-expect-error - taking a shortcut by setting protected property
 	channelEmitter.channel = null;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.throws(() => channelEmitter.port, { instanceOf: PortNotSetError });
+	expect(() => channelEmitter.port).toThrowError(PortNotSetError);
 });

@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import {
 	ChannelEmitter,
@@ -17,7 +16,7 @@ const iframe = document.createElement("div") as HTMLIFrameElement;
 // @ts-expect-error - setting for test purpose
 iframe.contentWindow = window;
 
-test("throws when target window is not available", async (t) => {
+it("throws when target window is not available", async () => {
 	const iframe = document.createElement("iframe");
 
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
@@ -25,12 +24,12 @@ test("throws when target window is not available", async (t) => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	await t.throwsAsync(channelEmitter.connect(), {
-		message: "Target window is not available",
-	});
+	await expect(channelEmitter.connect()).rejects.toThrowError(
+		"Target window is not available",
+	);
 });
 
-test("timeouts after set timeout", async (t) => {
+it("timeouts after set timeout", async () => {
 	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
@@ -40,12 +39,12 @@ test("timeouts after set timeout", async (t) => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	await t.throwsAsync(channelEmitter.connect(), {
-		instanceOf: ConnectionTimeoutError,
-	});
+	await expect(channelEmitter.connect()).rejects.toThrowError(
+		ConnectionTimeoutError,
+	);
 });
 
-test("sets `receiverReadyCallback` if `receiverReady` is not set", async (t) => {
+it("sets `receiverReadyCallback` if `receiverReady` is not set", async () => {
 	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
@@ -53,20 +52,20 @@ test("sets `receiverReadyCallback` if `receiverReady` is not set", async (t) => 
 	);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(channelEmitter._receiverReadyCallback, null);
+	expect(channelEmitter._receiverReadyCallback).toBe(null);
 
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	await t.throwsAsync(channelEmitter.connect(), {
-		instanceOf: ConnectionTimeoutError,
-	});
+	await expect(channelEmitter.connect()).rejects.toThrowError(
+		ConnectionTimeoutError,
+	);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(typeof channelEmitter._receiverReadyCallback, "function");
+	expect(channelEmitter._receiverReadyCallback).toBeTypeOf("function");
 });
 
-test("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option is set", async (t) => {
+it("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option is set", async (ctx) => {
 	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
@@ -74,83 +73,79 @@ test("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` opti
 	);
 
 	// @ts-expect-error - taking a shortcut by setting private property
-	channelEmitter._receiverReady = t.title;
+	channelEmitter._receiverReady = ctx.meta.name;
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(channelEmitter._receiverReadyCallback, null);
+	expect(channelEmitter._receiverReadyCallback).toBe(null);
 
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	await t.throwsAsync(channelEmitter.connect(true), {
-		instanceOf: ConnectionTimeoutError,
-	});
+	await expect(channelEmitter.connect(true)).rejects.toThrowError(
+		ConnectionTimeoutError,
+	);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(channelEmitter._receiverReady, "");
+	expect(channelEmitter._receiverReady).toBe("");
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(typeof channelEmitter._receiverReadyCallback, "function");
+	expect(channelEmitter._receiverReadyCallback).toBeTypeOf("function");
 });
 
-test.serial(
-	"calls `receiverReadyCallback` straight away if receiver is already ready",
-	async (t) => {
-		const channelEmitter = new StandaloneChannelEmitter(
-			iframe,
-			{},
-			{ connectTimeout: 100, requestIDPrefix: t.title },
-		);
+it("calls `receiverReadyCallback` straight away if receiver is already ready", async (ctx) => {
+	const channelEmitter = new StandaloneChannelEmitter(
+		iframe,
+		{},
+		{ connectTimeout: 100, requestIDPrefix: ctx.meta.name },
+	);
 
-		const contentWindowBck = iframe.contentWindow;
-		// @ts-expect-error - setting for test purpose
-		delete iframe.contentWindow;
-		const postMessageMock = sinon.spy(
-			(request: UnknownMessage, host?: string, ports?: [MessagePort]) => {
-				if (isRequestMessage(request) && ports) {
-					const response = createSuccessResponseMessage(
-						request.requestID,
-						undefined,
-					);
+	const contentWindowBck = iframe.contentWindow;
+	// @ts-expect-error - setting for test purpose
+	delete iframe.contentWindow;
+	const postMessageMock = vi.fn(
+		(request: UnknownMessage, host?: string, ports?: [MessagePort]) => {
+			if (isRequestMessage(request) && ports) {
+				const response = createSuccessResponseMessage(
+					request.requestID,
+					undefined,
+				);
 
-					ports[0].postMessage(response);
-				}
-			},
-		);
-		// @ts-expect-error - setting for test purpose
-		iframe.contentWindow = {
-			postMessage: postMessageMock,
-		};
+				ports[0].postMessage(response);
+			}
+		},
+	);
+	// @ts-expect-error - setting for test purpose
+	iframe.contentWindow = {
+		postMessage: postMessageMock,
+	};
 
-		// @ts-expect-error - taking a shortcut by setting private property
-		channelEmitter._receiverReady = t.title;
+	// @ts-expect-error - taking a shortcut by setting private property
+	channelEmitter._receiverReady = ctx.meta.name;
 
-		setTimeout(() => {
-			iframe.dispatchEvent(new Event("load"));
-		}, 10);
-		const response = await channelEmitter.connect();
+	setTimeout(() => {
+		iframe.dispatchEvent(new Event("load"));
+	}, 10);
+	const response = await channelEmitter.connect();
 
-		t.true(
-			// @ts-expect-error - taking a shortcut by accessing private property
-			channelEmitter.channel instanceof MessageChannel,
-			"sets message channel",
-		);
-		t.is(
-			postMessageMock.callCount,
-			2,
-			"calls `postMessage` twice: 1 for connect request, 1 for ready response",
-		);
-		t.notThrows(() => {
-			postMessageMock.getCalls().forEach((call) => {
-				validateMessage(call.args[0]);
-			});
-		}, "calls `postMessage` with valid messages only");
-		t.is(
-			response.requestID.replace(/\d+/, ""),
-			t.title,
-			"receives a valid connect response",
-		);
-		t.is(response.status, 200, "receives a valid connect response");
+	expect(
+		// @ts-expect-error - taking a shortcut by accessing private property
+		channelEmitter.channel instanceof MessageChannel,
+		"sets message channel",
+	).toBe(true);
+	expect(
+		postMessageMock,
+		"calls `postMessage` twice: 1 for connect request, 1 for ready response",
+	).toHaveBeenCalledTimes(2);
+	expect(() => {
+		// @ts-expect-error - type is broken
+		postMessageMock.calls.forEach((call) => {
+			validateMessage(call[0]);
+		});
+	}, "calls `postMessage` with valid messages only").not.toThrowError();
+	expect(
+		response.requestID.replace(/\d+/, ""),
+		"receives a valid connect response",
+	).toBe(ctx.meta.name);
+	expect(response.status, "receives a valid connect response").toBe(200);
 
-		// @ts-expect-error - setting for test purpose
-		iframe.contentWindow = contentWindowBck;
-	},
-);
+	// @ts-expect-error - setting for test purpose
+	iframe.contentWindow = contentWindowBck;
+});
