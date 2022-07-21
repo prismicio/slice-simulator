@@ -153,5 +153,6 @@ export const SliceSimulator = {
 	SliceSimulatorState,
 	Record<string, never>,
 	Record<string, never>,
-	SliceSimulatorProps
+	SliceSimulatorProps,
+	void
 >;

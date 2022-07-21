@@ -36,26 +36,26 @@
 		"release:alpha:dry": "standard-version --release-as major --prerelease alpha --dry-run",
 		"release:dry": "standard-version --dry-run",
 		"test": "npm run unit && npm run build",
-		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava"
+		"unit": "vitest run --coverage",
+		"unit:watch": "vitest watch"
 	},
 	"dependencies": {
-		"@prismicio/slice-simulator-core": "^0.2.1"
+		"@prismicio/slice-simulator-core": "^0.2.4"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.2",
-		"ava": "^3.15.0",
-		"nyc": "^15.1.0",
-		"react": "^18.0.0",
+		"@types/react": "^18.0.15",
+		"c8": "^7.12.0",
+		"react": "^18.2.0",
 		"siroc": "^0.16.0",
-		"standard-version": "^9.3.2",
-		"ts-eager": "^2.0.2",
-		"typescript": "^4.6.3"
+		"standard-version": "^9.5.0",
+		"typescript": "^4.7.4",
+		"vitest": "^0.18.1"
 	},
 	"peerDependencies": {
 		"react": "^16.8.0 || ^17.0.0 || ^18.0.0"
 	},
 	"engines": {
-		"node": ">=12.7.0"
+		"node": ">=14.15.0"
 	},
 	"publishConfig": {
 		"access": "public"
