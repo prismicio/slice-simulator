@@ -1,4 +1,4 @@
-import { it, expect } from "vitest";
+import { it, expect, beforeEach, afterEach } from "vitest";
 
 import {
 	getSliceZoneDOM,
@@ -7,7 +7,7 @@ import {
 	simulatorRootClass,
 } from "../src";
 
-test.before((_t) => {
+beforeEach(() => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<section class="foo"></section><section class="bar"></section>
@@ -15,11 +15,11 @@ test.before((_t) => {
 </div>`;
 });
 
-test.after((_t) => {
+afterEach((_t) => {
 	document.body.innerHTML = "";
 });
 
-it("returns null when Slice Zone is not part of raycast", (ctx) => {
+it("returns null when Slice Zone is not part of raycast", () => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -31,19 +31,18 @@ it("returns null when Slice Zone is not part of raycast", (ctx) => {
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	if ($sliceZone) {
-		const $activeSlice = getActiveSliceDOM($sliceZone, { x: 0, y: 0 });
+	expect($sliceZone).toBeInstanceOf(HTMLElement);
 
-		t.is($activeSlice, null);
-	} else {
-		t.fail();
-	}
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const $activeSlice = getActiveSliceDOM($sliceZone!, { x: 0, y: 0 });
+
+	expect($activeSlice).toBeNull();
 
 	// @ts-expect-error cleaning up polyfill
 	delete document.elementsFromPoint;
 });
 
-it("returns null when slice is not part of raycast", (ctx) => {
+it("returns null when slice is not part of raycast", () => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -57,19 +56,18 @@ it("returns null when slice is not part of raycast", (ctx) => {
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	if ($sliceZone) {
-		const $activeSlice = getActiveSliceDOM($sliceZone, { x: 0, y: 0 });
+	expect($sliceZone).toBeInstanceOf(HTMLElement);
 
-		t.is($activeSlice, null);
-	} else {
-		t.fail();
-	}
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const $activeSlice = getActiveSliceDOM($sliceZone!, { x: 0, y: 0 });
+
+	expect($activeSlice).toBeNull();
 
 	// @ts-expect-error cleaning up polyfill
 	delete document.elementsFromPoint;
 });
 
-it("returns slice when Slice is part of raycast", (ctx) => {
+it("returns slice when Slice is part of raycast", () => {
 	document.elementsFromPoint = (_x, _y) => {
 		return [
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -85,18 +83,14 @@ it("returns slice when Slice is part of raycast", (ctx) => {
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	if ($sliceZone) {
-		const $activeSlice = getActiveSliceDOM($sliceZone, { x: 0, y: 0 });
+	expect($sliceZone).toBeInstanceOf(HTMLElement);
 
-		t.true($activeSlice instanceof HTMLElement);
-		if ($activeSlice instanceof HTMLElement) {
-			t.true($activeSlice.classList.contains("foo"));
-		} else {
-			t.fail();
-		}
-	} else {
-		t.fail();
-	}
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const $activeSlice = getActiveSliceDOM($sliceZone!, { x: 0, y: 0 });
+
+	expect($activeSlice).toBeInstanceOf(HTMLElement);
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	expect($activeSlice!.classList.contains("foo")).toBe(true);
 
 	// @ts-expect-error cleaning up polyfill
 	delete document.elementsFromPoint;

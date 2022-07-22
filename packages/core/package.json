@@ -37,7 +37,8 @@
 		"release:dry": "standard-version --dry-run",
 		"test": "npm run types && npm run unit && npm run build",
 		"types": "tsc --noEmit",
-		"unit": "nyc --reporter=lcovonly --reporter=text --exclude-after-remap=false ava"
+		"unit": "vitest run --coverage",
+		"unit:watch": "vitest watch"
 	},
 	"dependencies": {
 		"@prismicio/slice-simulator-com": "^0.3.1",
