@@ -1,7 +1,7 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { getDefaultMessage } from "../src";
 
-test("returns default message", (t) => {
-	t.is(getDefaultMessage(), "");
+it("returns default message", () => {
+	expect(getDefaultMessage()).toMatchInlineSnapshot('""');
 });

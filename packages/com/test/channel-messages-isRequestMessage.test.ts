@@ -1,4 +1,4 @@
-import test from "ava";
+import { it, expect } from "vitest";
 import {
 	createErrorResponseMessage,
 	createRequestMessage,
@@ -9,20 +9,20 @@ import {
 const dummyData = { foo: "bar" };
 const dummyError = dummyData;
 
-test("returns true on request message", (t) => {
-	const request = createRequestMessage(t.title, dummyData);
+it("returns true on request message", (ctx) => {
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
-	t.true(isRequestMessage(request));
+	expect(isRequestMessage(request)).toBe(true);
 });
 
-test("returns false on success response message", (t) => {
-	const response = createSuccessResponseMessage(t.title, dummyData);
+it("returns false on success response message", (ctx) => {
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
-	t.false(isRequestMessage(response));
+	expect(isRequestMessage(response)).toBe(false);
 });
 
-test("returns false on error response message", (t) => {
-	const response = createErrorResponseMessage(t.title, dummyError);
+it("returns false on error response message", (ctx) => {
+	const response = createErrorResponseMessage(ctx.meta.name, dummyError);
 
-	t.false(isRequestMessage(response));
+	expect(isRequestMessage(response)).toBe(false);
 });

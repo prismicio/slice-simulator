@@ -1,6 +1,6 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 // TODO: Dummy test, meant to be removed when real tests come in
-test("exports something", (t) => {
-	t.truthy(true);
+it("exports something", () => {
+	expect(true).toBeTruthy();
 });

@@ -1,4 +1,4 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import {
 	createErrorResponseMessage,
@@ -10,52 +10,52 @@ import {
 const dummyData = { foo: "bar" };
 const dummyError = dummyData;
 
-test("validates valid request message", (t) => {
-	const request = createRequestMessage(t.title, dummyData);
+it("validates valid request message", (ctx) => {
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
-	t.notThrows(() => validateMessage(request));
+	expect(() => validateMessage(request)).not.toThrowError();
 });
 
-test("validates valid success response message", (t) => {
-	const response = createSuccessResponseMessage(t.title, dummyData);
+it("validates valid success response message", (ctx) => {
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
-	t.notThrows(() => validateMessage(response));
+	expect(() => validateMessage(response)).not.toThrowError();
 });
 
-test("validates valid error response message", (t) => {
-	const response = createErrorResponseMessage(t.title, dummyError);
+it("validates valid error response message", (ctx) => {
+	const response = createErrorResponseMessage(ctx.meta.name, dummyError);
 
-	t.notThrows(() => validateMessage(response));
+	expect(() => validateMessage(response)).not.toThrowError();
 });
 
-test("throws on non-object", (t) => {
+it("throws on non-object", () => {
 	const message1 = 1;
 
-	t.throws(() => validateMessage(message1), { instanceOf: TypeError });
+	expect(() => validateMessage(message1)).toThrowError(TypeError);
 
 	const message2 = null;
 
-	t.throws(() => validateMessage(message2), { instanceOf: TypeError });
+	expect(() => validateMessage(message2)).toThrowError(TypeError);
 });
 
-test("throws on invalid object", (t) => {
+it("throws on invalid object", () => {
 	const message1 = {};
 
-	t.throws(() => validateMessage(message1), { instanceOf: TypeError });
+	expect(() => validateMessage(message1)).toThrowError(TypeError);
 
 	const message2 = {
 		foo: "bar",
 	};
 
-	t.throws(() => validateMessage(message2), { instanceOf: TypeError });
+	expect(() => validateMessage(message2)).toThrowError(TypeError);
 });
 
-test("throws on invalid requestID", (t) => {
+it("throws on invalid requestID", (ctx) => {
 	const message: Record<string, unknown> = createRequestMessage(
-		t.title,
+		ctx.meta.name,
 		dummyData,
 	);
 	message.requestID = 1;
 
-	t.throws(() => validateMessage(message), { instanceOf: TypeError });
+	expect(() => validateMessage(message)).toThrowError(TypeError);
 });

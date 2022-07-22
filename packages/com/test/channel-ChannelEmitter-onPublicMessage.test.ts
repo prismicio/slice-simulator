@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import {
 	ChannelEmitter,
@@ -9,42 +8,41 @@ import {
 	InternalReceiverRequestType,
 } from "../src/channel";
 
-class StandaloneEmitterEmitter extends ChannelEmitter {}
+class StandaloneChannelEmitter extends ChannelEmitter {}
 
 const iframe = document.createElement("iframe");
 
 const dummyData = { foo: "bar" };
 
-test.serial(
-	"gets wired to public message events on class instantiation",
-	(t) => {
-		const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
-		// @ts-expect-error - taking a shortcut by accessing protected property
-		const onPublicMessageStub = sinon.stub(channelEmitter, "_onPublicMessage");
+it("gets wired to public message events on class instantiation", () => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
-		const event = new MessageEvent("message", {
-			data: dummyData,
-			source: iframe.contentWindow,
-		});
-		window.dispatchEvent(event);
+	const onPublicMessageStub = vi.fn();
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	vi.spyOn(channelEmitter, "_onPublicMessage").mockImplementation(
+		onPublicMessageStub,
+	);
 
-		t.is(onPublicMessageStub.callCount, 1);
-		t.deepEqual(onPublicMessageStub.getCall(0).args[0], event);
+	const event = new MessageEvent("message", {
+		data: dummyData,
+		source: iframe.contentWindow,
+	});
+	window.dispatchEvent(event);
 
-		onPublicMessageStub.restore();
-	},
-);
+	expect(onPublicMessageStub).toHaveBeenCalledOnce();
+	expect(onPublicMessageStub).toHaveBeenCalledWith(event);
+});
 
-test.serial("debug logs messages when on debug mode", async (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("debug logs messages when on debug mode", async (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
-	const channelEmitter = new StandaloneEmitterEmitter(
+	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
 		{ debug: true },
 	);
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({
@@ -52,26 +50,26 @@ test.serial("debug logs messages when on debug mode", async (t) => {
 		source: iframe.contentWindow,
 	});
 
-	t.is(
-		consoleDebugStub.callCount,
-		2,
+	expect(
+		console.debug,
 		"calls `console.debug` twice: 1 for the response, 1 for the request",
-	);
-	t.deepEqual(consoleDebugStub.getCall(0).args[0], request);
+	).toHaveBeenCalledTimes(2);
+	// @ts-expect-error - type is broken
+	expect(console.debug.calls[0][0]).toStrictEqual(request);
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test.serial("doesn't debug log messages when not on debug mode", async (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("doesn't debug log messages when not on debug mode", async (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
-	const channelEmitter = new StandaloneEmitterEmitter(
+	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
 		{ debug: false },
 	);
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({
@@ -79,70 +77,72 @@ test.serial("doesn't debug log messages when not on debug mode", async (t) => {
 		source: iframe.contentWindow,
 	});
 
-	t.is(consoleDebugStub.callCount, 0);
+	expect(console.debug).not.toHaveBeenCalled();
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test("ignores event not coming from target", async (t) => {
+it("ignores event not coming from target", async (ctx) => {
 	// Using debug mode as a way to make sure function returns early
-	const consoleDebugStub = sinon.stub(console, "debug");
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
-	const channelEmitter = new StandaloneEmitterEmitter(
+	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
 		{ debug: true },
 	);
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({ data: request });
 
-	t.false(consoleDebugStub.called);
+	expect(console.debug).not.toHaveBeenCalled();
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test("doens't throw on invalid message received", async (t) => {
-	const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
+it("doens't throw on invalid message received", async () => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
-	await t.notThrowsAsync(
+	await expect(
 		// @ts-expect-error - taking a shortcut by accessing private property
 		channelEmitter._onPublicMessage({
 			data: null,
 			source: iframe.contentWindow,
 		}),
-	);
+	).resolves.not.toThrowError();
 });
 
-test.serial("throws on other errors", async (t) => {
-	const consoleDebugStub = sinon
-		.stub(console, "debug")
-		.throws(new Error(t.title));
+it("throws on other errors", async (ctx) => {
+	vi.stubGlobal("console", {
+		...console,
+		debug: () => {
+			throw new Error(ctx.meta.name);
+		},
+	});
 
-	const channelEmitter = new StandaloneEmitterEmitter(
+	const channelEmitter = new StandaloneChannelEmitter(
 		iframe,
 		{},
 		{ debug: true },
 	);
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
-	await t.throwsAsync(
+	await expect(
 		// @ts-expect-error - taking a shortcut by accessing private property
 		channelEmitter._onPublicMessage({
 			data: request,
 			source: iframe.contentWindow,
 		}),
-		{ message: t.title },
-	);
+	).rejects.toThrowError(ctx.meta.name);
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test("accepts ready requests", async (t) => {
-	const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
+it("accepts ready requests", async () => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
 
 	const request = createRequestMessage(
 		InternalReceiverRequestType.Ready,
@@ -156,20 +156,15 @@ test("accepts ready requests", async (t) => {
 	});
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(channelEmitter._receiverReady, request.requestID);
+	expect(channelEmitter._receiverReady).toBe(request.requestID);
 });
 
-test("accepts ready requests and call `receiverReadyCallback` when available", async (t) => {
-	const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
+it("accepts ready requests and call `receiverReadyCallback` when available", async () => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+
+	const receiverReadyCallbackStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelEmitter._receiverReadyCallback = () => {
-		/* ... */
-	};
-	const receiverReadyCallbackStub = sinon.stub(
-		channelEmitter,
-		// @ts-expect-error - taking a shortcut by accessing private property
-		"_receiverReadyCallback",
-	);
+	channelEmitter._receiverReadyCallback = receiverReadyCallbackStub;
 
 	const request = createRequestMessage(
 		InternalReceiverRequestType.Ready,
@@ -183,18 +178,18 @@ test("accepts ready requests and call `receiverReadyCallback` when available", a
 	});
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	t.is(channelEmitter._receiverReady, request.requestID);
-	t.is(receiverReadyCallbackStub.callCount, 1);
-
-	receiverReadyCallbackStub.restore();
+	expect(channelEmitter._receiverReady).toBe(request.requestID);
+	expect(receiverReadyCallbackStub).toHaveBeenCalledOnce();
 });
 
-test("rejects non-ready requests", async (t) => {
-	const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
+it("rejects non-ready requests", async (ctx) => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+
+	const postResponseStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const postResponseStub = sinon.stub(channelEmitter, "postResponse");
+	vi.spyOn(channelEmitter, "postResponse").mockImplementation(postResponseStub);
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 	const response = createErrorResponseMessage(request.requestID, undefined);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
@@ -203,20 +198,21 @@ test("rejects non-ready requests", async (t) => {
 		source: iframe.contentWindow,
 	});
 
-	t.is(postResponseStub.callCount, 1);
-	t.deepEqual(postResponseStub.getCall(0).args[0], response);
-
-	postResponseStub.restore();
+	expect(postResponseStub).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(postResponseStub.calls[0][0]).toStrictEqual(response);
 });
 
-test("ignores response messages", async (t) => {
-	const channelEmitter = new StandaloneEmitterEmitter(iframe, {});
+it("ignores response messages", async (ctx) => {
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+
+	const onMessageStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const onMessageStub = sinon.stub(channelEmitter, "onMessage");
+	vi.spyOn(channelEmitter, "onMessage").mockImplementation(onMessageStub);
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelEmitter._ready = true;
 
-	const response = createSuccessResponseMessage(t.title, undefined);
+	const response = createSuccessResponseMessage(ctx.meta.name, undefined);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({
@@ -224,7 +220,5 @@ test("ignores response messages", async (t) => {
 		source: iframe.contentWindow,
 	});
 
-	t.is(onMessageStub.callCount, 0);
-
-	onMessageStub.restore();
+	expect(onMessageStub).not.toHaveBeenCalled();
 });

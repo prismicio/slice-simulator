@@ -1,4 +1,4 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { ChannelNetwork } from "../src/channel";
 
@@ -6,13 +6,13 @@ class StandaloneChannelNetwork extends ChannelNetwork {}
 
 const dummyData = { foo: "bar" };
 
-test("creates request message with instance prefix", (t) => {
+it("creates request message with instance prefix", (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork(
 		{},
-		{ requestIDPrefix: t.title },
+		{ requestIDPrefix: ctx.meta.name },
 	);
 
 	const request = channelNetwork.createRequestMessage("test", dummyData);
 
-	t.is(request.requestID.replace(/\d+/, ""), t.title);
+	expect(request.requestID.replace(/\d+/, "")).toBe(ctx.meta.name);
 });

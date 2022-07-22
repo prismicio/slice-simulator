@@ -1,16 +1,15 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { disableEventHandler } from "../src";
 
-test("prevents default and stops propagation", (t) => {
+it("prevents default and stops propagation", () => {
 	const event = {
-		preventDefault: sinon.spy(),
-		stopPropagation: sinon.spy(),
+		preventDefault: vi.fn(),
+		stopPropagation: vi.fn(),
 	};
 
 	disableEventHandler(event as unknown as Event);
 
-	t.is(event.preventDefault.callCount, 1);
-	t.is(event.stopPropagation.callCount, 1);
+	expect(event.preventDefault).toHaveBeenCalledOnce();
+	expect(event.stopPropagation).toHaveBeenCalledOnce();
 });

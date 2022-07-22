@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { sleep } from "./__testutils__/sleep";
 
@@ -13,42 +12,43 @@ class StandaloneChannelNetwork extends ChannelNetwork {}
 
 const dummyData = { foo: "bar" };
 
-test("throws when accessing unset port", (t) => {
+it("throws when accessing unset port", () => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.throws(() => channelNetwork.port, { instanceOf: PortNotSetError });
+	expect(() => channelNetwork.port).toThrowError(PortNotSetError);
 });
 
-test("listens to new port messages automatically", async (t) => {
+it("listens to new port messages automatically", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
-	const spiedChannelNetwork = sinon.spy(channelNetwork);
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onMessageStub = vi.spyOn(channelNetwork, "onMessage");
 
 	const channel = new MessageChannel();
 
 	// @ts-expect-error - taking a shortcut by setting protected property
-	spiedChannelNetwork.port = channel.port2;
+	channelNetwork.port = channel.port2;
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	channel.port1.postMessage(request);
 
 	await sleep(10);
 
-	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(spiedChannelNetwork.onMessage.callCount, 1);
-	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.deepEqual(spiedChannelNetwork.onMessage.getCall(0).args[0].data, request);
+	expect(onMessageStub).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(onMessageStub.calls[0][0].data).toStrictEqual(request);
 });
 
-test("stops listening to old port after new port automatically", async (t) => {
+it("stops listening to old port after new port automatically", async () => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
-	const spiedChannelNetwork = sinon.spy(channelNetwork);
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onMessageStub = vi.spyOn(channelNetwork, "onMessage");
 
 	const channel = new MessageChannel();
 
 	// @ts-expect-error - taking a shortcut by setting protected property
-	spiedChannelNetwork.port = channel.port2;
+	channelNetwork.port = channel.port2;
 
 	const request1 = createRequestMessage("foo", dummyData);
 
@@ -56,16 +56,12 @@ test("stops listening to old port after new port automatically", async (t) => {
 
 	await sleep(10);
 
-	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(spiedChannelNetwork.onMessage.callCount, 1);
-	t.deepEqual(
-		// @ts-expect-error - taking a shortcut by accessing protected property
-		spiedChannelNetwork.onMessage.getCall(0).args[0].data,
-		request1,
-	);
+	expect(onMessageStub).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(onMessageStub.calls[0][0].data).toStrictEqual(request1);
 
 	// @ts-expect-error - taking a shortcut by setting protected property
-	spiedChannelNetwork.port = null;
+	channelNetwork.port = null;
 
 	const request2 = createRequestMessage("bar", dummyData);
 
@@ -73,6 +69,5 @@ test("stops listening to old port after new port automatically", async (t) => {
 
 	await sleep(10);
 
-	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(spiedChannelNetwork.onMessage.callCount, 1);
+	expect(onMessageStub).toHaveBeenCalledOnce();
 });

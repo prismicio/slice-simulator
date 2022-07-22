@@ -1,94 +1,83 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { getSliceZoneDOM, simulatorClass, simulatorRootClass } from "../src";
 
-test("returns flagged Slice Zone if any", (t) => {
+it("returns flagged Slice Zone if any", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
-	t.true($sliceZone instanceof HTMLDivElement);
-	if ($sliceZone instanceof HTMLDivElement) {
-		t.is($sliceZone.dataset.sliceZone, "");
-	} else {
-		t.fail();
-	}
+
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("");
 
 	document.body.innerHTML = "";
 });
 
-test.serial(
-	"returns flagged Slice Zone if any and warn if number of children is off",
-	(t) => {
-		const consoleWarnStub = sinon.stub(console, "warn");
-		document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
+it("returns flagged Slice Zone if any and warn if number of children is off", () => {
+	vi.stubGlobal("console", { ...console, warn: vi.fn() });
 
-		const $sliceZone = getSliceZoneDOM(1);
-		t.true($sliceZone instanceof HTMLDivElement);
-		if ($sliceZone instanceof HTMLDivElement) {
-			t.is($sliceZone.dataset.sliceZone, "");
-		} else {
-			t.fail();
-		}
+	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
 
-		t.is(consoleWarnStub.callCount, 1);
-		t.true(
-			consoleWarnStub
-				.getCall(0)
-				.args[0].includes("unexpected number of children"),
-		);
+	const $sliceZone = getSliceZoneDOM(1);
 
-		document.body.innerHTML = "";
-		consoleWarnStub.restore();
-	},
-);
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("");
 
-test("returns null if simulator class is not found", (t) => {
+	expect(console.warn).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(console.warn.calls[0][0]).toMatchInlineSnapshot(
+		'"Flagged SliceZone has an unexpected number of children, found 0 but expected 1. This might lead to unexpected behaviors. Are you sure you tagged the right element?"',
+	);
+
+	document.body.innerHTML = "";
+
+	vi.restoreAllMocks();
+});
+
+it("returns null if simulator class is not found", () => {
 	document.body.innerHTML = "";
 
 	const $sliceZone = getSliceZoneDOM(0);
 
-	t.is($sliceZone, null);
+	expect($sliceZone).toBeNull();
 
 	document.body.innerHTML = "";
 });
 
-test("returns null if simulator root class is not found", (t) => {
+it("returns null if simulator root class is not found", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}"></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
 
-	t.is($sliceZone, null);
+	expect($sliceZone).toBeNull();
 
 	document.body.innerHTML = "";
 });
 
-test("returns null if simulator root has no children but children are expected", (t) => {
+it("returns null if simulator root has no children but children are expected", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(1);
 
-	t.is($sliceZone, null);
+	expect($sliceZone).toBeNull();
 
 	document.body.innerHTML = "";
 });
 
-test("returns simulator root when no children are expected", (t) => {
+it("returns simulator root when no children are expected", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
 
 	const $sliceZone = getSliceZoneDOM(0);
 
-	t.true($sliceZone instanceof HTMLDivElement);
-	if ($sliceZone instanceof HTMLDivElement) {
-		t.true($sliceZone.classList.contains(simulatorRootClass));
-	} else {
-		t.fail();
-	}
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect(
+		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
+	).toBe(true);
 
 	document.body.innerHTML = "";
 });
 
-test("returns simulator root when matching the expected number of children", (t) => {
+it("returns simulator root when matching the expected number of children", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<section></section><section></section>
@@ -97,17 +86,15 @@ test("returns simulator root when matching the expected number of children", (t)
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	t.true($sliceZone instanceof HTMLDivElement);
-	if ($sliceZone instanceof HTMLDivElement) {
-		t.true($sliceZone.classList.contains(simulatorRootClass));
-	} else {
-		t.fail();
-	}
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect(
+		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
+	).toBe(true);
 
 	document.body.innerHTML = "";
 });
 
-test("returns first element matching the expected number of children from simulator root", (t) => {
+it("returns first element matching the expected number of children from simulator root", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<div class="slicezone">
@@ -118,17 +105,15 @@ test("returns first element matching the expected number of children from simula
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	t.true($sliceZone instanceof HTMLDivElement);
-	if ($sliceZone instanceof HTMLDivElement) {
-		t.true($sliceZone.classList.contains("slicezone"));
-	} else {
-		t.fail();
-	}
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect(($sliceZone as HTMLDivElement).classList.contains("slicezone")).toBe(
+		true,
+	);
 
 	document.body.innerHTML = "";
 });
 
-test("returns null when Slice Zone is too deep", (t) => {
+it("returns null when Slice Zone is too deep", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<div><div><div><div>
@@ -141,7 +126,7 @@ test("returns null when Slice Zone is too deep", (t) => {
 
 	const $sliceZone = getSliceZoneDOM(2);
 
-	t.is($sliceZone, null);
+	expect($sliceZone).toBeNull();
 
 	document.body.innerHTML = "";
 });

@@ -1,94 +1,101 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { EventEmitter } from "../src/lib/EventEmitter";
 
 class StandaloneEventEmitter extends EventEmitter<{ foo: "bar" }> {}
 
-test("registers event handler", (t) => {
+it("registers event handler", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
 	eventEmitter.on("foo", listener);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(eventEmitter._listeners.foo[0][0], listener);
+	expect(eventEmitter._listeners.foo[0][0]).toBe(listener);
 });
 
-test("registers event handler with key", (t) => {
+it("registers event handler with key", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
 	eventEmitter.on("foo", listener, "baz");
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(eventEmitter._listeners.foo[0][0], listener);
+	expect(eventEmitter._listeners.foo[0][0]).toBe(listener);
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(eventEmitter._listeners.foo[0][1], "baz");
+	expect(eventEmitter._listeners.foo[0][1]).toBe("baz");
 });
 
-test("dispatches event", (t) => {
+it("dispatches event", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
 	eventEmitter.on("foo", listener);
 
-	t.is(listener.callCount, 0);
+	expect(listener).not.toHaveBeenCalled();
 
 	eventEmitter.emit("foo", "bar");
 
-	t.is(listener.callCount, 1);
+	expect(listener).toHaveBeenCalledOnce();
 });
 
-test("doesn't fail to dispatch when no handler", (t) => {
+it("doesn't fail to dispatch when no handler", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	t.notThrows(() => eventEmitter.emit("foo", "bar"));
+	expect(() => eventEmitter.emit("foo", "bar")).not.toThrowError();
 });
 
-test("unregisters event handler", (t) => {
+it("unregisters event handler", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
 	eventEmitter.on("foo", listener);
 
-	t.is(listener.callCount, 0);
+	expect(listener).not.toHaveBeenCalled();
+
+	eventEmitter.emit("foo", "bar");
+
+	expect(listener).toHaveBeenCalledOnce();
 
 	eventEmitter.off("foo", listener);
 
-	t.is(listener.callCount, 0);
+	expect(listener).toHaveBeenCalledOnce();
 
 	eventEmitter.emit("foo", "bar");
 
-	t.is(listener.callCount, 0);
+	expect(listener).toHaveBeenCalledOnce();
 });
 
-test("unregisters event handler with key", (t) => {
+it("unregisters event handler with key", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
 	eventEmitter.on("foo", listener, "baz");
 
-	t.is(listener.callCount, 0);
-
-	eventEmitter.off("foo", "baz");
-
-	t.is(listener.callCount, 0);
+	expect(listener).not.toHaveBeenCalled();
 
 	eventEmitter.emit("foo", "bar");
 
-	t.is(listener.callCount, 0);
+	expect(listener).toHaveBeenCalledOnce();
+
+	eventEmitter.off("foo", "baz");
+
+	expect(listener).toHaveBeenCalledOnce();
+
+	eventEmitter.emit("foo", "bar");
+
+	expect(listener).toHaveBeenCalledOnce();
 });
 
-test("doesn't fail to unregister when no handler", (t) => {
+it("doesn't fail to unregister when no handler", () => {
 	const eventEmitter = new StandaloneEventEmitter();
 
-	const listener = sinon.spy();
+	const listener = vi.fn();
 
-	t.notThrows(() => eventEmitter.off("foo", listener));
+	expect(() => eventEmitter.off("foo", listener)).not.toThrowError();
 });

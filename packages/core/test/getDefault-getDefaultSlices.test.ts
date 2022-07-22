@@ -1,7 +1,7 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { getDefaultSlices } from "../src";
 
-test("returns default slices", (t) => {
-	t.deepEqual(getDefaultSlices(), []);
+it("returns default slices", () => {
+	expect(getDefaultSlices()).toMatchInlineSnapshot("[]");
 });

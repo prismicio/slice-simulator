@@ -1,5 +1,4 @@
-import test, { ExecutionContext } from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { createRequestMessage } from "../src/channel";
 import {
@@ -11,36 +10,36 @@ import {
 
 const iframe = document.createElement("iframe");
 
-test("instantiates correctly", (t) => {
-	t.notThrows(
+it("instantiates correctly", () => {
+	expect(
 		() =>
 			new SimulatorClient(iframe, {
 				[APIRequestType.SetActiveSlice]: (_req, res) => {
 					return res.success();
 				},
 			}),
-	);
+	).not.toThrowError();
 });
 
-test("instantiates correctly with defaults", (t) => {
+it("instantiates correctly with defaults", () => {
 	const simulatorClient = new SimulatorClient(iframe);
 
 	const [req, res] = [
 		createRequestMessage(APIRequestType.SetActiveSlice, null),
 		{
-			success: sinon.spy(),
-			error: sinon.spy(),
+			success: vi.fn(),
+			error: vi.fn(),
 		},
 	];
 
 	simulatorClient.requestHandlers[APIRequestType.SetActiveSlice](req, res);
 
-	t.is(res.success.callCount, 1);
-	t.is(res.error.callCount, 0);
+	expect(res.success).toHaveBeenCalledOnce();
+	expect(res.error).not.toHaveBeenCalled();
 });
 
-test("registers instance on window object", (t) => {
-	t.false("prismic" in window);
+it("registers instance on window object", () => {
+	expect("prismic" in window).toBe(false);
 
 	const simulatorClient = new SimulatorClient(iframe, {}, { debug: true });
 
@@ -48,55 +47,44 @@ test("registers instance on window object", (t) => {
 		prismic?: { sliceSimulator: { client: SimulatorClient[] } };
 	};
 
-	t.is(
-		(window as ClientWindow).prismic?.sliceSimulator.client[0],
+	expect((window as ClientWindow).prismic?.sliceSimulator.client[0]).toBe(
 		simulatorClient,
 	);
 
 	delete (window as ClientWindow).prismic;
 });
 
-const callsPostFormattedRequestCorrectly = async <
+const callsPostFormattedRequestCorrectly = <
 	TRequestType extends ClientRequestType,
 >(
-	t: ExecutionContext,
 	requestType: TRequestType,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	requestData: ClientTransactions[TRequestType]["request"]["data"],
-) => {
-	const simulatorClient = new SimulatorClient(iframe);
+): [string, () => Promise<void>] => [
+	`\`SimulatorClient.${requestType}()\` calls \`postFormattedRequest\` correctly`,
+	async () => {
+		const simulatorClient = new SimulatorClient(iframe);
 
-	const postFormattedRequestStub = sinon.stub(
-		simulatorClient,
+		const postFormattedRequestStub = vi.fn();
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		"postFormattedRequest",
-	);
+		simulatorClient.postFormattedRequest = postFormattedRequestStub;
 
-	// @ts-expect-error - cannot provide "void" type generically
-	await simulatorClient[requestType](requestData);
+		// @ts-expect-error - cannot provide "void" type generically
+		await simulatorClient[requestType](requestData);
 
-	t.is(postFormattedRequestStub.callCount, 1);
-	t.is(postFormattedRequestStub.getCall(0).args[0], requestType);
-	t.is(postFormattedRequestStub.getCall(0).args[1], requestData);
-
-	postFormattedRequestStub.restore();
-};
-callsPostFormattedRequestCorrectly.title = <
-	TRequestType extends ClientRequestType,
->(
-	providedTitle = "",
-	requestType: TRequestType,
-	_requestData: ClientTransactions[TRequestType]["request"]["data"],
-) =>
-	providedTitle ||
-	`\`SimulatorClient.${requestType}()\` calls \`postFormattedRequest\` correctly`;
+		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
+		// @ts-expect-error - type is broken
+		expect(postFormattedRequestStub.calls[0][0]).toBe(requestType);
+		// @ts-expect-error - type is broken
+		expect(postFormattedRequestStub.calls[0][1]).toBe(requestData);
+	},
+];
 
 /* eslint-disable prettier/prettier */
 
-test(callsPostFormattedRequestCorrectly, ClientRequestType.Ping, undefined);
-test(callsPostFormattedRequestCorrectly, ClientRequestType.GetLibraries, undefined);
-test(callsPostFormattedRequestCorrectly, ClientRequestType.SetSliceZone, []);
-test(callsPostFormattedRequestCorrectly, ClientRequestType.SetSliceZoneFromSliceIDs, []);
-test(callsPostFormattedRequestCorrectly, ClientRequestType.ScrollToSlice, { sliceIndex: 0});
+it(...callsPostFormattedRequestCorrectly(ClientRequestType.Ping, undefined));
+it(...callsPostFormattedRequestCorrectly(ClientRequestType.GetLibraries, undefined));
+it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZone, []));
+it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZoneFromSliceIDs, []));
+it(...callsPostFormattedRequestCorrectly(ClientRequestType.ScrollToSlice, { sliceIndex: 0}));
 
 /* eslint-enable prettier/prettier */

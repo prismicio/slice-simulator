@@ -1,10 +1,12 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { getDefaultProps } from "../src";
 
-test("returns default props", (t) => {
-	t.deepEqual(getDefaultProps(), {
-		zIndex: 100,
-		background: "#ffffff",
-	});
+it("returns default props", () => {
+	expect(getDefaultProps()).toMatchInlineSnapshot(`
+		{
+		  "background": "#ffffff",
+		  "zIndex": 100,
+		}
+	`);
 });

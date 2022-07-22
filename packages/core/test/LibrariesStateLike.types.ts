@@ -1,6 +1,6 @@
 import { expectType, TypeOf } from "ts-expect";
 
-import { LibrariesState } from "@slicemachine/core/build/src/models";
+import { Libraries } from "@slicemachine/core/build/models/LibrariesState";
 
 import { LibrariesStateLike } from "../src/types";
 
@@ -41,7 +41,7 @@ expectType<TypeOf<LibrariesStateLike, LibrariesStateLikeNative>>(true);
 /**
  * io-ts type is compatible core type
  */
-expectType<TypeOf<LibrariesStateLike, LibrariesState.Libraries>>(true);
+expectType<TypeOf<LibrariesStateLike, Libraries>>(true);
 
 /**
  * Native type is compatible io-ts type
@@ -51,4 +51,4 @@ expectType<TypeOf<LibrariesStateLikeNative, LibrariesStateLike>>(true);
 /**
  * Native type is compatible core type
  */
-expectType<TypeOf<LibrariesStateLikeNative, LibrariesState.Libraries>>(true);
+expectType<TypeOf<LibrariesStateLikeNative, Libraries>>(true);

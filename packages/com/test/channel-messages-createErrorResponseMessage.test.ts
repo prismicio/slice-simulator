@@ -1,42 +1,42 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { createErrorResponseMessage } from "../src/channel";
 
 const dummyError = { foo: "bar" };
 
-test("creates a valid error response message with default status", (t) => {
-	const response = createErrorResponseMessage(t.title, dummyError);
+it("creates a valid error response message with default status", (ctx) => {
+	const response = createErrorResponseMessage(ctx.meta.name, dummyError);
 
-	t.deepEqual(response, {
-		requestID: t.title,
+	expect(response).toStrictEqual({
+		requestID: ctx.meta.name,
 		status: 400,
 		msg: "bad request",
 		error: dummyError,
 	});
 });
 
-test("creates a valid error response message with status", (t) => {
-	const response1 = createErrorResponseMessage(t.title, dummyError, 401);
+it("creates a valid error response message with status", (ctx) => {
+	const response1 = createErrorResponseMessage(ctx.meta.name, dummyError, 401);
 
-	t.deepEqual(response1, {
-		requestID: t.title,
+	expect(response1).toStrictEqual({
+		requestID: ctx.meta.name,
 		status: 401,
 		msg: "unauthorized",
 		error: dummyError,
 	});
 
-	const response2 = createErrorResponseMessage(t.title, dummyError, 599);
+	const response2 = createErrorResponseMessage(ctx.meta.name, dummyError, 599);
 
-	t.deepEqual(response2, {
-		requestID: t.title,
+	expect(response2).toStrictEqual({
+		requestID: ctx.meta.name,
 		status: 599,
 		msg: "",
 		error: dummyError,
 	});
 });
 
-test("throws when invalid error status is provided", (t) => {
-	t.throws(() => createErrorResponseMessage(t.title, dummyError, 200), {
-		instanceOf: TypeError,
-	});
+it("throws when invalid error status is provided", (ctx) => {
+	expect(() =>
+		createErrorResponseMessage(ctx.meta.name, dummyError, 200),
+	).toThrowError(TypeError);
 });

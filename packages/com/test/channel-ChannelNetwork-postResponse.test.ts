@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { ChannelNetwork, createSuccessResponseMessage } from "../src/channel";
 
@@ -7,13 +6,13 @@ class StandaloneChannelNetwork extends ChannelNetwork {}
 
 const dummyData = { foo: "bar" };
 
-test("uses provided post message method", (t) => {
+it("uses provided post message method", (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {});
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	const onmessage = (event: MessageEvent<unknown>) => {
-		t.deepEqual(event.data, response);
+		expect(event.data).toStrictEqual(response);
 	};
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
@@ -22,32 +21,32 @@ test("uses provided post message method", (t) => {
 	});
 });
 
-test.serial("debug logs messages when on debug mode", (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("debug logs messages when on debug mode", (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, { debug: true });
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	channelNetwork.postResponse(response, () => undefined);
 
-	t.is(consoleDebugStub.callCount, 1);
+	expect(console.debug).toHaveBeenCalledOnce();
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test.serial("doesn't debug log messages when not on debug mode", (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("doesn't debug log messages when not on debug mode", (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
 	const channelNetwork = new StandaloneChannelNetwork({}, { debug: false });
 
-	const response = createSuccessResponseMessage(t.title, dummyData);
+	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	channelNetwork.postResponse(response, () => undefined);
 
-	t.is(consoleDebugStub.callCount, 0);
+	expect(console.debug).not.toHaveBeenCalled();
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });

@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import { ChannelReceiver, NotReadyError } from "../src/channel";
 
@@ -7,40 +6,43 @@ class StandaloneChannelReceiver extends ChannelReceiver {}
 
 const dummyData = { foo: "bar" };
 
-test("throws when not ready", (t) => {
+it("throws when not ready", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 
-	t.throws(
-		() => {
-			// @ts-expect-error - taking a shortcut by accessing protected property
-			channelReceiver.postFormattedRequest(t.title, dummyData);
-		},
-		{ instanceOf: NotReadyError },
-	);
+	expect(() => {
+		// @ts-expect-error - taking a shortcut by accessing protected property
+		channelReceiver.postFormattedRequest(ctx.meta.name, dummyData);
+	}).toThrowError(NotReadyError);
 });
 
-test("forwards request to default post request handler once ready", (t) => {
+it("forwards request to default post request handler once ready", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver(
 		{},
-		{ requestIDPrefix: t.title },
+		{ requestIDPrefix: ctx.meta.name },
 	);
+
+	const postRequestStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const postRequestStub = sinon.stub(channelReceiver, "postRequest");
+	channelReceiver.postRequest = postRequestStub;
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelReceiver._ready = true;
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	channelReceiver.postFormattedRequest(t.title, dummyData, { timeout: 1000 });
+	channelReceiver.postFormattedRequest(ctx.meta.name, dummyData, {
+		timeout: 1000,
+	});
 
-	t.is(postRequestStub.callCount, 1);
-	t.is(
-		postRequestStub.getCall(0).args[0].requestID.replace(/\d+/, ""),
-		t.title,
+	expect(postRequestStub).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(postRequestStub.calls[0][0].requestID.replace(/\d+/, "")).toBe(
+		ctx.meta.name,
 	);
-	t.is(postRequestStub.getCall(0).args[0].type, t.title);
-	t.deepEqual(postRequestStub.getCall(0).args[0].data, dummyData);
-	t.is(postRequestStub.getCall(0).args[1], undefined);
-	t.deepEqual(postRequestStub.getCall(0).args[2], { timeout: 1000 });
-
-	postRequestStub.restore();
+	// @ts-expect-error - type is broken
+	expect(postRequestStub.calls[0][0].type, ctx.meta.name);
+	// @ts-expect-error - type is broken
+	expect(postRequestStub.calls[0][0].data).toStrictEqual(dummyData);
+	// @ts-expect-error - type is broken
+	expect(postRequestStub.calls[0][1]).toBeUndefined();
+	// @ts-expect-error - type is broken
+	expect(postRequestStub.calls[0][2]).toStrictEqual({ timeout: 1000 });
 });

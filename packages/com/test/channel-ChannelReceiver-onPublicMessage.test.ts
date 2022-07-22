@@ -1,5 +1,4 @@
-import test from "ava";
-import * as sinon from "sinon";
+import { it, expect, vi } from "vitest";
 
 import {
 	ChannelReceiver,
@@ -13,91 +12,82 @@ class StandaloneChannelReceiver extends ChannelReceiver {}
 
 const dummyData = { foo: "bar" };
 
-test.serial(
-	"gets wired to public message events on class instantiation",
-	(t) => {
-		const channelReceiver = new StandaloneChannelReceiver({});
-		// @ts-expect-error - taking a shortcut by accessing protected property
-		const onPublicMessageStub = sinon.stub(channelReceiver, "_onPublicMessage");
+it("gets wired to public message events on class instantiation", () => {
+	const channelReceiver = new StandaloneChannelReceiver({});
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onPublicMessageStub = vi.spyOn(channelReceiver, "_onPublicMessage");
 
-		const event = new MessageEvent("message", { data: dummyData });
-		window.dispatchEvent(event);
+	const event = new MessageEvent("message", { data: dummyData });
+	window.dispatchEvent(event);
 
-		t.is(onPublicMessageStub.callCount, 1);
-		t.deepEqual(onPublicMessageStub.getCall(0).args[0], event);
+	expect(onPublicMessageStub).toHaveBeenCalledOnce();
+	expect(onPublicMessageStub).toHaveBeenCalledWith(event);
+});
 
-		onPublicMessageStub.restore();
-	},
-);
-
-test.serial("debug logs messages when on debug mode", (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("debug logs messages when on debug mode", (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
 	const channelReceiver = new StandaloneChannelReceiver({}, { debug: true });
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: request });
 
-	t.is(
-		consoleDebugStub.callCount,
-		2,
+	expect(
+		console.debug,
 		"calls `console.debug` twice: 1 for the response, 1 for the request",
-	);
-	t.deepEqual(consoleDebugStub.getCall(0).args[0], request);
-
-	consoleDebugStub.restore();
+	).toHaveBeenCalledTimes(2);
+	// @ts-expect-error - type is broken
+	expect(console.debug.calls[0][0]).toStrictEqual(request);
 });
 
-test.serial("doesn't debug log messages when not on debug mode", (t) => {
-	const consoleDebugStub = sinon.stub(console, "debug");
+it("doesn't debug log messages when not on debug mode", (ctx) => {
+	vi.stubGlobal("console", { ...console, debug: vi.fn() });
 
 	const channelReceiver = new StandaloneChannelReceiver({}, { debug: false });
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: request });
 
-	t.is(consoleDebugStub.callCount, 0);
-
-	consoleDebugStub.restore();
+	expect(console.debug).not.toHaveBeenCalled();
 });
 
-test("doens't throw on invalid message received", (t) => {
+it("doens't throw on invalid message received", () => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 
-	t.notThrows(() => {
+	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
 		channelReceiver._onPublicMessage({ data: null });
-	});
+	}).not.toThrowError();
 });
 
-test.serial("throws on other errors", (t) => {
-	const consoleDebugStub = sinon
-		.stub(console, "debug")
-		.throws(new Error(t.title));
+it("throws on other errors", (ctx) => {
+	vi.stubGlobal("console", {
+		...console,
+		debug: () => {
+			throw new Error(ctx.meta.name);
+		},
+	});
 
 	const channelReceiver = new StandaloneChannelReceiver({}, { debug: true });
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
-	t.throws(
-		() => {
-			// @ts-expect-error - taking a shortcut by accessing private property
-			channelReceiver._onPublicMessage({ data: request });
-		},
-		{ message: t.title },
-	);
+	expect(() => {
+		// @ts-expect-error - taking a shortcut by accessing private property
+		channelReceiver._onPublicMessage({ data: request });
+	}).toThrowError(ctx.meta.name);
 
-	consoleDebugStub.restore();
+	vi.restoreAllMocks();
 });
 
-test("accepts connect requests", (t) => {
+it("accepts connect requests", () => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const postResponseStub = sinon.stub(channelReceiver, "postResponse");
+	const postResponseStub = vi.spyOn(channelReceiver, "postResponse");
 
 	const channel = new MessageChannel();
 
@@ -110,60 +100,57 @@ test("accepts connect requests", (t) => {
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1] });
 
-	t.is(postResponseStub.callCount, 1);
+	expect(postResponseStub).toHaveBeenCalledOnce();
+	expect(postResponseStub).toHaveBeenCalledWith(response);
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	t.is(channelReceiver.port, channel.port1);
-	t.deepEqual(postResponseStub.getCall(0).args[0], response);
-
-	postResponseStub.restore();
+	expect(channelReceiver.port).toBe(channel.port1);
 });
 
-test("rejects non-connect requests", (t) => {
+it("rejects non-connect requests", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const postResponseStub = sinon.stub(channelReceiver, "postResponse");
+	const postResponseStub = vi.spyOn(channelReceiver, "postResponse");
 
-	const request = createRequestMessage(t.title, dummyData);
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 	const response = createErrorResponseMessage(request.requestID, undefined);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: request });
 
-	t.is(postResponseStub.callCount, 1);
-	t.deepEqual(postResponseStub.getCall(0).args[0], response);
-
-	postResponseStub.restore();
+	expect(postResponseStub).toHaveBeenCalledOnce();
+	// @ts-expect-error - type is broken
+	expect(postResponseStub.calls[0][0]).toStrictEqual(response);
 });
 
-test("forwards response messages to default message handler when not ready", (t) => {
+it("forwards response messages to default message handler when not ready", (ctx) => {
+	vi.stubGlobal("console", { ...console, error: vi.fn() });
+
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const onMessageStub = sinon.stub(channelReceiver, "onMessage");
+	const onMessageStub = vi.spyOn(channelReceiver, "onMessage");
 
-	const response = createSuccessResponseMessage(t.title, undefined);
+	const response = createSuccessResponseMessage(ctx.meta.name, undefined);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: response });
 
-	t.is(onMessageStub.callCount, 1);
-	t.deepEqual(onMessageStub.getCall(0).args[0], { data: response });
+	expect(onMessageStub).toHaveBeenCalledOnce();
+	expect(onMessageStub).toHaveBeenCalledWith({ data: response });
 
-	onMessageStub.restore();
+	vi.restoreAllMocks();
 });
 
-test("doesn't forward response messages to default message handler once ready", (t) => {
+it("doesn't forward response messages to default message handler once ready", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({});
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const onMessageStub = sinon.stub(channelReceiver, "onMessage");
+	const onMessageStub = vi.spyOn(channelReceiver, "onMessage");
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelReceiver._ready = true;
 
-	const response = createSuccessResponseMessage(t.title, undefined);
+	const response = createSuccessResponseMessage(ctx.meta.name, undefined);
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelReceiver._onPublicMessage({ data: response });
 
-	t.is(onMessageStub.callCount, 0);
-
-	onMessageStub.restore();
+	expect(onMessageStub).not.toHaveBeenCalled();
 });

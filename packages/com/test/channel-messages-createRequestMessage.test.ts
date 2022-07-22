@@ -1,26 +1,26 @@
-import test from "ava";
+import { it, expect } from "vitest";
 
 import { createRequestMessage } from "../src/channel";
 
 const dummyData = { foo: "bar" };
 
-test("creates a valid request message", (t) => {
-	const request = createRequestMessage(t.title, dummyData);
+it("creates a valid request message", (ctx) => {
+	const request = createRequestMessage(ctx.meta.name, dummyData);
 
-	t.is(typeof request.requestID, "string");
-	t.false(isNaN(parseInt(request.requestID)));
+	expect(request.requestID).toBeTypeOf("string");
+	expect(isNaN(parseInt(request.requestID))).not.toBeNaN();
 
 	request.requestID = "0";
 
-	t.deepEqual(request, {
+	expect(request).toStrictEqual({
 		requestID: "0",
-		type: t.title,
+		type: ctx.meta.name,
 		data: dummyData,
 	});
 });
 
-test("handles prefix", (t) => {
-	const request = createRequestMessage(t.title, dummyData, "baz");
+it("handles prefix", (ctx) => {
+	const request = createRequestMessage(ctx.meta.name, dummyData, "baz");
 
-	t.true(request.requestID.startsWith("baz"));
+	expect(request.requestID.startsWith("baz")).toBe(true);
 });
