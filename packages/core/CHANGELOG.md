@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.4...@prismicio/slice-simulator-core@0.2.5) (2022-07-27)
+
+
+### Features
+
+* **core:** enable active slice API based on `SimulatorAPI` options ([28158ab](https://github.com/prismicio/slice-simulator/commit/28158abb8af90ef2a3d6b2e1d211f949368fd35d))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([f4122ec](https://github.com/prismicio/slice-simulator/commit/f4122ec510907eadf668dd46a66354ff5a47f2f2))
+
 ### [0.2.4](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.3...@prismicio/slice-simulator-core@0.2.4) (2022-07-20)
 
 
