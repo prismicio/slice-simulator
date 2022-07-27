@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.5...@prismicio/slice-simulator-core@0.2.6) (2022-07-27)
+
+
+### Bug Fixes
+
+* **core:** remove `set:slices` side effects ([8ce026c](https://github.com/prismicio/slice-simulator/commit/8ce026cc065cab25092502d1a6811599c4f247ce))
+
 ### [0.2.5](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.4...@prismicio/slice-simulator-core@0.2.5) (2022-07-27)
 
 
