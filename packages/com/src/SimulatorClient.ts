@@ -5,6 +5,7 @@ import {
 	TransactionsMethods,
 	TransactionsHandlers,
 } from "./channel";
+import { SimulatorAPIOptions } from "./SimulatorAPI";
 import {
 	APIRequestType,
 	APITransactions,
@@ -18,7 +19,11 @@ export const simulatorClientDefaultOptions: Partial<AllChannelEmitterOptions> =
 	};
 
 export class SimulatorClient
-	extends ChannelEmitter<APITransactions>
+	extends ChannelEmitter<
+		APITransactions,
+		Partial<AllChannelEmitterOptions>,
+		SimulatorAPIOptions
+	>
 	implements TransactionsMethods<ClientTransactions>
 {
 	constructor(

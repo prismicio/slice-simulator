@@ -15,8 +15,6 @@ import {
 	NotReadyError,
 } from "./errors";
 import {
-	RequestMessage,
-	ResponseMessage,
 	SuccessResponseMessage,
 	ExtractSuccessResponseMessage,
 	UnknownRequestMessage,
@@ -25,7 +23,9 @@ import {
 	UnknownTransaction,
 	InternalEmitterRequestType,
 	InternalReceiverRequestType,
+	InternalEmitterTransactions,
 } from "./types";
+import { AllChannelReceiverOptions } from "./ChannelReceiver";
 
 export type ChannelEmitterOptions = {
 	connectTimeout: number;
@@ -45,7 +45,12 @@ export abstract class ChannelEmitter<
 		string,
 		never
 	>,
-> extends ChannelNetwork<ChannelEmitterOptions, TReceiverTransactions> {
+	TOptions extends Record<string, unknown> = Record<string, unknown>,
+	TReceiverOptions extends Record<string, unknown> = Record<string, unknown>,
+> extends ChannelNetwork<
+	TReceiverTransactions,
+	ChannelEmitterOptions & TOptions
+> {
 	private _target: HTMLIFrameElement;
 	private _channel: MessageChannel | null = null;
 	protected get channel(): MessageChannel {
@@ -75,7 +80,7 @@ export abstract class ChannelEmitter<
 	constructor(
 		target: HTMLIFrameElement,
 		requestHandlers: TransactionsHandlers<TReceiverTransactions>,
-		options?: Partial<AllChannelEmitterOptions>,
+		options: Partial<AllChannelEmitterOptions> & TOptions,
 	) {
 		super(requestHandlers, { ...channelEmitterDefaultOptions, ...options });
 
@@ -89,11 +94,17 @@ export abstract class ChannelEmitter<
 	/**
 	 * Initiates connection to receiver
 	 *
+	 * @param receiverOptions - Options to configure the receiver with
 	 * @param newOrigin - Indicates to the emitter that we're connecting to a new origin
 	 *
 	 * @returns Success connect message
 	 */
-	connect(newOrigin = false): Promise<SuccessResponseMessage> {
+	connect(
+		receiverOptions: InternalEmitterTransactions<
+			AllChannelReceiverOptions & TReceiverOptions
+		>["connect"]["request"]["data"] = {},
+		newOrigin = false,
+	): Promise<SuccessResponseMessage> {
 		// Disconnect first
 		this.disconnect();
 		// If changing origin we'll need to wait for receiver to be ready again
@@ -129,11 +140,15 @@ export abstract class ChannelEmitter<
 						// Conclude handshake by sending message channel port to target
 						const request = this.createRequestMessage(
 							InternalEmitterRequestType.Connect,
-							undefined,
+							receiverOptions,
 						);
 						const response = await this.postRequest<
-							RequestMessage<InternalEmitterRequestType.Connect>,
-							ResponseMessage
+							InternalEmitterTransactions<
+								AllChannelReceiverOptions & TReceiverOptions
+							>["connect"]["request"],
+							InternalEmitterTransactions<
+								AllChannelReceiverOptions & TReceiverOptions
+							>["connect"]["response"]
 						>(request, (request) => {
 							// Target content window is checked in previous statement
 							// eslint-disable-next-line @typescript-eslint/no-non-null-assertion

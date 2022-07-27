@@ -4,6 +4,7 @@ export {
 } from "./SimulatorClient";
 
 export { SimulatorAPI, simulatorAPIDefaultOptions } from "./SimulatorAPI";
+export type { SimulatorAPIOptions } from "./SimulatorAPI";
 
 export {
 	// Validators

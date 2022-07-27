@@ -9,7 +9,7 @@ import {
 class StandaloneChannelReceiver extends ChannelReceiver {}
 
 it("throws when not embedded as an iframe", async () => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 
 	await expect(channelReceiver.ready()).rejects.toThrowError(
 		"Receiver is currently not embedded as an iframe",

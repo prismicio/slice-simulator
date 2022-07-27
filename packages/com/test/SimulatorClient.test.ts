@@ -72,10 +72,8 @@ const callsPostFormattedRequestCorrectly = <
 		await simulatorClient[requestType](requestData);
 
 		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
-		// @ts-expect-error - type is broken
-		expect(postFormattedRequestStub.calls[0][0]).toBe(requestType);
-		// @ts-expect-error - type is broken
-		expect(postFormattedRequestStub.calls[0][1]).toBe(requestData);
+		expect(postFormattedRequestStub.mock.calls[0][0]).toBe(requestType);
+		expect(postFormattedRequestStub.mock.calls[0][1]).toBe(requestData);
 	},
 ];
 

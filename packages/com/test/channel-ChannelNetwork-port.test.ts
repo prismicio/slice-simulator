@@ -58,7 +58,7 @@ it("stops listening to old port after new port automatically", async () => {
 
 	expect(onMessageStub).toHaveBeenCalledOnce();
 	// @ts-expect-error - type is broken
-	expect(onMessageStub.calls[0][0].data).toStrictEqual(request1);
+	expect(onMessageStub.mock.calls[0][0].data).toStrictEqual(request1);
 
 	// @ts-expect-error - taking a shortcut by setting protected property
 	channelNetwork.port = null;

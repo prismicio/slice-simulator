@@ -15,7 +15,7 @@ const iframe = document.createElement("iframe");
 const dummyData = { foo: "bar" };
 
 it("gets wired to public message events on class instantiation", () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const onPublicMessageStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property
@@ -54,8 +54,7 @@ it("debug logs messages when on debug mode", async (ctx) => {
 		console.debug,
 		"calls `console.debug` twice: 1 for the response, 1 for the request",
 	).toHaveBeenCalledTimes(2);
-	// @ts-expect-error - type is broken
-	expect(console.debug.calls[0][0]).toStrictEqual(request);
+	expect(vi.mocked(console.debug).mock.calls[0][0]).toStrictEqual(request);
 
 	vi.restoreAllMocks();
 });
@@ -103,7 +102,7 @@ it("ignores event not coming from target", async (ctx) => {
 });
 
 it("doens't throw on invalid message received", async () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	await expect(
 		// @ts-expect-error - taking a shortcut by accessing private property
@@ -142,7 +141,7 @@ it("throws on other errors", async (ctx) => {
 });
 
 it("accepts ready requests", async () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const request = createRequestMessage(
 		InternalReceiverRequestType.Ready,
@@ -160,7 +159,7 @@ it("accepts ready requests", async () => {
 });
 
 it("accepts ready requests and call `receiverReadyCallback` when available", async () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const receiverReadyCallbackStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing private property
@@ -183,7 +182,7 @@ it("accepts ready requests and call `receiverReadyCallback` when available", asy
 });
 
 it("rejects non-ready requests", async (ctx) => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const postResponseStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property
@@ -199,12 +198,11 @@ it("rejects non-ready requests", async (ctx) => {
 	});
 
 	expect(postResponseStub).toHaveBeenCalledOnce();
-	// @ts-expect-error - type is broken
-	expect(postResponseStub.calls[0][0]).toStrictEqual(response);
+	expect(postResponseStub.mock.calls[0][0]).toStrictEqual(response);
 });
 
 it("ignores response messages", async (ctx) => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const onMessageStub = vi.fn();
 	// @ts-expect-error - taking a shortcut by accessing protected property

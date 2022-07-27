@@ -13,7 +13,7 @@ class StandaloneChannelReceiver extends ChannelReceiver {}
 const dummyData = { foo: "bar" };
 
 it("gets wired to public message events on class instantiation", () => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onPublicMessageStub = vi.spyOn(channelReceiver, "_onPublicMessage");
 
@@ -38,8 +38,7 @@ it("debug logs messages when on debug mode", (ctx) => {
 		console.debug,
 		"calls `console.debug` twice: 1 for the response, 1 for the request",
 	).toHaveBeenCalledTimes(2);
-	// @ts-expect-error - type is broken
-	expect(console.debug.calls[0][0]).toStrictEqual(request);
+	expect(vi.mocked(console.debug).mock.calls[0][0]).toStrictEqual(request);
 });
 
 it("doesn't debug log messages when not on debug mode", (ctx) => {
@@ -56,7 +55,7 @@ it("doesn't debug log messages when not on debug mode", (ctx) => {
 });
 
 it("doens't throw on invalid message received", () => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
@@ -85,7 +84,7 @@ it("throws on other errors", (ctx) => {
 });
 
 it("accepts connect requests", () => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = vi.spyOn(channelReceiver, "postResponse");
 
@@ -93,7 +92,7 @@ it("accepts connect requests", () => {
 
 	const request = createRequestMessage(
 		InternalEmitterRequestType.Connect,
-		dummyData,
+		undefined,
 	);
 	const response = createSuccessResponseMessage(request.requestID, undefined);
 
@@ -106,8 +105,26 @@ it("accepts connect requests", () => {
 	expect(channelReceiver.port).toBe(channel.port1);
 });
 
+it("updates its options following connect request", () => {
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
+
+	const channel = new MessageChannel();
+
+	const request = createRequestMessage(
+		InternalEmitterRequestType.Connect,
+		dummyData,
+	);
+
+	expect(channelReceiver.options.foo).toBeUndefined();
+
+	// @ts-expect-error - taking a shortcut by accessing private property
+	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1] });
+
+	expect(channelReceiver.options.foo).toBe("bar");
+});
+
 it("rejects non-connect requests", (ctx) => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = vi.spyOn(channelReceiver, "postResponse");
 
@@ -119,13 +136,13 @@ it("rejects non-connect requests", (ctx) => {
 
 	expect(postResponseStub).toHaveBeenCalledOnce();
 	// @ts-expect-error - type is broken
-	expect(postResponseStub.calls[0][0]).toStrictEqual(response);
+	expect(postResponseStub.mock.calls[0][0]).toStrictEqual(response);
 });
 
 it("forwards response messages to default message handler when not ready", (ctx) => {
 	vi.stubGlobal("console", { ...console, error: vi.fn() });
 
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage");
 
@@ -141,7 +158,7 @@ it("forwards response messages to default message handler when not ready", (ctx)
 });
 
 it("doesn't forward response messages to default message handler once ready", (ctx) => {
-	const channelReceiver = new StandaloneChannelReceiver({});
+	const channelReceiver = new StandaloneChannelReceiver({}, {});
 	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage");
 	// @ts-expect-error - taking a shortcut by setting private property

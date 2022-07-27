@@ -112,9 +112,17 @@ export enum InternalEmitterRequestType {
 	Connect = "connect",
 }
 
-export type InternalEmitterTransactions = {
+export type InternalEmitterTransactions<
+	TReceiverOptions extends Record<string, unknown> = Record<string, unknown>,
+> = {
 	[InternalEmitterRequestType.Connect]: Transaction<
-		RequestMessage<InternalEmitterRequestType.Connect>
+		RequestMessage<
+			InternalEmitterRequestType.Connect,
+			| Partial<
+					Omit<TReceiverOptions, "debug" | "requestIDPrefix" | "readyTimeout">
+			  >
+			| undefined
+		>
 	>;
 };
 

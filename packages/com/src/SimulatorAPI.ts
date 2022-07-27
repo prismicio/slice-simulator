@@ -12,12 +12,18 @@ import {
 	ClientTransactions,
 } from "./types";
 
-export const simulatorAPIDefaultOptions: Partial<AllChannelReceiverOptions> = {
+export type SimulatorAPIOptions = {
+	activeSliceAPI: boolean;
+};
+
+export const simulatorAPIDefaultOptions: Partial<AllChannelReceiverOptions> &
+	SimulatorAPIOptions = {
 	requestIDPrefix: "api-",
+	activeSliceAPI: false,
 };
 
 export class SimulatorAPI
-	extends ChannelReceiver<ClientTransactions>
+	extends ChannelReceiver<ClientTransactions, SimulatorAPIOptions>
 	implements TransactionsMethods<APITransactions>
 {
 	constructor(
@@ -28,7 +34,7 @@ export class SimulatorAPI
 			Partial<
 				Pick<TransactionsHandlers<ClientTransactions>, ClientRequestType.Ping>
 			>,
-		options?: Partial<AllChannelReceiverOptions>,
+		options?: Partial<AllChannelReceiverOptions & SimulatorAPIOptions>,
 	) {
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =

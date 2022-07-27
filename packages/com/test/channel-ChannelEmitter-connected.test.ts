@@ -7,7 +7,7 @@ class StandaloneChannelEmitter extends ChannelEmitter {}
 const iframe = document.createElement("iframe");
 
 it("returns connected status", () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	expect(channelEmitter.connected).toBe(false);
 

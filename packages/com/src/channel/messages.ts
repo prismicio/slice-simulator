@@ -2,10 +2,13 @@ import statuses from "statuses";
 
 import {
 	RequestMessage,
-	ResponseMessage,
 	SuccessResponseMessage,
 	ErrorResponseMessage,
 	UnknownMessage,
+	UnknownRequestMessage,
+	UnknownResponseMessage,
+	UnknownSuccessResponseMessage,
+	UnknownErrorResponseMessage,
 } from "./types";
 
 let requestID = 0;
@@ -89,24 +92,24 @@ export const validateMessage = (message: unknown): UnknownMessage => {
 
 export const isRequestMessage = (
 	message: UnknownMessage,
-): message is RequestMessage => {
+): message is UnknownRequestMessage => {
 	return "type" in message;
 };
 
 export const isResponseMessage = (
 	message: UnknownMessage,
-): message is ResponseMessage => {
+): message is UnknownResponseMessage => {
 	return !("type" in message);
 };
 
 export const isSuccessResponseMessage = (
 	message: UnknownMessage,
-): message is SuccessResponseMessage => {
+): message is UnknownSuccessResponseMessage => {
 	return isResponseMessage(message) && !("error" in message);
 };
 
 export const isErrorResponseMessage = (
 	message: UnknownMessage,
-): message is ErrorResponseMessage => {
+): message is UnknownErrorResponseMessage => {
 	return isResponseMessage(message) && !("data" in message);
 };

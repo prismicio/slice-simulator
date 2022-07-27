@@ -21,6 +21,7 @@ import {
 	RequestMessage,
 	ResponseMessage,
 	InternalEmitterRequestType,
+	InternalEmitterTransactions,
 } from "./types";
 
 export type ChannelReceiverOptions = {
@@ -41,12 +42,16 @@ export abstract class ChannelReceiver<
 		string,
 		never
 	>,
-> extends ChannelNetwork<ChannelReceiverOptions, TEmitterTransactions> {
+	TOptions extends Record<string, unknown> = Record<string, unknown>,
+> extends ChannelNetwork<
+	TEmitterTransactions,
+	ChannelReceiverOptions & TOptions
+> {
 	private _ready = false;
 
 	constructor(
 		requestHandlers: TransactionsHandlers<TEmitterTransactions>,
-		options?: Partial<AllChannelReceiverOptions>,
+		options: Partial<AllChannelReceiverOptions> & TOptions,
 	) {
 		super(requestHandlers, { ...channelReceiverDefaultOptions, ...options });
 
@@ -103,7 +108,20 @@ export abstract class ChannelReceiver<
 
 				switch (message.type) {
 					case InternalEmitterRequestType.Connect:
+						// Set port
 						this.port = event.ports[0];
+
+						// Update options
+						const { data } =
+							message as InternalEmitterTransactions["connect"]["request"];
+						this.options = {
+							...this.options,
+							...data,
+							// Ensure core options remain the same
+							debug: this.options.debug,
+							requestIDPrefix: this.options.requestIDPrefix,
+							readyTimeout: this.options.readyTimeout,
+						};
 
 						const response = createSuccessResponseMessage(
 							message.requestID,

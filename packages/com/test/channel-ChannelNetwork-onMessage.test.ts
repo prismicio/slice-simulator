@@ -14,7 +14,7 @@ class StandaloneChannelNetwork<
 		string,
 		never
 	>,
-> extends ChannelNetwork<TOptions, TPartnerTransactions> {}
+> extends ChannelNetwork<TPartnerTransactions, TOptions> {}
 
 const dummyData = { foo: "bar" };
 
@@ -237,8 +237,9 @@ it("logs error when unknown request ID is received", async (ctx) => {
 	await channelNetwork.onMessage({ data: response });
 
 	expect(console.error).toHaveBeenCalledOnce();
-	// @ts-expect-error - type is broken
-	expect(console.error.calls[0][0].includes(response.requestID)).toBe(true);
+	expect(
+		vi.mocked(console.error).mock.calls[0][0].includes(response.requestID),
+	).toBe(true);
 
 	vi.restoreAllMocks();
 });

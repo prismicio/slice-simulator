@@ -16,10 +16,12 @@ const iframe = document.createElement("div") as HTMLIFrameElement;
 // @ts-expect-error - setting for test purpose
 iframe.contentWindow = window;
 
+const dummyData = { foo: "bar" };
+
 it("throws when target window is not available", async () => {
 	const iframe = document.createElement("iframe");
 
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
@@ -80,7 +82,7 @@ it("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	await expect(channelEmitter.connect(true)).rejects.toThrowError(
+	await expect(channelEmitter.connect({}, true)).rejects.toThrowError(
 		ConnectionTimeoutError,
 	);
 
@@ -123,7 +125,7 @@ it("calls `receiverReadyCallback` straight away if receiver is already ready", a
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"));
 	}, 10);
-	const response = await channelEmitter.connect();
+	const response = await channelEmitter.connect(dummyData);
 
 	expect(
 		// @ts-expect-error - taking a shortcut by accessing private property
@@ -135,11 +137,14 @@ it("calls `receiverReadyCallback` straight away if receiver is already ready", a
 		"calls `postMessage` twice: 1 for connect request, 1 for ready response",
 	).toHaveBeenCalledTimes(2);
 	expect(() => {
-		// @ts-expect-error - type is broken
-		postMessageMock.calls.forEach((call) => {
+		postMessageMock.mock.calls.forEach((call) => {
 			validateMessage(call[0]);
 		});
 	}, "calls `postMessage` with valid messages only").not.toThrowError();
+	expect(
+		postMessageMock.mock.calls[0][0].data,
+		"calls `postMessage` with provided options",
+	).toStrictEqual(dummyData);
 	expect(
 		response.requestID.replace(/\d+/, ""),
 		"receives a valid connect response",

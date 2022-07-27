@@ -7,7 +7,7 @@ class StandaloneChannelEmitter extends ChannelEmitter {}
 const iframe = document.createElement("iframe");
 
 it("disconnects emitter from receiver by killing channel", () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
 
 	const channel = new MessageChannel();
 
