@@ -129,13 +129,17 @@ export class CoreManager {
 		});
 		// Update active slice on events impacting slices rendering
 		window.addEventListener("resize", () => {
-			this._api?.options.activeSliceAPI && this.stateManager.setActiveSlice;
+			this._api?.options.activeSliceAPI && this.stateManager.setActiveSlice();
 		});
 		window.addEventListener("mousewheel", () => {
 			this._api?.options.activeSliceAPI &&
 				setTimeout(this.stateManager.setActiveSlice, 200);
 		});
 
+		// Update active slice when slices are set
+		this.stateManager.on(StateManagerEventType.Slices, () => {
+			this._api?.options.activeSliceAPI && this.stateManager.setActiveSlice();
+		});
 		// Send active slices to renderer
 		this.stateManager.on(
 			StateManagerEventType.ActiveSlice,

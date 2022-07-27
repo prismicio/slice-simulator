@@ -33,8 +33,6 @@ export class StateManager extends EventEmitter<StateManagerEvents> {
 		this.message = "";
 		// Dispatch event
 		this.emit(StateManagerEventType.Slices, slices);
-		// Update active slice
-		this.setActiveSlice();
 	}
 	public get slices(): SliceZone {
 		return this._slices;
