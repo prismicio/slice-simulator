@@ -111,7 +111,8 @@ export class CoreManager {
 				});
 
 				// Update active slice after scrolling
-				setTimeout(this.stateManager.setActiveSlice, 750);
+				this._api?.options.activeSliceAPI &&
+					setTimeout(this.stateManager.setActiveSlice, 750);
 
 				return res.success();
 			},
@@ -123,12 +124,16 @@ export class CoreManager {
 
 	private _initListeners(): void {
 		// Update active slice on mouse move
-		window.addEventListener("mousemove", this.stateManager.setActiveSlice);
-
+		window.addEventListener("mousemove", () => {
+			this._api?.options.activeSliceAPI && this.stateManager.setActiveSlice();
+		});
 		// Update active slice on events impacting slices rendering
-		window.addEventListener("resize", this.stateManager.setActiveSlice);
+		window.addEventListener("resize", () => {
+			this._api?.options.activeSliceAPI && this.stateManager.setActiveSlice;
+		});
 		window.addEventListener("mousewheel", () => {
-			setTimeout(this.stateManager.setActiveSlice, 200);
+			this._api?.options.activeSliceAPI &&
+				setTimeout(this.stateManager.setActiveSlice, 200);
 		});
 
 		// Send active slices to renderer

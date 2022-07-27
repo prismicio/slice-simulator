@@ -52,7 +52,7 @@ const activeSlice = ref<ActiveSlice | null>(null);
 let client: SimulatorClient | null = null;
 
 const updateClient = async (newOrigin = false) => {
-	await client!.connect(newOrigin);
+	await client!.connect({ activeSliceAPI: true }, newOrigin);
 	await client!.ping();
 
 	const { data: libraries } = await client!.getLibraries();

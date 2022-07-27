@@ -24,8 +24,7 @@ it("returns flagged Slice Zone if any and warn if number of children is off", ()
 	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("");
 
 	expect(console.warn).toHaveBeenCalledOnce();
-	// @ts-expect-error - type is broken
-	expect(console.warn.calls[0][0]).toMatchInlineSnapshot(
+	expect(vi.mocked(console.warn).mock.calls[0][0]).toMatchInlineSnapshot(
 		'"Flagged SliceZone has an unexpected number of children, found 0 but expected 1. This might lead to unexpected behaviors. Are you sure you tagged the right element?"',
 	);
 
