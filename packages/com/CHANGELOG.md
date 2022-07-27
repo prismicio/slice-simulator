@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.3.1...@prismicio/slice-simulator-com@0.4.0) (2022-07-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **com:** allow emitter to set receiver options on connect
+
+### Features
+
+* **com:** allow emitter to set receiver options on connect ([7d7967e](https://github.com/prismicio/slice-simulator/commit/7d7967ef0fffdf2f04bacbf0b9328737dcc62593))
+
 ### [0.3.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.3.0...@prismicio/slice-simulator-com@0.3.1) (2022-04-12)
 
 
