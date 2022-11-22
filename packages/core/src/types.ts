@@ -73,8 +73,8 @@ export interface SliceSimulatorProps {
 		| (() => Promise<LibrariesStateLike>)
 		| Promise<LibrariesStateLike>
 		| LibrariesStateLike;
-	zIndex?: number | null;
-	background?: string | null;
+	zIndex?: number;
+	background?: string;
 }
 
 export interface SliceSimulatorState {

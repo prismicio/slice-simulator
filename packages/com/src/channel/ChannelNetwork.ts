@@ -104,12 +104,18 @@ export abstract class ChannelNetwork<
 					);
 				} else {
 					try {
+						// TODO: Figure out why type cannot be inferred on its own anymore
 						const response = await this.requestHandlers[message.type](message, {
 							success: createSuccessResponseMessage.bind(
 								this,
 								message.requestID,
-							),
-							error: createErrorResponseMessage.bind(this, message.requestID),
+							) as Parameters<
+								typeof this.requestHandlers[string]
+							>[1]["success"],
+							error: createErrorResponseMessage.bind(
+								this,
+								message.requestID,
+							) as Parameters<typeof this.requestHandlers[string]>[1]["error"],
 						});
 
 						this.postResponse(response);

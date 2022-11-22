@@ -28,17 +28,17 @@
 		"test": "npm run lint && npm run types && npm run unit && npm run build && npm run size"
 	},
 	"devDependencies": {
-		"@size-limit/preset-small-lib": "^7.0.8",
-		"@typescript-eslint/eslint-plugin": "^5.30.7",
-		"@typescript-eslint/parser": "^5.30.7",
-		"eslint": "^8.20.0",
+		"@size-limit/preset-small-lib": "^8.1.0",
+		"@typescript-eslint/eslint-plugin": "^5.44.0",
+		"@typescript-eslint/parser": "^5.44.0",
+		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-tsdoc": "^0.2.16",
+		"eslint-plugin-tsdoc": "^0.2.17",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.7.1",
-		"prettier-plugin-jsdoc": "^0.3.38",
-		"size-limit": "^7.0.8"
+		"prettier-plugin-jsdoc": "^0.4.2",
+		"size-limit": "^8.1.0"
 	},
 	"//": "Order matters!",
 	"workspaces": [

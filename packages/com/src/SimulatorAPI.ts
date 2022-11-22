@@ -55,7 +55,7 @@ export class SimulatorAPI
 			},
 		);
 
-		// Append api to window object
+		// Append API to window object
 		if (debug) {
 			type APIWindow = typeof window & {
 				prismic: { sliceSimulator?: { api?: SimulatorAPI[] } };

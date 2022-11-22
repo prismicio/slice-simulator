@@ -95,7 +95,8 @@ export abstract class ChannelEmitter<
 	 * Initiates connection to receiver
 	 *
 	 * @param receiverOptions - Options to configure the receiver with
-	 * @param newOrigin - Indicates to the emitter that we're connecting to a new origin
+	 * @param newOrigin - Indicates to the emitter that we're connecting to a new
+	 *   origin
 	 *
 	 * @returns Success connect message
 	 */

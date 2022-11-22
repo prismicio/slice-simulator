@@ -92,7 +92,7 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 				zIndex:
 					typeof props.zIndex === "undefined"
 						? defaultProps.zIndex
-						: props.zIndex ?? undefined,
+						: props.zIndex,
 				position: "fixed",
 				top: 0,
 				left: 0,
@@ -102,7 +102,7 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 				background:
 					typeof props.background === "undefined"
 						? defaultProps.background
-						: props.background ?? undefined,
+						: props.background,
 			}}
 		>
 			{message ? (
