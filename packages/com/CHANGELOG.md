@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1-alpha.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.4.0...@prismicio/slice-simulator-com@0.4.1-alpha.0) (2022-11-22)
+
+
+### Bug Fixes
+
+* **com:** prevent `receiverReadyCallback` from being called multiple times ([58ab0ec](https://github.com/prismicio/slice-simulator/commit/58ab0ec37cbafddbd4cc2ccdb3a5027e6c98c6b4))
+
+
+### Chore
+
+* **deps:** maintain dependencies ([6312009](https://github.com/prismicio/slice-simulator/commit/6312009984539c36644e1dd87f332e99f1d4fcdd))
+* release as patch ([f9e4856](https://github.com/prismicio/slice-simulator/commit/f9e48561e670dabf1044aa76a68c57e83c832dc1))
+
 ## [0.4.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.3.1...@prismicio/slice-simulator-com@0.4.0) (2022-07-27)
 
 
