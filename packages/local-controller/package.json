@@ -24,8 +24,8 @@
     "serve": "vite preview",
 		"release": "npm run test && standard-version && git push --follow-tags && npm run build && npm publish",
 		"release:dry": "standard-version --dry-run",
-		"release:alpha": "npm run test && standard-version --release-as major --prerelease alpha && git push --follow-tags && npm run build && npm publish --tag alpha",
-		"release:alpha:dry": "standard-version --release-as major --prerelease alpha --dry-run",
+		"release:alpha": "npm run test && standard-version --release-as patch --prerelease alpha && git push --follow-tags && npm run build && npm publish --tag alpha",
+		"release:alpha:dry": "standard-version --release-as patch --prerelease alpha --dry-run",
 		"test": "npm run unit && npm run build",
 		"unit": "vitest run --coverage",
 		"unit:watch": "vitest watch"
