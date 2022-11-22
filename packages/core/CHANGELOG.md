@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7-alpha.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.6...@prismicio/slice-simulator-core@0.2.7-alpha.0) (2022-11-22)
+
+
+### Bug Fixes
+
+* **core:** prevent `init` from initing the iframe twice ([4f39639](https://github.com/prismicio/slice-simulator/commit/4f39639cfebde71e999af538fd00796cc2de5f40))
+
+
+### Chore
+
+* **deps:** bump com ([34e37fb](https://github.com/prismicio/slice-simulator/commit/34e37fb44a3cbcbec2c33bae83303efd31517027))
+* **deps:** maintain dependencies ([6312009](https://github.com/prismicio/slice-simulator/commit/6312009984539c36644e1dd87f332e99f1d4fcdd))
+* release as patch ([f9e4856](https://github.com/prismicio/slice-simulator/commit/f9e48561e670dabf1044aa76a68c57e83c832dc1))
+
 ### [0.2.6](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.5...@prismicio/slice-simulator-core@0.2.6) (2022-07-27)
 
 
