@@ -13,12 +13,12 @@ import {
 	ManagedState,
 	SliceSimulatorProps,
 	StateManagerEventType,
-	StateManagerStatus,
 } from "./types";
 
 export class CoreManager {
 	public stateManager: StateManager;
 	private _api: SimulatorAPI | null;
+	private _initialized: boolean;
 
 	constructor(
 		managedState: ManagedState = getDefaultManagedState(),
@@ -26,14 +26,17 @@ export class CoreManager {
 	) {
 		this.stateManager = new StateManager(managedState, slices);
 		this._api = null;
+		this._initialized = false;
 	}
 
 	async init(state: SliceSimulatorProps["state"]) {
 		// When not handling HMR, init might be called multiple times, here we take a shortcut by just reloading the state on subsequent inits
-		if (this.stateManager.managedState.status === StateManagerStatus.Loaded) {
+		if (this._initialized) {
 			await this.stateManager.reload(state);
 
 			return;
+		} else {
+			this._initialized = true;
 		}
 
 		// Init state manager
