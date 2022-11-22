@@ -219,8 +219,13 @@ export abstract class ChannelEmitter<
 
 						// If emitter is waiting for receiver to be ready
 						if (this._receiverReadyCallback) {
-							await this._receiverReadyCallback();
+							// We don't await the promise directly as we need to clear the callback first
+							const receiverReadyCallbackPromise =
+								this._receiverReadyCallback();
+
 							this._receiverReadyCallback = null;
+
+							await receiverReadyCallbackPromise;
 						}
 						break;
 
