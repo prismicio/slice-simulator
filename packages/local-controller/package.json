@@ -32,7 +32,7 @@
   },
   "devDependencies": {
 		"@fontsource/ibm-plex-sans": "^4.5.13",
-		"@prismicio/slice-simulator-com": "^0.4.0",
+		"@prismicio/slice-simulator-com": "^0.4.1-alpha.0",
 		"@vitejs/plugin-vue": "^3.2.0",
 		"@vitest/coverage-c8": "^0.25.3",
 		"autoprefixer": "^10.4.13",
