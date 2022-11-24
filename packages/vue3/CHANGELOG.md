@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2-alpha.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.1.2-alpha.0...@prismicio/slice-simulator-vue3@0.1.2-alpha.1) (2022-11-24)
+
+
+### Features
+
+* `state` prop is now optional ([949531a](https://github.com/prismicio/slice-simulator/commit/949531ad0a0e5238ce14381bd6a863b87fafbcca))
+
+
+### Chore
+
+* **deps:** bump core ([f1f98fe](https://github.com/prismicio/slice-simulator/commit/f1f98fe309261b11cb942a00b5e54694717eeb83))
+
 ### [0.1.2-alpha.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.1.1...@prismicio/slice-simulator-vue3@0.1.2-alpha.0) (2022-11-22)
 
 
