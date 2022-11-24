@@ -40,7 +40,7 @@
 		"unit:watch": "vitest watch"
 	},
 	"dependencies": {
-		"@prismicio/slice-simulator-core": "^0.2.7-alpha.0"
+		"@prismicio/slice-simulator-core": "^0.2.7-alpha.1"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.25",
