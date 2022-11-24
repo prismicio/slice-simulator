@@ -36,7 +36,8 @@ export const SliceSimulatorImpl = /*#__PURE__*/ defineComponent({
 	props: {
 		state: {
 			type: [Function, Object] as PropType<SliceSimulatorProps["state"]>,
-			required: true,
+			default: getDefaultProps().state,
+			required: false,
 		},
 		zIndex: {
 			type: Number as PropType<Required<SliceSimulatorProps["zIndex"]>>,

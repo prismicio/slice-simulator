@@ -3,10 +3,9 @@ import { SliceZone } from "@prismicio/types";
 import { SliceSimulatorProps, ManagedState, StateManagerStatus } from "./types";
 
 export const getDefaultProps = (): Required<{
-	[K in keyof Omit<SliceSimulatorProps, "state">]: NonNullable<
-		SliceSimulatorProps[K]
-	>;
+	[K in keyof SliceSimulatorProps]: NonNullable<SliceSimulatorProps[K]>;
 }> => ({
+	state: {},
 	zIndex: 100,
 	background: "#ffffff",
 });

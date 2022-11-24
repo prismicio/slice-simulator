@@ -55,7 +55,7 @@ export const SliceSimulator = (props: SliceSimulatorProps): JSX.Element => {
 			"simulator-message",
 		);
 
-		coreManager.init(props.state);
+		coreManager.init(props.state || defaultProps.state);
 
 		return () => {
 			coreManager.stateManager.off(

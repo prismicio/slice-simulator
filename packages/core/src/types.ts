@@ -69,7 +69,7 @@ export type ManagedState = {
 };
 
 export interface SliceSimulatorProps {
-	state:
+	state?:
 		| (() => Promise<LibrariesStateLike>)
 		| Promise<LibrariesStateLike>
 		| LibrariesStateLike;
