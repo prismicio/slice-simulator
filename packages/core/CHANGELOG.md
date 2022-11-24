@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7-alpha.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.7-alpha.0...@prismicio/slice-simulator-core@0.2.7-alpha.1) (2022-11-24)
+
+
+### Features
+
+* `state` prop is now optional ([949531a](https://github.com/prismicio/slice-simulator/commit/949531ad0a0e5238ce14381bd6a863b87fafbcca))
+
 ### [0.2.7-alpha.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.6...@prismicio/slice-simulator-core@0.2.7-alpha.0) (2022-11-22)
 
 
