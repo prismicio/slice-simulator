@@ -1,6 +1,6 @@
 {
 	"name": "@prismicio/slice-simulator-core",
-	"version": "0.2.7-alpha.1",
+	"version": "0.2.7",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
 		"typescript",

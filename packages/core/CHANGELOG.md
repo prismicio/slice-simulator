@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.7-alpha.1...@prismicio/slice-simulator-core@0.2.7) (2022-12-20)
+
+
+### Chore
+
+* **deps:** bump com ([dcbae88](https://github.com/prismicio/slice-simulator/commit/dcbae882f337c8e7ea13baedbafff7e891990d75))
+
 ### [0.2.7-alpha.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-core@0.2.7-alpha.0...@prismicio/slice-simulator-core@0.2.7-alpha.1) (2022-11-24)
 
 
