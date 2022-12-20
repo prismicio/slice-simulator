@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.4.1-alpha.0...@prismicio/slice-simulator-com@0.4.1) (2022-12-20)
+
 ### [0.4.1-alpha.0](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-com@0.4.0...@prismicio/slice-simulator-com@0.4.1-alpha.0) (2022-11-22)
 
 
