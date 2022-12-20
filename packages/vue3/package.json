@@ -40,7 +40,7 @@
 		"unit:watch": "vitest watch"
 	},
 	"dependencies": {
-		"@prismicio/slice-simulator-core": "^0.2.7-alpha.1"
+		"@prismicio/slice-simulator-core": "^0.2.7"
 	},
 	"devDependencies": {
 		"@vitest/coverage-c8": "^0.25.3",
