@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue@0.2.2-alpha.1...@prismicio/slice-simulator-vue@0.2.2) (2022-12-20)
+
+
+### Chore
+
+* **deps:** bump core ([83df202](https://github.com/prismicio/slice-simulator/commit/83df202ffbae466272cb6ba723803a04fc91ba80))
+
 ### [0.2.2-alpha.1](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue@0.2.2-alpha.0...@prismicio/slice-simulator-vue@0.2.2-alpha.1) (2022-11-24)
 
 
