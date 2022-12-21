@@ -40,6 +40,7 @@
 		"unit:watch": "vitest watch"
 	},
 	"dependencies": {
+		"@prismicio/types": "^0.2.7",
 		"statuses": "^2.0.1"
 	},
 	"devDependencies": {
