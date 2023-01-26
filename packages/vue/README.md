@@ -33,7 +33,7 @@ Then create a page for Slice Simulator:
 ```vue
 <!-- e.g. ~/pages/slice-simulator.vue -->
 <template>
-	<SliceSimulator :state="state" #default="{ slices }">
+	<SliceSimulator #default="{ slices }">
 		<SliceZone :slices="slices" :components="components" />
 	</SliceSimulator>
 </template>
@@ -42,7 +42,6 @@ Then create a page for Slice Simulator:
 import { SliceSimulator } from "@prismicio/slice-simulator-vue";
 import { SliceZone } from "@prismicio/vue/components";
 
-import state from "~~/.slicemachine/libraries-state.json";
 import components from "~~/slices/components";
 
 export default {
@@ -51,7 +50,7 @@ export default {
 		SliceZone
 	},
 	data() {
-		return { state, components };
+		return { components };
 	}
 };
 </script>
@@ -86,7 +85,7 @@ Some versions of Webpack fails to resolve ESM modules correctly, to mitigate tha
 
 If you're using Nuxt, to just fix HMR issues, try first updating your config as stated there: https://github.com/nuxt/postcss8/issues/24
 
-If you're still having trouble with HMR, or would like full HMR support, you can try updating your Slice Simulator page as follow:
+If you're still having trouble with HMR, you can try updating your Slice Simulator page as follow:
 
 ```vue
 <!-- e.g. ~/pages/slice-simulator.vue -->

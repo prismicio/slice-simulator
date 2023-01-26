@@ -33,7 +33,7 @@ Then create a page for Slice Simulator:
 ```vue
 <!-- e.g. ~/pages/slice-simulator.vue -->
 <template>
-	<SliceSimulator :state="state" #default="{ slices }">
+	<SliceSimulator #default="{ slices }">
 		<SliceZone :slices="slices" :components="components" />
 	</SliceSimulator>
 </template>
@@ -42,7 +42,6 @@ Then create a page for Slice Simulator:
 import { SliceSimulator } from "@prismicio/slice-simulator-vue3";
 import { SliceZone } from "@prismicio/vue";
 
-import state from "../../.slicemachine/libraries-state.json";
 import components from "../../slices/components";
 </script>
 ```
