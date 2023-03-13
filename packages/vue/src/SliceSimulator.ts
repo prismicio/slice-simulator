@@ -27,7 +27,7 @@ export const SliceSimulator = {
 	props: {
 		state: {
 			type: [Function, Object] as PropType<SliceSimulatorProps["state"]>,
-			default: getDefaultProps().state,
+			default: () => getDefaultProps().state,
 			required: false,
 		},
 		zIndex: {
