@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.1.2...@prismicio/slice-simulator-vue3@0.1.3) (2023-03-13)
+
+
+### Bug Fixes
+
+* `state` prop default value in Vue libraries ([901c7d2](https://github.com/prismicio/slice-simulator/commit/901c7d201de109f6e5184db2ed33a83f453debf3))
+
+
+### Documentation
+
+* remove reference to deprecated `state` prop ([b10d38d](https://github.com/prismicio/slice-simulator/commit/b10d38df8c27b6575f420fb186c21231195651da))
+
 ### [0.1.2](https://github.com/prismicio/slice-simulator/compare/@prismicio/slice-simulator-vue3@0.1.2-alpha.1...@prismicio/slice-simulator-vue3@0.1.2) (2022-12-20)
 
 
