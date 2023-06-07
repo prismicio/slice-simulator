@@ -1,7 +1,11 @@
 # custom
 dist
 examples/**/package-lock.json
-packages/**/package-lock.json
+playground/**/package-lock.json
+.nuxt
+.nitro
+.cache
+.output
 
 # os
 .DS_Store

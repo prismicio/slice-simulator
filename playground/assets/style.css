@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Core, likely what you want to copy/paste with little change
+ */
+.marquee {
+  overflow: hidden;
+  display: block;
+}
+
+.marquee::before {
+  display: block;
+  white-space: pre;
+  /* Abusing `content` property and `attr` function to duplicate content in CSS */
+  content: attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text) "        " attr(data-text);
+  width: fit-content;
+  transform: translate3d(-2%, 0, 0);
+  will-change: transform;
+}
+
+/**
+ * Only run animations when reduced motion is not set
+ * Thanks @patrick_h_lauke@mastodon.social for the heads up!
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .marquee::before {
+    animation: marquee 6s linear infinite;
+  }
+
+  .marquee--reverse::before {
+    animation-direction: reverse;
+  }
+}
+
+@keyframes marquee {
+	0% {
+    /**
+     * -2% is used to start scrolling with an offset (visual only)
+     */
+		transform: translate3d(-2%, 0, 0);
+	}
+	100% {
+    /**
+     * -2% offset has to be preserved
+     *
+     * Content is duplicated 20 times
+     * 100% / 20 = 5 % = "1 content length"
+     *
+     * -1px seems to prevent a small jump between each loop
+     */
+		transform: translate3d(calc(-2% - 5% - 1px), 0, 0);
+	}
+}

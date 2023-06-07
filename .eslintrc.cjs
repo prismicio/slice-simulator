@@ -12,10 +12,11 @@ module.exports = {
 		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:prettier/recommended",
+		"@nuxt/eslint-config",
 	],
 	plugins: ["eslint-plugin-tsdoc"],
 	rules: {
-		"no-console": ["warn", { allow: ["debug", "info", "warn", "error"] }],
+		"no-console": ["warn", { allow: ["info", "warn", "error"] }],
 		"no-debugger": "warn",
 		"no-undef": "off",
 		curly: "error",
@@ -32,6 +33,16 @@ module.exports = {
 			},
 		],
 		"@typescript-eslint/no-var-requires": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "error",
 		"tsdoc/syntax": "warn",
+		"vue/multi-word-component-names": "off",
 	},
+	overrides: [
+		{
+			files: "*.vue",
+			rules: {
+				"prettier/prettier": "off",
+			},
+		},
+	],
 };

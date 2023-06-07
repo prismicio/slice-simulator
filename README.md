@@ -8,7 +8,7 @@ Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.jso
 
 -->
 
-# @prismicio/slice-simulator
+# @prismicio/simulator
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -19,21 +19,15 @@ Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.jso
 
 Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
-- 🛠 &nbsp;Minimal configuration;
-- 🖥 &nbsp;Preview and develop slices locally;
-- 🈂 &nbsp;Compatible with [React][react] & [Vue][vue].
+- 🖼 &nbsp;Message channel-based communication;
+- 🈂 &nbsp;Fully typed request & response;
+- 🔁 &nbsp;Two-way binding.
 
 ## Install
 
 ```bash
-npm install @prismicio/slice-simulator-* # `react`, `vue`, or `vue3`
+npm install @prismicio/simulator
 ```
-
-For further details, refer to each packages' READMEs:
-
-- [@prismicio/slice-simulator-react](./packages/react/README.md#install)
-- [@prismicio/slice-simulator-vue](./packages/vue/README.md#install)
-- [@prismicio/slice-simulator-vue3](./packages/vue3/README.md#install)
 
 ## Documentation
 
@@ -56,7 +50,7 @@ For more clarity on this project and its structure you can also check out the de
 ## License
 
 ```
-   Copyright 2013-2022 Prismic <contact@prismic.io> (https://prismic.io)
+   Copyright 2013-2023 Prismic <contact@prismic.io> (https://prismic.io)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -80,8 +74,6 @@ For more clarity on this project and its structure you can also check out the de
 [prismic-docs]: https://prismic.io/docs
 [changelog]: ./CHANGELOG.md
 [contributing]: ./CONTRIBUTING.md
-[react]: https://reactjs.org
-[vue]: https://vuejs.org
 
 <!-- TODO: Replace link with a more useful one if available -->
 
@@ -92,15 +84,15 @@ For more clarity on this project and its structure you can also check out the de
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/@prismicio/slice-simulator-core/latest.svg
-[npm-version-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
-[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/slice-simulator-core.svg
-[npm-downloads-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[npm-version-src]: https://img.shields.io/npm/v/@prismicio/simulator/latest.svg
+[npm-version-href]: https://npmjs.com/package/@prismicio/simulator
+[npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/simulator.svg
+[npm-downloads-href]: https://npmjs.com/package/@prismicio/simulator
 [github-actions-ci-src]: https://github.com/prismicio/slice-simulator/workflows/ci/badge.svg
 [github-actions-ci-href]: https://github.com/prismicio/slice-simulator/actions?query=workflow%3Aci
 [codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-simulator.svg
 [codecov-href]: https://codecov.io/gh/prismicio/slice-simulator
-[conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
+[conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white
 [conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/slice-simulator-core.svg
-[license-href]: https://npmjs.com/package/@prismicio/slice-simulator-core
+[license-src]: https://img.shields.io/npm/l/@prismicio/simulator.svg
+[license-href]: https://npmjs.com/package/@prismicio/simulator
