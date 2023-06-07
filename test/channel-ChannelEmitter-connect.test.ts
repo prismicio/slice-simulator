@@ -1,11 +1,11 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import {
 	ChannelEmitter,
 	ConnectionTimeoutError,
+	UnknownMessage,
 	createSuccessResponseMessage,
 	isRequestMessage,
-	UnknownMessage,
 	validateMessage,
 } from "../src/channel";
 

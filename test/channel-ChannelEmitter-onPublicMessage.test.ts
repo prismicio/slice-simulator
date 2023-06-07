@@ -1,11 +1,11 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import {
 	ChannelEmitter,
+	InternalReceiverRequestType,
 	createErrorResponseMessage,
 	createRequestMessage,
 	createSuccessResponseMessage,
-	InternalReceiverRequestType,
 } from "../src/channel";
 
 class StandaloneChannelEmitter extends ChannelEmitter {}

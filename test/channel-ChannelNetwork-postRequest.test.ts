@@ -1,12 +1,12 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import {
 	ChannelNetwork,
-	createErrorResponseMessage,
-	createSuccessResponseMessage,
 	RequestTimeoutError,
 	ResponseError,
 	TooManyConcurrentRequestsError,
+	createErrorResponseMessage,
+	createSuccessResponseMessage,
 } from "../src/channel";
 
 class StandaloneChannelNetwork extends ChannelNetwork {}

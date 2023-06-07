@@ -1,11 +1,11 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import {
 	ChannelNetwork,
+	UnknownTransaction,
 	createErrorResponseMessage,
 	createRequestMessage,
 	createSuccessResponseMessage,
-	UnknownTransaction,
 } from "../src/channel";
 
 class StandaloneChannelNetwork<

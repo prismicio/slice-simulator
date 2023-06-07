@@ -1,8 +1,10 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
-export default <Partial<Config>>{
+const config: Partial<Config> = {
 	content: [
 		"./slices/**/*.{js,ts,vue}",
-		"./playground/slices/**/*.{js,ts,vue}"
-	]
+		"./playground/slices/**/*.{js,ts,vue}",
+	],
 };
+
+export default config;

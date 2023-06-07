@@ -1,8 +1,8 @@
-import { it, expect, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, expect, it } from "vitest";
 
 import {
-	getSliceZoneDOM,
 	getActiveSliceDOM,
+	getSliceZoneDOM,
 	simulatorClass,
 	simulatorRootClass,
 } from "../src/kit";

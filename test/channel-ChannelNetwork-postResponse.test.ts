@@ -1,4 +1,4 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import { ChannelNetwork, createSuccessResponseMessage } from "../src/channel";
 

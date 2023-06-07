@@ -1,12 +1,12 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
-import { createRequestMessage } from "../src/channel";
 import {
 	APIRequestType,
 	ClientRequestType,
 	ClientTransactions,
 	SimulatorClient,
 } from "../src";
+import { createRequestMessage } from "../src/channel";
 
 const iframe = document.createElement("iframe");
 
@@ -80,9 +80,23 @@ const callsPostFormattedRequestCorrectly = <
 /* eslint-disable prettier/prettier */
 
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.Ping, undefined));
-it(...callsPostFormattedRequestCorrectly(ClientRequestType.GetLibraries, undefined));
+it(
+	...callsPostFormattedRequestCorrectly(
+		ClientRequestType.GetLibraries,
+		undefined,
+	),
+);
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZone, []));
-it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZoneFromSliceIDs, []));
-it(...callsPostFormattedRequestCorrectly(ClientRequestType.ScrollToSlice, { sliceIndex: 0}));
+it(
+	...callsPostFormattedRequestCorrectly(
+		ClientRequestType.SetSliceZoneFromSliceIDs,
+		[],
+	),
+);
+it(
+	...callsPostFormattedRequestCorrectly(ClientRequestType.ScrollToSlice, {
+		sliceIndex: 0,
+	}),
+);
 
 /* eslint-enable prettier/prettier */

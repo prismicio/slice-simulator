@@ -35,7 +35,7 @@ export class SimulatorClient
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =
 			options?.debug ||
-			/[\?&]debug=true/i.test(decodeURIComponent(window.location.search));
+			/[?&]debug=true/i.test(decodeURIComponent(window.location.search));
 
 		super(
 			target,

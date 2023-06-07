@@ -1,6 +1,10 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
-import { getSliceZoneDOM, simulatorClass, simulatorRootClass } from "../src/kit";
+import {
+	getSliceZoneDOM,
+	simulatorClass,
+	simulatorRootClass,
+} from "../src/kit";
 
 it("returns flagged Slice Zone if any", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;

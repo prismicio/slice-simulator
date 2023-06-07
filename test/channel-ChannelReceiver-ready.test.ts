@@ -1,9 +1,9 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
 import {
 	ChannelReceiver,
-	createSuccessResponseMessage,
 	UnknownRequestMessage,
+	createSuccessResponseMessage,
 } from "../src/channel";
 
 class StandaloneChannelReceiver extends ChannelReceiver {}

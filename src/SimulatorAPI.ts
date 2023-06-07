@@ -42,7 +42,7 @@ export class SimulatorAPI
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =
 			options?.debug ||
-			/[\?&]debug=true/i.test(decodeURIComponent(window.location.search));
+			/[?&]debug=true/i.test(decodeURIComponent(window.location.search));
 
 		super(
 			{
@@ -82,6 +82,9 @@ export class SimulatorAPI
 	[APIRequestType.SetSliceZoneSize]: TransactionMethod<
 		APITransactions[APIRequestType.SetSliceZoneSize]
 	> = async (data) => {
-		return await this.postFormattedRequest(APIRequestType.SetSliceZoneSize, data);
+		return await this.postFormattedRequest(
+			APIRequestType.SetSliceZoneSize,
+			data,
+		);
 	};
 }

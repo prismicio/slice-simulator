@@ -1,12 +1,12 @@
-import { it, expect, vi } from "vitest";
+import { expect, it, vi } from "vitest";
 
-import { createRequestMessage } from "../src/channel";
 import {
 	APIRequestType,
 	APITransactions,
 	ClientRequestType,
 	SimulatorAPI,
 } from "../src";
+import { createRequestMessage } from "../src/channel";
 
 it("instantiates correctly", () => {
 	expect(

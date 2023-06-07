@@ -1,9 +1,9 @@
-import { it, expect } from "vitest";
+import { expect, it } from "vitest";
 
 import {
 	ChannelEmitter,
-	PortNotSetError,
 	ChannelNotSetError,
+	PortNotSetError,
 } from "../src/channel";
 
 class StandaloneChannelEmitter extends ChannelEmitter {}

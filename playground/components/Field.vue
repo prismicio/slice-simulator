@@ -2,15 +2,14 @@
 defineProps({
 	label: {
 		type: String,
-		required: true
-	}
-})
+		required: true,
+	},
+});
 </script>
 
 <template>
-  <label>
-    <span class="text-sm text-slate-500">{{ label }}</span>
-    <slot />
-  </label>
+	<label>
+		<span class="text-sm text-slate-500">{{ label }}</span>
+		<slot />
+	</label>
 </template>
-
