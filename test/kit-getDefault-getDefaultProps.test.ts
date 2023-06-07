@@ -6,7 +6,6 @@ it("returns default props", () => {
 	expect(getDefaultProps()).toMatchInlineSnapshot(`
 		{
 		  "background": "#ffffff",
-		  "state": {},
 		  "zIndex": 100,
 		}
 	`);

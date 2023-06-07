@@ -37,7 +37,7 @@ it("listens to new port messages automatically", async (ctx) => {
 
 	expect(onMessageStub).toHaveBeenCalledOnce();
 	// @ts-expect-error - type is broken
-	expect(onMessageStub.calls[0][0].data).toStrictEqual(request);
+	expect(onMessageStub.mock.calls[0][0].data).toStrictEqual(request);
 });
 
 it("stops listening to old port after new port automatically", async () => {

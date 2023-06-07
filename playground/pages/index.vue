@@ -7,12 +7,6 @@ const sliceZoneRaw = ref(
 	JSON.stringify(
 		[
 			{
-				slice_type: "contact_form",
-				variation: "default",
-				primary: {},
-				items: [],
-			},
-			{
 				slice_type: "quote",
 				variation: "default",
 				primary: {
@@ -24,6 +18,12 @@ const sliceZoneRaw = ref(
 					],
 					source: "John Doe",
 				},
+				items: [],
+			},
+			{
+				slice_type: "contact_form",
+				variation: "default",
+				primary: {},
 				items: [],
 			},
 		],
@@ -88,28 +88,30 @@ watch(sliceZone, async () => {
 </script>
 
 <template>
-	<main class="w-screen h-screen flex items-stretch font-mono bg-gray-50">
-		<form class="w-[600px] p-4 flex flex-col gap-4 border-r border-gray-200">
-			<h1 class="font-bold text-4xl">SliceZone</h1>
-			<textarea
-				v-model="sliceZoneRaw"
-				class="resize-none flex-1 bg-gray-900 text-white px-2 py-1"
-			/>
-			<figure
-				class="marquee text-red-400"
-				data-text="Invalid JSON!"
-				:class="{ 'opacity-0': sliceZoneRawValid }"
-			>
-				<span class="sr-only">Invalid JSON!</span>
-			</figure>
-		</form>
-		<figure class="flex-1">
-			<iframe
-				ref="iframe"
-				:src="iframeSRC"
-				frameborder="0"
-				class="w-full h-full"
-			/>
-		</figure>
-	</main>
+  <main class="w-screen h-screen flex items-stretch font-mono bg-gray-50">
+    <form class="w-[600px] p-4 flex flex-col gap-4 border-r border-gray-200">
+      <h1 class="font-bold text-4xl">
+        SliceZone
+      </h1>
+      <textarea
+        v-model="sliceZoneRaw"
+        class="resize-none flex-1 bg-gray-900 text-white px-2 py-1"
+      />
+      <figure
+        class="marquee text-red-400"
+        data-text="Invalid JSON!"
+        :class="{ 'opacity-0': sliceZoneRawValid }"
+      >
+        <span class="sr-only">Invalid JSON!</span>
+      </figure>
+    </form>
+    <figure class="flex-1">
+      <iframe
+        ref="iframe"
+        :src="iframeSRC"
+        frameborder="0"
+        class="w-full h-full"
+      />
+    </figure>
+  </main>
 </template>

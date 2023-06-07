@@ -15,13 +15,7 @@ it("instantiates correctly", () => {
 				[ClientRequestType.Ping]: (_req, res) => {
 					return res.success("pong");
 				},
-				[ClientRequestType.GetLibraries]: (_req, res) => {
-					return res.success([]);
-				},
 				[ClientRequestType.SetSliceZone]: (_req, res) => {
-					return res.success();
-				},
-				[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
 					return res.success();
 				},
 				[ClientRequestType.ScrollToSlice]: (_req, res) => {
@@ -33,13 +27,7 @@ it("instantiates correctly", () => {
 
 it("instantiates correctly with defaults", () => {
 	const simulatorAPI = new SimulatorAPI({
-		[ClientRequestType.GetLibraries]: (_req, res) => {
-			return res.success([]);
-		},
 		[ClientRequestType.SetSliceZone]: (_req, res) => {
-			return res.success();
-		},
-		[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
 			return res.success();
 		},
 		[ClientRequestType.ScrollToSlice]: (_req, res) => {
@@ -66,13 +54,7 @@ it("registers instance on window object", () => {
 
 	const simulatorClient = new SimulatorAPI(
 		{
-			[ClientRequestType.GetLibraries]: (_req, res) => {
-				return res.success([]);
-			},
 			[ClientRequestType.SetSliceZone]: (_req, res) => {
-				return res.success();
-			},
-			[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
 				return res.success();
 			},
 			[ClientRequestType.ScrollToSlice]: (_req, res) => {
@@ -95,20 +77,15 @@ it("registers instance on window object", () => {
 
 const callsPostFormattedRequestCorrectly = <
 	TRequestType extends APIRequestType,
+	TRequestData extends APITransactions[TRequestType]["request"]["data"],
 >(
 	requestType: TRequestType,
-	requestData: APITransactions[TRequestType]["request"]["data"],
+	requestData: TRequestData,
 ): [string, () => Promise<void>] => [
 	`\`SimulatorAPI.${requestType}()\` calls \`postFormattedRequest\` correctly`,
 	async () => {
 		const simulatorAPI = new SimulatorAPI({
-			[ClientRequestType.GetLibraries]: (_req, res) => {
-				return res.success([]);
-			},
 			[ClientRequestType.SetSliceZone]: (_req, res) => {
-				return res.success();
-			},
-			[ClientRequestType.SetSliceZoneFromSliceIDs]: (_req, res) => {
 				return res.success();
 			},
 			[ClientRequestType.ScrollToSlice]: (_req, res) => {
@@ -120,6 +97,7 @@ const callsPostFormattedRequestCorrectly = <
 		// @ts-expect-error - taking a shortcut by accessing protected property
 		simulatorAPI.postFormattedRequest = postFormattedRequestStub;
 
+		// @ts-expect-error - TypeScript fails to match type with data
 		await simulatorAPI[requestType](requestData);
 
 		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
@@ -131,5 +109,6 @@ const callsPostFormattedRequestCorrectly = <
 /* eslint-disable prettier/prettier */
 
 it(...callsPostFormattedRequestCorrectly(APIRequestType.SetActiveSlice, null));
+it(...callsPostFormattedRequestCorrectly(APIRequestType.SetSliceZoneSize, null));
 
 /* eslint-enable prettier/prettier */

@@ -17,6 +17,9 @@ it("instantiates correctly", () => {
 				[APIRequestType.SetActiveSlice]: (_req, res) => {
 					return res.success();
 				},
+				[APIRequestType.SetSliceZoneSize]: (_req, res) => {
+					return res.success();
+				},
 			}),
 	).not.toThrowError();
 });
@@ -56,9 +59,10 @@ it("registers instance on window object", () => {
 
 const callsPostFormattedRequestCorrectly = <
 	TRequestType extends ClientRequestType,
+	TRequestData extends ClientTransactions[TRequestType]["request"]["data"],
 >(
 	requestType: TRequestType,
-	requestData: ClientTransactions[TRequestType]["request"]["data"],
+	requestData: TRequestData,
 ): [string, () => Promise<void>] => [
 	`\`SimulatorClient.${requestType}()\` calls \`postFormattedRequest\` correctly`,
 	async () => {
@@ -68,7 +72,7 @@ const callsPostFormattedRequestCorrectly = <
 		// @ts-expect-error - taking a shortcut by accessing protected property
 		simulatorClient.postFormattedRequest = postFormattedRequestStub;
 
-		// @ts-expect-error - cannot provide "void" type generically
+		// @ts-expect-error - TypeScript fails to match type with data
 		await simulatorClient[requestType](requestData);
 
 		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
@@ -80,19 +84,7 @@ const callsPostFormattedRequestCorrectly = <
 /* eslint-disable prettier/prettier */
 
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.Ping, undefined));
-it(
-	...callsPostFormattedRequestCorrectly(
-		ClientRequestType.GetLibraries,
-		undefined,
-	),
-);
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZone, []));
-it(
-	...callsPostFormattedRequestCorrectly(
-		ClientRequestType.SetSliceZoneFromSliceIDs,
-		[],
-	),
-);
 it(
 	...callsPostFormattedRequestCorrectly(ClientRequestType.ScrollToSlice, {
 		sliceIndex: 0,

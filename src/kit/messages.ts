@@ -13,9 +13,9 @@ const footer =
 export const sliceSimulatorAccessedDirectly = div(
 	[
 		header,
-		`You're seeing this page because you're accessing Slice Simulator\ndirectly, e.g:\n\n  - ${a(
+		`You're seeing this page because you're accessing Slice simulator\ndirectly, e.g:\n\n  - ${a(
 			"http://localhost:3000/slice-simulator",
-		)}\n\n\n\nSlice Simulator is not meant to be accessed this way, to preview your\nslices, head over to Slice Machine UI:\n\n  - ${a(
+		)}\n\n\n\nThe Slice simulator can only be accessed through Slice Machine or the\nPage Builder. To preview your Slices, head over to Slice Machine:\n\n  - ${a(
 			"http://localhost:9999",
 		)}\n\n\n\nIf you believe this is an error, please reach out to us:\n\n  - ${a(
 			"https://github.com/prismicio/slice-machine/issues/new/choose",

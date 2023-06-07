@@ -66,7 +66,7 @@ export class State extends EventEmitter<StateEvents> {
 	}
 
 	private _setActiveSlice = (): void => {
-		// There can't be an active slice if there's no slices displayed
+		// There can't be an active slice if there's no slice displayed
 		if (this.slices.length === 0) {
 			this.activeSlice = null;
 

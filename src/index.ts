@@ -34,9 +34,7 @@ export type {
 export { APIRequestType, ClientRequestType } from "./types";
 export type {
 	ActiveSlice,
-	VariationSummary,
-	SliceSummary,
-	LibrarySummary,
+	SliceZoneSize,
 	APITransactions,
 	ClientTransactions,
 } from "./types";
