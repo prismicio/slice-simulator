@@ -1,3 +1,11 @@
+// This is an inlined version of the Slice Simulator component from
+// `@slicemachine/adapter-nuxt` so that developing with the playground is
+// more straightforward.
+//
+// People should **not** have that kind of component directly within their
+// projects, but instead use the one provided by their Slice Machine adapter.
+//
+// See: https://github.com/prismicio/slice-machine/blob/5cd4d26b4d37715173202c27ed3bf1dd6ac669ff/packages/adapter-nuxt/src/simulator/SliceSimulator.ts
 import {
 	AllowedComponentProps,
 	ComponentCustomProps,
