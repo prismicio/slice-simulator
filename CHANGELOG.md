@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com///compare/v0.1.2...v0.1.3) (2023-06-08)
+
+
+### Bug Fixes
+
+* `SetSliceZoneSize` is not nullable ([f3efaff](https://github.com///commit/f3efaffd6caad9531902a69fe9a8aebde906b08e))
+
 ### [0.1.2](https://github.com///compare/v0.1.1...v0.1.2) (2023-06-08)
 
 ### [0.1.1](https://github.com///compare/v0.1.0...v0.1.1) (2023-06-07)
