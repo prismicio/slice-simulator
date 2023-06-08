@@ -30,7 +30,7 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 > This is probably not the package you're looking for. For dedicated framework integrations, check out:
 > - [@slicemachine/adapter-next](https://prismic.io/docs/technical-reference/slicemachine-adapter-next)
 > - [@slicemachine/adapter-nuxt](https://prismic.io/docs/technical-reference/slicemachine-adapter-nuxt)
-> - [@slicemachine/adapter-nuxt2](https://prismic.io/docs/technical-reference/slicemachine-adapter-nuxt)
+> - [@slicemachine/adapter-nuxt2](https://prismic.io/docs/technical-reference/slicemachine-adapter-nuxt2)
 
 ```bash
 npm install @prismicio/simulator
