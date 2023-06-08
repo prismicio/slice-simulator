@@ -5,7 +5,10 @@ export default defineConfig({
 	plugins: [sdk()],
 	build: {
 		lib: {
-			entry: ["./src/index.ts", "./src/kit/index.ts"],
+			entry: {
+				index: "./src/index.ts",
+				kit: "./src/kit/index.ts",
+			},
 		},
 	},
 	test: {

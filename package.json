@@ -43,6 +43,16 @@
 		"./dist",
 		"./src"
 	],
+	"typesVersions": {
+		"*": {
+			"*": [
+				"dist/index.d.ts"
+			],
+			"kit": [
+				"dist/kit/index.d.ts"
+			]
+		}
+	},
 	"scripts": {
 		"build": "vite build",
 		"dev": "nuxi dev playground",
