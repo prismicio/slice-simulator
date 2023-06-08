@@ -27,11 +27,11 @@
 		"./kit": {
 			"require": {
 				"types": "./dist/kit/index.d.ts",
-				"default": "./dist/kit/index.cjs"
+				"default": "./dist/kit.cjs"
 			},
 			"import": {
 				"types": "./dist/kit/index.d.ts",
-				"default": "./dist/kit/index.js"
+				"default": "./dist/kit.js"
 			}
 		},
 		"./package.json": "./package.json"
