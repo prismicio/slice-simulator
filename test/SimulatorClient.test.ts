@@ -81,8 +81,6 @@ const callsPostFormattedRequestCorrectly = <
 	},
 ];
 
-/* eslint-disable prettier/prettier */
-
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.Ping, undefined));
 it(...callsPostFormattedRequestCorrectly(ClientRequestType.SetSliceZone, []));
 it(
@@ -90,5 +88,3 @@ it(
 		sliceIndex: 0,
 	}),
 );
-
-/* eslint-enable prettier/prettier */

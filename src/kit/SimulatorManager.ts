@@ -127,8 +127,7 @@ export class SimulatorManager {
 				this.state.setActiveSlice();
 			});
 			window.addEventListener("mousewheel", () => {
-				this._api?.options.activeSliceAPI &&
-					setTimeout(this.state.setActiveSlice, 200);
+				setTimeout(this.state.setActiveSlice, 200);
 			});
 
 			// Update active slice when slices are set
@@ -180,8 +179,8 @@ export class SimulatorManager {
 			);
 			const observeSimulatorRoot = () => {
 				const simulatorRootDOM = getSimulatorRootDOM();
+				resizeObserver.disconnect();
 				if (simulatorRootDOM) {
-					resizeObserver.disconnect();
 					resizeObserver.observe(simulatorRootDOM);
 				}
 			};

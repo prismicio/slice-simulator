@@ -23,7 +23,7 @@ export type APITransactions = {
 		RequestMessage<APIRequestType.SetActiveSlice, ActiveSlice | null>
 	>;
 	[APIRequestType.SetSliceZoneSize]: Transaction<
-		RequestMessage<APIRequestType.SetSliceZoneSize, SliceZoneSize | null>
+		RequestMessage<APIRequestType.SetSliceZoneSize, SliceZoneSize>
 	>;
 };
 
