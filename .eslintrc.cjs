@@ -37,11 +37,10 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: "playground/**/*.vue",
-			extends: ["@nuxt/eslint-config"],
+			files: "playground/**/*",
+			extends: ["next/core-web-vitals"],
 			rules: {
-				"prettier/prettier": "off",
-				"vue/multi-word-component-names": "off",
+				"no-console": "off",
 			},
 		},
 	],

@@ -7,10 +7,9 @@ CHANGELOG.md
 dist
 examples/**/package-lock.json
 playground/**/package-lock.json
-.nuxt
-.nitro
-.cache
-.output
+.next
+out
+next-env.d.ts
 
 # os
 .DS_Store
