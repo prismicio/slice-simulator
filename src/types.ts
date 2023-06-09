@@ -1,4 +1,4 @@
-import { SliceZone } from "@prismicio/types";
+import { SliceZone } from "@prismicio/client";
 
 import { RequestMessage, ResponseMessage, Transaction } from "./channel";
 
