@@ -64,15 +64,9 @@ it("registers instance on window object", () => {
 		{ debug: true },
 	);
 
-	type APIWindow = typeof window & {
-		prismic?: { sliceSimulator: { api: SimulatorAPI[] } };
-	};
+	expect(window?.prismic?.sliceSimulator?.api?.[0]).toBe(simulatorClient);
 
-	expect((window as APIWindow).prismic?.sliceSimulator.api[0]).toBe(
-		simulatorClient,
-	);
-
-	delete (window as APIWindow).prismic;
+	delete window.prismic;
 });
 
 const callsPostFormattedRequestCorrectly = <

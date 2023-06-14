@@ -57,16 +57,10 @@ export class SimulatorClient
 
 		// Append client to window object
 		if (debug) {
-			type ClientWindow = typeof window & {
-				prismic: { sliceSimulator?: { client?: SimulatorClient[] } };
-			};
-
-			(window as ClientWindow).prismic ||= {};
-			(window as ClientWindow).prismic.sliceSimulator ||= {};
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			(window as ClientWindow).prismic.sliceSimulator!.client ||= [];
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			(window as ClientWindow).prismic.sliceSimulator!.client!.push(this);
+			window.prismic ||= {};
+			window.prismic.sliceSimulator ||= {};
+			window.prismic.sliceSimulator.client ||= [];
+			window.prismic.sliceSimulator.client.push(this);
 		}
 	}
 

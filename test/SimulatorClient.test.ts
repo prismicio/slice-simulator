@@ -45,16 +45,9 @@ it("registers instance on window object", () => {
 	expect("prismic" in window).toBe(false);
 
 	const simulatorClient = new SimulatorClient(iframe, {}, { debug: true });
+	expect(window?.prismic?.sliceSimulator?.client?.[0]).toBe(simulatorClient);
 
-	type ClientWindow = typeof window & {
-		prismic?: { sliceSimulator: { client: SimulatorClient[] } };
-	};
-
-	expect((window as ClientWindow).prismic?.sliceSimulator.client[0]).toBe(
-		simulatorClient,
-	);
-
-	delete (window as ClientWindow).prismic;
+	delete window.prismic;
 });
 
 const callsPostFormattedRequestCorrectly = <

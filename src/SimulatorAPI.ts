@@ -60,16 +60,10 @@ export class SimulatorAPI
 
 		// Append API to window object
 		if (debug) {
-			type APIWindow = typeof window & {
-				prismic: { sliceSimulator?: { api?: SimulatorAPI[] } };
-			};
-
-			(window as APIWindow).prismic ||= {};
-			(window as APIWindow).prismic.sliceSimulator ||= {};
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			(window as APIWindow).prismic.sliceSimulator!.api ||= [];
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			(window as APIWindow).prismic.sliceSimulator!.api!.push(this);
+			window.prismic ||= {};
+			window.prismic.sliceSimulator ||= {};
+			window.prismic.sliceSimulator.api ||= [];
+			window.prismic.sliceSimulator.api.push(this);
 		}
 	}
 

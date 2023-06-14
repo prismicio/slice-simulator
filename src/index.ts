@@ -38,3 +38,5 @@ export type {
 	APITransactions,
 	ClientTransactions,
 } from "./types";
+
+export * from "./globalExtensions";
