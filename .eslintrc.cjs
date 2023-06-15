@@ -15,7 +15,7 @@ module.exports = {
 	],
 	plugins: ["eslint-plugin-tsdoc"],
 	rules: {
-		"no-console": ["warn", { allow: ["debug", "info", "warn", "error"] }],
+		"no-console": ["warn", { allow: ["info", "warn", "error", "debug"] }],
 		"no-debugger": "warn",
 		"no-undef": "off",
 		curly: "error",
@@ -32,6 +32,16 @@ module.exports = {
 			},
 		],
 		"@typescript-eslint/no-var-requires": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "error",
 		"tsdoc/syntax": "warn",
 	},
+	overrides: [
+		{
+			files: "playground/**/*",
+			extends: ["next/core-web-vitals"],
+			rules: {
+				"no-console": "off",
+			},
+		},
+	],
 };

@@ -1,18 +1,29 @@
 # Changelog
 
-Prismic Slice Simulator is a collection of npm packages with their own versions and changelogs, each listed below.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Simulators
+### [0.1.3](https://github.com///compare/v0.1.2...v0.1.3) (2023-06-08)
 
-- [@prismicio/slice-simulator-core](./packages/core/CHANGELOG.md)
-- [@prismicio/slice-simulator-react](./packages/react/CHANGELOG.md)
-- [@prismicio/slice-simulator-vue](./packages/vue/CHANGELOG.md)
-- [@prismicio/slice-simulator-vue3](./packages/vue3/CHANGELOG.md)
 
-## Communication
+### Bug Fixes
 
-- [@prismicio/slice-simulator-com](./packages/com/CHANGELOG.md)
+* `SetSliceZoneSize` is not nullable ([f3efaff](https://github.com///commit/f3efaffd6caad9531902a69fe9a8aebde906b08e))
 
-## Controllers
+### [0.1.2](https://github.com///compare/v0.1.1...v0.1.2) (2023-06-08)
 
-- [@prismicio/slice-simulator-local-controller](./packages/local-controller/CHANGELOG.md)
+### [0.1.1](https://github.com///compare/v0.1.0...v0.1.1) (2023-06-07)
+
+
+### Documentation
+
+* fix changelog ([378d31b](https://github.com///commit/378d31bcf838c71e2801aba6585b47cc212af38f))
+
+## 0.1.0 (2023-06-07)
+
+### ⚠ BREAKING CHANGES
+
+* simplify codebase
+
+### Refactor
+
+* simplify codebase ([9aabc23](https://github.com///commit/9aabc2375cd9a2d77c006e96ad8861dad07ba1ea))
