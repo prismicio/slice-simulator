@@ -58,8 +58,8 @@ export class SimulatorManager {
 			return;
 		}
 
-		// Init listeners
 		this._initListeners();
+		this._injectGlobalStyles();
 	}
 
 	private async _initAPI(): Promise<void> {
@@ -194,5 +194,25 @@ export class SimulatorManager {
 				childList: true,
 			});
 		}
+	}
+
+	private _injectGlobalStyles() {
+		if (
+			document.querySelector(
+				"style[data-slice-simulator-prismic-toolbar-styles]",
+			)
+		) {
+			return;
+		}
+
+		// A basic <style> tag is used over CSSStyleSheet for greater
+		// browser compatibility.
+		const style = document.createElement("style");
+		style.dataset.sliceSimulatorPrismicToolbarStyles = "";
+
+		style.innerText =
+			"iframe#prismic-toolbar-v2 { visibility: hidden !important; }";
+
+		document.head.appendChild(style);
 	}
 }
