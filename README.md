@@ -27,7 +27,7 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 >
 > - [@prismicio/next](https://prismic.io/docs/technical-reference/prismicio-next)
 > - [@nuxtjs/prismic](https://prismic.io/docs/technical-reference/nuxtjs-prismic)
-> - [@prismicoo/svelte](https://prismic.io/docs/technical-reference/prismicio-svelte)
+> - [@prismicio/svelte](https://prismic.io/docs/technical-reference/prismicio-svelte)
 
 ```bash
 npm install @prismicio/simulator
