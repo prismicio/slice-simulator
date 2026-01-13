@@ -1,28 +1,28 @@
-import { expect, it } from "vitest";
+import { expect, it } from "vitest"
 
-import { ChannelEmitter, ChannelNotSetError } from "../src/channel";
+import { ChannelEmitter, ChannelNotSetError } from "../src/channel"
 
 class StandaloneChannelEmitter extends ChannelEmitter {}
 
-const iframe = document.createElement("iframe");
+const iframe = document.createElement("iframe")
 
 it("disconnects emitter from receiver by killing channel", () => {
-	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {});
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
-	const channel = new MessageChannel();
+	const channel = new MessageChannel()
 
 	// @ts-expect-error - taking a shortcut by setting protected property
-	channelEmitter.channel = channel;
+	channelEmitter.channel = channel
 	// @ts-expect-error - taking a shortcut by setting private property
-	channelEmitter._connected = true;
+	channelEmitter._connected = true
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(channelEmitter.channel).toBe(channel);
-	expect(channelEmitter.connected).toBe(true);
+	expect(channelEmitter.channel).toBe(channel)
+	expect(channelEmitter.connected).toBe(true)
 
-	channelEmitter.disconnect();
+	channelEmitter.disconnect()
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError);
-	expect(channelEmitter.connected).toBe(false);
-});
+	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError)
+	expect(channelEmitter.connected).toBe(false)
+})

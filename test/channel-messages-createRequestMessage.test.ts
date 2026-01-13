@@ -1,26 +1,26 @@
-import { expect, it } from "vitest";
+import { expect, it } from "vitest"
 
-import { createRequestMessage } from "../src/channel";
+import { createRequestMessage } from "../src/channel"
 
-const dummyData = { foo: "bar" };
+const dummyData = { foo: "bar" }
 
 it("creates a valid request message", (ctx) => {
-	const request = createRequestMessage(ctx.meta.name, dummyData);
+	const request = createRequestMessage(ctx.task.name, dummyData)
 
-	expect(request.requestID).toBeTypeOf("string");
-	expect(isNaN(parseInt(request.requestID))).not.toBeNaN();
+	expect(request.requestID).toBeTypeOf("string")
+	expect(isNaN(parseInt(request.requestID))).not.toBeNaN()
 
-	request.requestID = "0";
+	request.requestID = "0"
 
 	expect(request).toStrictEqual({
 		requestID: "0",
-		type: ctx.meta.name,
+		type: ctx.task.name,
 		data: dummyData,
-	});
-});
+	})
+})
 
 it("handles prefix", (ctx) => {
-	const request = createRequestMessage(ctx.meta.name, dummyData, "baz");
+	const request = createRequestMessage(ctx.task.name, dummyData, "baz")
 
-	expect(request.requestID.startsWith("baz")).toBe(true);
-});
+	expect(request.requestID.startsWith("baz")).toBe(true)
+})

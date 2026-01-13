@@ -1,13 +1,13 @@
 // Main
-export { SimulatorManager } from "./SimulatorManager";
-export { State } from "./State";
+export { SimulatorManager } from "./SimulatorManager"
+export { State } from "./State"
 
 // Defaults
 export {
 	getDefaultProps,
 	getDefaultSlices,
 	getDefaultMessage,
-} from "./getDefault";
+} from "./getDefault"
 
 // DOM helpers
 export {
@@ -15,19 +15,19 @@ export {
 	simulatorRootClass,
 	getSliceZoneDOM,
 	getActiveSliceDOM,
-} from "./domHelpers";
+} from "./domHelpers"
 
 // Events
-export { disableEventHandler, onClickHandler } from "./eventHandlers";
+export { disableEventHandler, onClickHandler } from "./eventHandlers"
 
 // Messages
-export { sliceSimulatorAccessedDirectly } from "./messages";
+export { sliceSimulatorAccessedDirectly } from "./messages"
 
 // Types
-export { StateEventType } from "./types";
+export { StateEventType } from "./types"
 export type {
 	StateEvents,
 	SliceSimulatorProps,
 	SliceSimulatorState,
 	SliceSimulatorOptions,
-} from "./types";
+} from "./types"

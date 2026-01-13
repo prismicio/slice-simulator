@@ -1,23 +1,25 @@
+import type {
+	APITransactions,
+	ClientTransactions} from "./types";
 import {
 	APIRequestType,
-	APITransactions,
-	ClientRequestType,
-	ClientTransactions,
-} from "./types";
+	ClientRequestType
+} from "./types"
 
-import { SimulatorAPIOptions } from "./SimulatorAPI";
-import {
+import type { SimulatorAPIOptions } from "./SimulatorAPI"
+import type {
 	AllChannelEmitterOptions,
-	ChannelEmitter,
 	TransactionMethod,
 	TransactionsHandlers,
-	TransactionsMethods,
-} from "./channel";
+	TransactionsMethods} from "./channel";
+import {
+	ChannelEmitter
+} from "./channel"
 
 export const simulatorClientDefaultOptions: Partial<AllChannelEmitterOptions> =
 	{
 		requestIDPrefix: "client-",
-	};
+	}
 
 export class SimulatorClient
 	extends ChannelEmitter<
@@ -35,16 +37,16 @@ export class SimulatorClient
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =
 			options?.debug ||
-			/[?&]debug=true/i.test(decodeURIComponent(window.location.search));
+			/[?&]debug=true/i.test(decodeURIComponent(window.location.search))
 
 		super(
 			target,
 			{
 				[APIRequestType.SetActiveSlice]: (_req, res) => {
-					return res.success();
+					return res.success()
 				},
 				[APIRequestType.SetSliceZoneSize]: (_req, res) => {
-					return res.success();
+					return res.success()
 				},
 				...requestHandlers,
 			},
@@ -53,30 +55,27 @@ export class SimulatorClient
 				...options,
 				debug,
 			},
-		);
+		)
 
 		// Append client to window object
 		if (debug) {
-			window.prismic ||= {};
-			window.prismic.sliceSimulator ||= {};
-			window.prismic.sliceSimulator.client ||= [];
-			window.prismic.sliceSimulator.client.push(this);
+			window.prismic ||= {}
+			window.prismic.sliceSimulator ||= {}
+			window.prismic.sliceSimulator.client ||= []
+			window.prismic.sliceSimulator.client.push(this)
 		}
 	}
 
 	[ClientRequestType.Ping]: TransactionMethod<
 		ClientTransactions[ClientRequestType.Ping]
 	> = async () => {
-		return await this.postFormattedRequest(ClientRequestType.Ping);
+		return await this.postFormattedRequest(ClientRequestType.Ping)
 	};
 
 	[ClientRequestType.SetSliceZone]: TransactionMethod<
 		ClientTransactions[ClientRequestType.SetSliceZone]
 	> = async (data) => {
-		return await this.postFormattedRequest(
-			ClientRequestType.SetSliceZone,
-			data,
-		);
+		return await this.postFormattedRequest(ClientRequestType.SetSliceZone, data)
 	};
 
 	[ClientRequestType.ScrollToSlice]: TransactionMethod<
@@ -85,6 +84,6 @@ export class SimulatorClient
 		return await this.postFormattedRequest(
 			ClientRequestType.ScrollToSlice,
 			data,
-		);
-	};
+		)
+	}
 }

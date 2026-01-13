@@ -1,29 +1,29 @@
-import { expect, it } from "vitest";
+import { expect, it } from "vitest"
 
 import {
 	createErrorResponseMessage,
 	createRequestMessage,
 	createSuccessResponseMessage,
 	isErrorResponseMessage,
-} from "../src/channel";
+} from "../src/channel"
 
-const dummyData = { foo: "bar" };
-const dummyError = dummyData;
+const dummyData = { foo: "bar" }
+const dummyError = dummyData
 
 it("returns false on request message", (ctx) => {
-	const request = createRequestMessage(ctx.meta.name, dummyData);
+	const request = createRequestMessage(ctx.task.name, dummyData)
 
-	expect(isErrorResponseMessage(request)).toBe(false);
-});
+	expect(isErrorResponseMessage(request)).toBe(false)
+})
 
 it("returns false on success response message", (ctx) => {
-	const response = createSuccessResponseMessage(ctx.meta.name, dummyData);
+	const response = createSuccessResponseMessage(ctx.task.name, dummyData)
 
-	expect(isErrorResponseMessage(response)).toBe(false);
-});
+	expect(isErrorResponseMessage(response)).toBe(false)
+})
 
 it("returns true on error response message", (ctx) => {
-	const response = createErrorResponseMessage(ctx.meta.name, dummyError);
+	const response = createErrorResponseMessage(ctx.task.name, dummyError)
 
-	expect(isErrorResponseMessage(response)).toBe(true);
-});
+	expect(isErrorResponseMessage(response)).toBe(true)
+})

@@ -1,101 +1,97 @@
-import { expect, it, vi } from "vitest";
+import { expect, it, vi } from "vitest"
 
-import {
-	getSliceZoneDOM,
-	simulatorClass,
-	simulatorRootClass,
-} from "../src/kit";
+import { getSliceZoneDOM, simulatorClass, simulatorRootClass } from "../src/kit"
 
 it("returns flagged Slice Zone if any", () => {
-	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
+	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`
 
-	const $sliceZone = getSliceZoneDOM(0);
+	const $sliceZone = getSliceZoneDOM(0)
 
-	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
-	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("");
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
+	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("")
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns flagged Slice Zone if any and warn if number of children is off", () => {
-	vi.stubGlobal("console", { ...console, warn: vi.fn() });
+	vi.stubGlobal("console", { ...console, warn: vi.fn() })
 
-	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`;
+	document.body.innerHTML = `<div class="${simulatorClass}"><div data-slice-zone></div></div>`
 
-	const $sliceZone = getSliceZoneDOM(1);
+	const $sliceZone = getSliceZoneDOM(1)
 
-	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
-	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("");
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
+	expect(($sliceZone as HTMLDivElement).dataset.sliceZone).toBe("")
 
-	expect(console.warn).toHaveBeenCalledOnce();
+	expect(console.warn).toHaveBeenCalledOnce()
 	expect(vi.mocked(console.warn).mock.calls[0][0]).toMatchInlineSnapshot(
 		'"Flagged SliceZone has an unexpected number of children, found 0 but expected 1. This might lead to unexpected behaviors. Are you sure you tagged the right element?"',
-	);
+	)
 
-	document.body.innerHTML = "";
+	document.body.innerHTML = ""
 
-	vi.restoreAllMocks();
-});
+	vi.restoreAllMocks()
+})
 
 it("returns null if simulator class is not found", () => {
-	document.body.innerHTML = "";
+	document.body.innerHTML = ""
 
-	const $sliceZone = getSliceZoneDOM(0);
+	const $sliceZone = getSliceZoneDOM(0)
 
-	expect($sliceZone).toBeNull();
+	expect($sliceZone).toBeNull()
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns null if simulator root class is not found", () => {
-	document.body.innerHTML = `<div class="${simulatorClass}"></div>`;
+	document.body.innerHTML = `<div class="${simulatorClass}"></div>`
 
-	const $sliceZone = getSliceZoneDOM(0);
+	const $sliceZone = getSliceZoneDOM(0)
 
-	expect($sliceZone).toBeNull();
+	expect($sliceZone).toBeNull()
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns null if simulator root has no children but children are expected", () => {
-	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
+	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`
 
-	const $sliceZone = getSliceZoneDOM(1);
+	const $sliceZone = getSliceZoneDOM(1)
 
-	expect($sliceZone).toBeNull();
+	expect($sliceZone).toBeNull()
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns simulator root when no children are expected", () => {
-	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`;
+	document.body.innerHTML = `<div class="${simulatorClass}"><div class="${simulatorRootClass}"></div></div>`
 
-	const $sliceZone = getSliceZoneDOM(0);
+	const $sliceZone = getSliceZoneDOM(0)
 
-	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
 	expect(
 		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
-	).toBe(true);
+	).toBe(true)
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns simulator root when matching the expected number of children", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
 	<div class="${simulatorRootClass}">
 		<section></section><section></section>
 	</div>
-</div>`;
+</div>`
 
-	const $sliceZone = getSliceZoneDOM(2);
+	const $sliceZone = getSliceZoneDOM(2)
 
-	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
 	expect(
 		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
-	).toBe(true);
+	).toBe(true)
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns first element matching the expected number of children from simulator root", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
@@ -104,17 +100,17 @@ it("returns first element matching the expected number of children from simulato
 			<section></section><section></section>
 		</div>
 	</div>
-</div>`;
+</div>`
 
-	const $sliceZone = getSliceZoneDOM(2);
+	const $sliceZone = getSliceZoneDOM(2)
 
-	expect($sliceZone).toBeInstanceOf(HTMLDivElement);
+	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
 	expect(($sliceZone as HTMLDivElement).classList.contains("slicezone")).toBe(
 		true,
-	);
+	)
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})
 
 it("returns null when Slice Zone is too deep", () => {
 	document.body.innerHTML = `<div class="${simulatorClass}">
@@ -125,11 +121,11 @@ it("returns null when Slice Zone is too deep", () => {
 			</div>
 		</div></div></div></div>
 	</div>
-</div>`;
+</div>`
 
-	const $sliceZone = getSliceZoneDOM(2);
+	const $sliceZone = getSliceZoneDOM(2)
 
-	expect($sliceZone).toBeNull();
+	expect($sliceZone).toBeNull()
 
-	document.body.innerHTML = "";
-});
+	document.body.innerHTML = ""
+})

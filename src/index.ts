@@ -1,10 +1,10 @@
 export {
 	SimulatorClient,
 	simulatorClientDefaultOptions,
-} from "./SimulatorClient";
+} from "./SimulatorClient"
 
-export { SimulatorAPI, simulatorAPIDefaultOptions } from "./SimulatorAPI";
-export type { SimulatorAPIOptions } from "./SimulatorAPI";
+export { SimulatorAPI, simulatorAPIDefaultOptions } from "./SimulatorAPI"
+export type { SimulatorAPIOptions } from "./SimulatorAPI"
 
 export {
 	// Validators
@@ -21,7 +21,7 @@ export {
 	NotReadyError,
 	PortNotSetError,
 	ChannelNotSetError,
-} from "./channel";
+} from "./channel"
 export type {
 	RequestMessage,
 	ResponseMessage,
@@ -29,14 +29,14 @@ export type {
 	SuccessResponseMessage,
 	AllChannelEmitterOptions,
 	AllChannelReceiverOptions,
-} from "./channel";
+} from "./channel"
 
-export { APIRequestType, ClientRequestType } from "./types";
+export { APIRequestType, ClientRequestType } from "./types"
 export type {
 	ActiveSlice,
 	SliceZoneSize,
 	APITransactions,
 	ClientTransactions,
-} from "./types";
+} from "./types"
 
-export * from "./globalExtensions";
+export * from "./globalExtensions"
