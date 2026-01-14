@@ -1,23 +1,23 @@
-export { ChannelNetwork, channelNetworkDefaultOptions } from "./ChannelNetwork";
+export { ChannelNetwork, channelNetworkDefaultOptions } from "./ChannelNetwork"
 export type {
 	PostRequestOptions,
 	ChannelNetworkOptions,
-} from "./ChannelNetwork";
+} from "./ChannelNetwork"
 
-export { ChannelEmitter, channelEmitterDefaultOptions } from "./ChannelEmitter";
+export { ChannelEmitter, channelEmitterDefaultOptions } from "./ChannelEmitter"
 export type {
 	ChannelEmitterOptions,
 	AllChannelEmitterOptions,
-} from "./ChannelEmitter";
+} from "./ChannelEmitter"
 
 export {
 	ChannelReceiver,
 	channelReceiverDefaultOptions,
-} from "./ChannelReceiver";
+} from "./ChannelReceiver"
 export type {
 	ChannelReceiverOptions,
 	AllChannelReceiverOptions,
-} from "./ChannelReceiver";
+} from "./ChannelReceiver"
 
 export {
 	createRequestMessage,
@@ -28,7 +28,7 @@ export {
 	isResponseMessage,
 	isSuccessResponseMessage,
 	isErrorResponseMessage,
-} from "./messages";
+} from "./messages"
 
 export {
 	ResponseError,
@@ -38,12 +38,12 @@ export {
 	NotReadyError,
 	PortNotSetError,
 	ChannelNotSetError,
-} from "./errors";
+} from "./errors"
 
 export {
 	InternalEmitterRequestType,
 	InternalReceiverRequestType,
-} from "./types";
+} from "./types"
 export type {
 	// Messages
 	RequestMessage,
@@ -72,4 +72,4 @@ export type {
 	InternalEmitterTransactions,
 	// Receiver
 	InternalReceiverTransactions,
-} from "./types";
+} from "./types"

@@ -1,6 +1,6 @@
-import { expect, it } from "vitest";
+import { expect, it } from "vitest"
 
-import { getDefaultProps } from "../src/kit";
+import { getDefaultProps } from "../src/kit"
 
 it("returns default props", () => {
 	expect(getDefaultProps()).toMatchInlineSnapshot(`
@@ -8,5 +8,5 @@ it("returns default props", () => {
 		  "background": "#ffffff",
 		  "zIndex": 100,
 		}
-	`);
-});
+	`)
+})

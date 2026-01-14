@@ -1,15 +1,15 @@
-import { expect, it, vi } from "vitest";
+import { expect, it, vi } from "vitest"
 
-import { disableEventHandler } from "../src/kit";
+import { disableEventHandler } from "../src/kit"
 
 it("prevents default and stops propagation", () => {
 	const event = {
 		preventDefault: vi.fn(),
 		stopPropagation: vi.fn(),
-	};
+	}
 
-	disableEventHandler(event as unknown as Event);
+	disableEventHandler(event as unknown as Event)
 
-	expect(event.preventDefault).toHaveBeenCalledOnce();
-	expect(event.stopPropagation).toHaveBeenCalledOnce();
-});
+	expect(event.preventDefault).toHaveBeenCalledOnce()
+	expect(event.stopPropagation).toHaveBeenCalledOnce()
+})

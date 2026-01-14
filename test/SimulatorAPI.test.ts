@@ -1,39 +1,40 @@
-import { expect, it, vi } from "vitest";
+import { expect, it, vi } from "vitest"
 
+import type {
+	APITransactions} from "../src";
 import {
 	APIRequestType,
-	APITransactions,
 	ClientRequestType,
 	SimulatorAPI,
-} from "../src";
-import { createRequestMessage } from "../src/channel";
+} from "../src"
+import { createRequestMessage } from "../src/channel"
 
 it("instantiates correctly", () => {
 	expect(
 		() =>
 			new SimulatorAPI({
 				[ClientRequestType.Ping]: (_req, res) => {
-					return res.success("pong");
+					return res.success("pong")
 				},
 				[ClientRequestType.SetSliceZone]: (_req, res) => {
-					return res.success();
+					return res.success()
 				},
 				[ClientRequestType.ScrollToSlice]: (_req, res) => {
-					return res.success();
+					return res.success()
 				},
 			}),
-	).not.toThrowError();
-});
+	).not.toThrowError()
+})
 
 it("instantiates correctly with defaults", () => {
 	const simulatorAPI = new SimulatorAPI({
 		[ClientRequestType.SetSliceZone]: (_req, res) => {
-			return res.success();
+			return res.success()
 		},
 		[ClientRequestType.ScrollToSlice]: (_req, res) => {
-			return res.success();
+			return res.success()
 		},
-	});
+	})
 
 	const [req, res] = [
 		createRequestMessage(ClientRequestType.Ping, undefined),
@@ -41,33 +42,33 @@ it("instantiates correctly with defaults", () => {
 			success: vi.fn(),
 			error: vi.fn(),
 		},
-	];
+	]
 
-	simulatorAPI.requestHandlers[ClientRequestType.Ping](req, res);
+	simulatorAPI.requestHandlers[ClientRequestType.Ping](req, res)
 
-	expect(res.success).toHaveBeenCalledOnce();
-	expect(res.error).not.toHaveBeenCalled();
-});
+	expect(res.success).toHaveBeenCalledOnce()
+	expect(res.error).not.toHaveBeenCalled()
+})
 
 it("registers instance on window object", () => {
-	expect("prismic" in window).toBe(false);
+	expect("prismic" in window).toBe(false)
 
 	const simulatorClient = new SimulatorAPI(
 		{
 			[ClientRequestType.SetSliceZone]: (_req, res) => {
-				return res.success();
+				return res.success()
 			},
 			[ClientRequestType.ScrollToSlice]: (_req, res) => {
-				return res.success();
+				return res.success()
 			},
 		},
 		{ debug: true },
-	);
+	)
 
-	expect(window?.prismic?.sliceSimulator?.api?.[0]).toBe(simulatorClient);
+	expect(window?.prismic?.sliceSimulator?.api?.[0]).toBe(simulatorClient)
 
-	delete window.prismic;
-});
+	delete window.prismic
+})
 
 const callsPostFormattedRequestCorrectly = <
 	TRequestType extends APIRequestType,
@@ -80,27 +81,27 @@ const callsPostFormattedRequestCorrectly = <
 	async () => {
 		const simulatorAPI = new SimulatorAPI({
 			[ClientRequestType.SetSliceZone]: (_req, res) => {
-				return res.success();
+				return res.success()
 			},
 			[ClientRequestType.ScrollToSlice]: (_req, res) => {
-				return res.success();
+				return res.success()
 			},
-		});
+		})
 
-		const postFormattedRequestStub = vi.fn();
+		const postFormattedRequestStub = vi.fn()
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		simulatorAPI.postFormattedRequest = postFormattedRequestStub;
+		simulatorAPI.postFormattedRequest = postFormattedRequestStub
 
 		// @ts-expect-error - TypeScript fails to match type with data
-		await simulatorAPI[requestType](requestData);
+		await simulatorAPI[requestType](requestData)
 
-		expect(postFormattedRequestStub).toHaveBeenCalledOnce();
-		expect(postFormattedRequestStub.mock.calls[0][0]).toBe(requestType);
-		expect(postFormattedRequestStub.mock.calls[0][1]).toBe(requestData);
+		expect(postFormattedRequestStub).toHaveBeenCalledOnce()
+		expect(postFormattedRequestStub.mock.calls[0][0]).toBe(requestType)
+		expect(postFormattedRequestStub.mock.calls[0][1]).toBe(requestData)
 	},
-];
+]
 
-it(...callsPostFormattedRequestCorrectly(APIRequestType.SetActiveSlice, null));
+it(...callsPostFormattedRequestCorrectly(APIRequestType.SetActiveSlice, null))
 it(
 	...callsPostFormattedRequestCorrectly(APIRequestType.SetSliceZoneSize, {
 		rect: {
@@ -115,4 +116,4 @@ it(
 			toJSON: () => "",
 		},
 	}),
-);
+)

@@ -1,18 +1,18 @@
-import type { SliceZone } from "@prismicio/client";
+import type { SliceZone } from "@prismicio/client"
 
-import { SliceSimulatorProps } from "./types";
+import type { SliceSimulatorProps } from "./types"
 
 export const getDefaultProps = (): Required<{
-	[K in keyof SliceSimulatorProps]: NonNullable<SliceSimulatorProps[K]>;
+	[K in keyof SliceSimulatorProps]: NonNullable<SliceSimulatorProps[K]>
 }> => ({
 	zIndex: 100,
 	background: "#ffffff",
-});
+})
 
 export const getDefaultSlices = (): SliceZone => {
-	return [];
-};
+	return []
+}
 
 export const getDefaultMessage = (): string => {
-	return "";
-};
+	return ""
+}

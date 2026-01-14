@@ -12,10 +12,6 @@ Replace all on all files (README.md, CONTRIBUTING.md, bug_report.md, package.jso
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
-[![Codecov][codecov-src]][codecov-href]
-[![Conventional Commits][conventional-commits-src]][conventional-commits-href]
-[![License][license-src]][license-href]
 
 Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
@@ -25,12 +21,13 @@ Preview and develop [Prismic][prismic] slices fast with minimal configuration.
 
 ## Install
 
-> **Warning**
-> 
+> [!WARNING]
+>
 > This is probably not the package you're looking for. For dedicated framework integrations, check out:
-> - [@slicemachine/adapter-next](https://prismic.io/docs/technical-reference/slicemachine-adapter-next)
-> - [@slicemachine/adapter-nuxt](https://prismic.io/docs/technical-reference/slicemachine-adapter-nuxt)
-> - [@slicemachine/adapter-nuxt2](https://prismic.io/docs/technical-reference/slicemachine-adapter-nuxt2)
+>
+> - [@prismicio/next](https://prismic.io/docs/technical-reference/prismicio-next)
+> - [@nuxtjs/prismic](https://prismic.io/docs/technical-reference/nuxtjs-prismic)
+> - [@prismicio/svelte](https://prismic.io/docs/technical-reference/prismicio-svelte)
 
 ```bash
 npm install @prismicio/simulator
@@ -57,7 +54,7 @@ For more clarity on this project and its structure you can also check out the de
 ## License
 
 ```
-   Copyright 2013-2023 Prismic <contact@prismic.io> (https://prismic.io)
+   Copyright 2013-2026 Prismic <contact@prismic.io> (https://prismic.io)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -95,11 +92,3 @@ For more clarity on this project and its structure you can also check out the de
 [npm-version-href]: https://npmjs.com/package/@prismicio/simulator
 [npm-downloads-src]: https://img.shields.io/npm/dm/@prismicio/simulator.svg
 [npm-downloads-href]: https://npmjs.com/package/@prismicio/simulator
-[github-actions-ci-src]: https://github.com/prismicio/slice-simulator/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/prismicio/slice-simulator/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/github/prismicio/slice-simulator.svg
-[codecov-href]: https://codecov.io/gh/prismicio/slice-simulator
-[conventional-commits-src]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white
-[conventional-commits-href]: https://conventionalcommits.org
-[license-src]: https://img.shields.io/npm/l/@prismicio/simulator.svg
-[license-href]: https://npmjs.com/package/@prismicio/simulator

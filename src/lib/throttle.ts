@@ -3,24 +3,24 @@ export const throttle = <TFn extends (...args: any[]) => any>(
 	fn: TFn,
 	delay = 16,
 ): ((...args: Parameters<TFn>) => void) => {
-	let lastExec = 0;
-	let timer: NodeJS.Timeout | null = null;
+	let lastExec = 0
+	let timer: NodeJS.Timeout | null = null
 
 	return function (this: unknown, ...args: Parameters<TFn>) {
-		const now = Date.now();
-		const delta = now - lastExec;
+		const now = Date.now()
+		const delta = now - lastExec
 
 		if (delta >= delay) {
-			fn.apply(this, args);
-			lastExec = now;
+			fn.apply(this, args)
+			lastExec = now
 		} else {
 			if (timer) {
-				clearTimeout(timer);
+				clearTimeout(timer)
 			}
 			timer = setTimeout(() => {
-				fn.apply(this, args);
-				lastExec = Date.now();
-			}, delay - delta);
+				fn.apply(this, args)
+				lastExec = Date.now()
+			}, delay - delta)
 		}
-	};
-};
+	}
+}

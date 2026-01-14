@@ -1,46 +1,48 @@
-import {
+import type {
 	ExtractSuccessResponseMessage,
-	InternalEmitterRequestType,
 	InternalEmitterTransactions,
-	InternalReceiverRequestType,
 	SuccessResponseMessage,
 	TransactionsHandlers,
 	UnknownRequestMessage,
 	UnknownResponseMessage,
-	UnknownTransaction,
-} from "./types";
+	UnknownTransaction} from "./types";
+import {
+	InternalEmitterRequestType,
+	InternalReceiverRequestType
+} from "./types"
 
 import {
 	ChannelNotSetError,
 	ConnectionTimeoutError,
 	NotReadyError,
-} from "./errors";
+} from "./errors"
 
-import {
-	ChannelNetwork,
+import type {
 	ChannelNetworkOptions,
-	PostRequestOptions,
-} from "./ChannelNetwork";
-import { AllChannelReceiverOptions } from "./ChannelReceiver";
+	PostRequestOptions} from "./ChannelNetwork";
+import {
+	ChannelNetwork
+} from "./ChannelNetwork"
+import type { AllChannelReceiverOptions } from "./ChannelReceiver"
 import {
 	createErrorResponseMessage,
 	createSuccessResponseMessage,
 	isRequestMessage,
 	validateMessage,
-} from "./messages";
+} from "./messages"
 
 export type ChannelEmitterOptions = {
-	connectTimeout: number;
-};
+	connectTimeout: number
+}
 
 export const channelEmitterDefaultOptions: ChannelEmitterOptions &
 	Partial<ChannelNetworkOptions> = {
 	connectTimeout: 20000,
 	requestIDPrefix: "emitter-",
-};
+}
 
 export type AllChannelEmitterOptions = ChannelEmitterOptions &
-	ChannelNetworkOptions;
+	ChannelNetworkOptions
 
 export abstract class ChannelEmitter<
 	TReceiverTransactions extends Record<string, UnknownTransaction> = Record<
@@ -53,30 +55,30 @@ export abstract class ChannelEmitter<
 	TReceiverTransactions,
 	ChannelEmitterOptions & TOptions
 > {
-	private _target: HTMLIFrameElement;
-	private _channel: MessageChannel | null = null;
+	private _target: HTMLIFrameElement
+	private _channel: MessageChannel | null = null
 	protected get channel(): MessageChannel {
 		if (!this._channel) {
-			throw new ChannelNotSetError();
+			throw new ChannelNotSetError()
 		}
 
-		return this._channel;
+		return this._channel
 	}
 	protected set channel(channel: MessageChannel | null) {
-		this._channel = channel;
+		this._channel = channel
 
 		// Update port automatically
 		if (this._channel) {
-			this.port = this._channel.port1;
+			this.port = this._channel.port1
 		} else {
-			this.port = null;
+			this.port = null
 		}
 	}
-	private _receiverReady = "";
-	private _receiverReadyCallback: (() => Promise<void>) | null = null;
-	private _connected = false;
+	private _receiverReady = ""
+	private _receiverReadyCallback: (() => Promise<void>) | null = null
+	private _connected = false
 	public get connected(): boolean {
-		return this._connected;
+		return this._connected
 	}
 
 	constructor(
@@ -84,13 +86,13 @@ export abstract class ChannelEmitter<
 		requestHandlers: TransactionsHandlers<TReceiverTransactions>,
 		options: Partial<AllChannelEmitterOptions> & TOptions,
 	) {
-		super(requestHandlers, { ...channelEmitterDefaultOptions, ...options });
+		super(requestHandlers, { ...channelEmitterDefaultOptions, ...options })
 
-		this._target = target;
+		this._target = target
 
 		window.addEventListener("message", (event) => {
-			this._onPublicMessage(event);
-		});
+			this._onPublicMessage(event)
+		})
 	}
 
 	/**
@@ -109,10 +111,10 @@ export abstract class ChannelEmitter<
 		newOrigin = false,
 	): Promise<SuccessResponseMessage> {
 		// Disconnect first
-		this.disconnect();
+		this.disconnect()
 		// If changing origin we'll need to wait for receiver to be ready again
 		if (newOrigin) {
-			this._receiverReady = "";
+			this._receiverReady = ""
 		}
 
 		// Handshake promise
@@ -123,28 +125,28 @@ export abstract class ChannelEmitter<
 				() => {
 					// Throw if target doesn't allow access to content window
 					if (!this._target.contentWindow) {
-						return reject(new Error("Target window is not available"));
+						return reject(new Error("Target window is not available"))
 					}
 
 					const receiverReadyTimeout = setTimeout(() => {
-						reject(new ConnectionTimeoutError());
-					}, this.options.connectTimeout);
+						reject(new ConnectionTimeoutError())
+					}, this.options.connectTimeout)
 
 					// Connect to target once ready
 					const receiverReadyCallback = async (): Promise<void> => {
 						// Clear receiver ready timeout
-						clearTimeout(receiverReadyTimeout);
+						clearTimeout(receiverReadyTimeout)
 
 						// Create new message channel (set up port automatically)
 						// This is done here to prevent transferable objects neutering
 						// when calling `connect()` multiple times
-						this.channel = new MessageChannel();
+						this.channel = new MessageChannel()
 
 						// Conclude handshake by sending message channel port to target
 						const request = this.createRequestMessage(
 							InternalEmitterRequestType.Connect,
 							receiverOptions,
-						);
+						)
 						const response = await this.postRequest<
 							InternalEmitterTransactions<
 								AllChannelReceiverOptions & TReceiverOptions
@@ -157,8 +159,8 @@ export abstract class ChannelEmitter<
 							// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 							this._target.contentWindow!.postMessage(request, "*", [
 								this.channel.port2,
-							]);
-						});
+							])
+						})
 
 						// Finish by aknowledging ready
 						this.postResponse(
@@ -166,82 +168,77 @@ export abstract class ChannelEmitter<
 							(response) => {
 								// Target content window is checked in previous statement
 								// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-								this._target.contentWindow!.postMessage(response, "*");
+								this._target.contentWindow!.postMessage(response, "*")
 							},
-						);
+						)
 
 						// If post request succeed, we're connected
-						this._connected = true;
+						this._connected = true
 
-						resolve(response);
-					};
+						resolve(response)
+					}
 
 					if (this._receiverReady) {
 						// If receiver is already ready, send port immediately
-						receiverReadyCallback();
+						receiverReadyCallback()
 					} else {
 						// Else wait for receiver to be ready
-						this._receiverReadyCallback = receiverReadyCallback;
+						this._receiverReadyCallback = receiverReadyCallback
 					}
 				},
 				{ once: true },
-			);
-		});
+			)
+		})
 	}
 
-	/**
-	 * Destroys current connection to receiver if any
-	 */
+	/** Destroys current connection to receiver if any */
 	disconnect(): void {
-		this._connected = false;
-		this.channel = null;
+		this._connected = false
+		this.channel = null
 	}
 
-	/**
-	 * Handles public messages
-	 */
+	/** Handles public messages */
 	private async _onPublicMessage(event: MessageEvent<unknown>): Promise<void> {
 		// Return is event is not from target
 		if (event.source !== this._target.contentWindow) {
-			return;
+			return
 		}
 
 		try {
-			const message = validateMessage(event.data);
+			const message = validateMessage(event.data)
 
 			if (isRequestMessage(message)) {
 				if (this.options.debug) {
 					// eslint-disable-next-line no-console
-					console.debug(event.data);
+					console.debug(event.data)
 				}
 
 				switch (message.type) {
 					case InternalReceiverRequestType.Ready:
-						this._receiverReady = message.requestID;
+						this._receiverReady = message.requestID
 
 						// If emitter is waiting for receiver to be ready
 						if (this._receiverReadyCallback) {
 							// We don't await the promise directly as we need to clear the callback first
-							const receiverReadyCallbackPromise =
-								this._receiverReadyCallback();
+							const receiverReadyCallbackPromise = this._receiverReadyCallback()
 
-							this._receiverReadyCallback = null;
+							this._receiverReadyCallback = null
 
-							await receiverReadyCallbackPromise;
+							await receiverReadyCallbackPromise
 						}
-						break;
+						break
 
 					default:
 						this.postResponse(
 							createErrorResponseMessage(message.requestID, undefined),
 							(response) => {
-								(event.source as WindowProxy).postMessage(
+								;(event.source as WindowProxy).postMessage(
 									response,
 									event.origin,
-								);
+								)
 							},
-						);
-						break;
+						)
+						break
 				}
 			} else {
 				// No response messages are expected on public channel
@@ -250,7 +247,7 @@ export abstract class ChannelEmitter<
 			if (error instanceof TypeError) {
 				// Ignore unknown messages
 			} else {
-				throw error;
+				throw error
 			}
 		}
 	}
@@ -266,13 +263,13 @@ export abstract class ChannelEmitter<
 		if (!this._connected) {
 			throw new NotReadyError(
 				"Emitter is not connected, use `ChannelEmitter.connect()` first",
-			);
+			)
 		}
 
 		return this.postRequest(
 			this.createRequestMessage(type, data),
 			undefined,
 			options,
-		);
+		)
 	}
 }

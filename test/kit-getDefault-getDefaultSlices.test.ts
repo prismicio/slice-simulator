@@ -1,7 +1,7 @@
-import { expect, it } from "vitest";
+import { expect, it } from "vitest"
 
-import { getDefaultSlices } from "../src/kit";
+import { getDefaultSlices } from "../src/kit"
 
 it("returns default slices", () => {
-	expect(getDefaultSlices()).toMatchInlineSnapshot("[]");
-});
+	expect(getDefaultSlices()).toMatchInlineSnapshot("[]")
+})

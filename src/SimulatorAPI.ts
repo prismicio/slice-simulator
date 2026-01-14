@@ -1,29 +1,31 @@
+import type {
+	APITransactions,
+	ClientTransactions} from "./types";
 import {
 	APIRequestType,
-	APITransactions,
-	ClientRequestType,
-	ClientTransactions,
-} from "./types";
+	ClientRequestType
+} from "./types"
 
-import {
+import type {
 	AllChannelReceiverOptions,
-	ChannelReceiver,
 	TransactionMethod,
 	TransactionsHandlers,
-	TransactionsMethods,
-} from "./channel";
+	TransactionsMethods} from "./channel";
+import {
+	ChannelReceiver
+} from "./channel"
 
 export type SimulatorAPIOptions = {
-	activeSliceAPI: boolean;
-	sliceZoneSizeAPI: boolean;
-};
+	activeSliceAPI: boolean
+	sliceZoneSizeAPI: boolean
+}
 
 export const simulatorAPIDefaultOptions: Partial<AllChannelReceiverOptions> &
 	SimulatorAPIOptions = {
 	requestIDPrefix: "api-",
 	activeSliceAPI: false,
 	sliceZoneSizeAPI: false,
-};
+}
 
 export class SimulatorAPI
 	extends ChannelReceiver<ClientTransactions, SimulatorAPIOptions>
@@ -42,12 +44,12 @@ export class SimulatorAPI
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =
 			options?.debug ||
-			/[?&]debug=true/i.test(decodeURIComponent(window.location.search));
+			/[?&]debug=true/i.test(decodeURIComponent(window.location.search))
 
 		super(
 			{
 				[ClientRequestType.Ping]: (_req, res) => {
-					return res.success("pong");
+					return res.success("pong")
 				},
 				...requestHandlers,
 			},
@@ -56,21 +58,21 @@ export class SimulatorAPI
 				...options,
 				debug,
 			},
-		);
+		)
 
 		// Append API to window object
 		if (debug) {
-			window.prismic ||= {};
-			window.prismic.sliceSimulator ||= {};
-			window.prismic.sliceSimulator.api ||= [];
-			window.prismic.sliceSimulator.api.push(this);
+			window.prismic ||= {}
+			window.prismic.sliceSimulator ||= {}
+			window.prismic.sliceSimulator.api ||= []
+			window.prismic.sliceSimulator.api.push(this)
 		}
 	}
 
 	[APIRequestType.SetActiveSlice]: TransactionMethod<
 		APITransactions[APIRequestType.SetActiveSlice]
 	> = async (data) => {
-		return await this.postFormattedRequest(APIRequestType.SetActiveSlice, data);
+		return await this.postFormattedRequest(APIRequestType.SetActiveSlice, data)
 	};
 
 	[APIRequestType.SetSliceZoneSize]: TransactionMethod<
@@ -79,6 +81,6 @@ export class SimulatorAPI
 		return await this.postFormattedRequest(
 			APIRequestType.SetSliceZoneSize,
 			data,
-		);
-	};
+		)
+	}
 }
