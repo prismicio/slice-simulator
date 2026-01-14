@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/prismicio/slice-simulator/compare/v0.1.4...v0.2.0) (2026-01-14)
+
+
+### Features
+
+* turn `@prismicio/client` into a peer dependency ([930d7f5](https://github.com/prismicio/slice-simulator/commit/930d7f5e95256e7753a9d2d69af3f8a4f5f43686))
+
+
+### Bug Fixes
+
+* typo ([5fbfa7c](https://github.com/prismicio/slice-simulator/commit/5fbfa7c2cf9a13e5124041247a5703a0e264f862))
+
 ### [0.1.4](https://github.com///compare/v0.1.3...v0.1.4) (2023-06-15)
 
 
