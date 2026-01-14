@@ -52,12 +52,10 @@
 		"unit:watch": "vitest watch",
 		"test": "npm run lint && npm run types && npm run unit && npm run build"
 	},
-	"dependencies": {
-		"@prismicio/client": "^7.21.3"
-	},
 	"devDependencies": {
+		"@prismicio/client": "^7.21.3",
 		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
-		"@types/node": "25.0.7",
+		"@types/node": "25.0.8",
 		"@vitest/coverage-v8": "^4.0.17",
 		"jsdom": "^27.4.0",
 		"oxlint": "^1.39.0",
@@ -66,6 +64,9 @@
 		"tsdown": "^0.19.0",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.17"
+	},
+	"peerDependencies": {
+		"@prismicio/client": "^7"
 	},
 	"engines": {
 		"node": ">=14.15.0"
