@@ -62,7 +62,7 @@ export const createErrorResponseMessage = <TError = undefined>(
 ): ErrorResponseMessage<TError> => {
 	if (status < 400) {
 		throw new TypeError(
-			`Invalid error status code, expected status to be within \`[500;600[\`, got \`${status}\``,
+			`Invalid error status code, expected status to be within \`[400;600[\`, got \`${status}\``,
 		)
 	}
 
