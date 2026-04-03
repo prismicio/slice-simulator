@@ -10,8 +10,6 @@ import {
 
 class StandaloneChannelReceiver extends ChannelReceiver {}
 
-const dummyData = { foo: "bar" }
-
 // --- Inbound origin validation ---
 
 it("silently drops messages from non-matching origins when allowedOrigin is set", () => {
