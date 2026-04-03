@@ -7,20 +7,20 @@ import type {
 	TransactionsHandlers,
 	UnknownRequestMessage,
 	UnknownResponseMessage,
-	UnknownTransaction} from "./types";
+	UnknownTransaction,
+} from "./types"
 import {
 	InternalEmitterRequestType,
-	InternalReceiverRequestType
+	InternalReceiverRequestType,
 } from "./types"
 
 import { NotReadyError } from "./errors"
 
 import type {
 	ChannelNetworkOptions,
-	PostRequestOptions} from "./ChannelNetwork";
-import {
-	ChannelNetwork
+	PostRequestOptions,
 } from "./ChannelNetwork"
+import { ChannelNetwork } from "./ChannelNetwork"
 import {
 	createErrorResponseMessage,
 	createSuccessResponseMessage,
@@ -30,12 +30,14 @@ import {
 
 export type ChannelReceiverOptions = {
 	readyTimeout: number
+	allowedOrigin: string | null
 }
 
 export const channelReceiverDefaultOptions: ChannelReceiverOptions &
 	Partial<ChannelNetworkOptions> = {
 	readyTimeout: 20000,
 	requestIDPrefix: "receiver-",
+	allowedOrigin: null,
 }
 
 export type AllChannelReceiverOptions = ChannelReceiverOptions &
@@ -83,7 +85,7 @@ export abstract class ChannelReceiver<
 		>(
 			request,
 			(request) => {
-				window.parent.postMessage(request, "*")
+				window.parent.postMessage(request, this.options.allowedOrigin ?? "*")
 			},
 			{
 				timeout: this.options.readyTimeout,
@@ -97,6 +99,14 @@ export abstract class ChannelReceiver<
 
 	/** Handles public messages */
 	private _onPublicMessage(event: MessageEvent<unknown>): void {
+		// Validate origin if allowedOrigin is configured
+		if (
+			this.options.allowedOrigin &&
+			this.options.allowedOrigin !== event.origin
+		) {
+			return
+		}
+
 		try {
 			const message = validateMessage(event.data)
 
@@ -121,6 +131,7 @@ export abstract class ChannelReceiver<
 							debug: this.options.debug,
 							requestIDPrefix: this.options.requestIDPrefix,
 							readyTimeout: this.options.readyTimeout,
+							allowedOrigin: this.options.allowedOrigin,
 						}
 
 						const response = createSuccessResponseMessage(

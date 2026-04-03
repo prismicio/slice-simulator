@@ -18,17 +18,20 @@ import { sliceSimulatorAccessedDirectly } from "./messages"
 
 type ManagerConstructorArgs = {
 	slices?: SliceZone
+	allowedOrigin?: string
 }
 
 export class SimulatorManager {
 	public state: State
 	private _api: SimulatorAPI | null
 	private _initialized: boolean
+	private _allowedOrigin: string | null
 
 	constructor(args?: ManagerConstructorArgs) {
 		this.state = new State(args)
 		this._api = null
 		this._initialized = false
+		this._allowedOrigin = args?.allowedOrigin ?? null
 	}
 
 	async init(): Promise<void> {
@@ -64,54 +67,59 @@ export class SimulatorManager {
 
 	private async _initAPI(): Promise<void> {
 		// Register SimulatorAPI request handlers
-		this._api = new SimulatorAPI({
-			[ClientRequestType.SetSliceZone]: (req, res) => {
-				this.state.setSliceZone(req.data)
+		this._api = new SimulatorAPI(
+			{
+				[ClientRequestType.SetSliceZone]: (req, res) => {
+					this.state.setSliceZone(req.data)
 
-				return res.success()
+					return res.success()
+				},
+				[ClientRequestType.ScrollToSlice]: (req, res) => {
+					// Error if `sliceIndex` is invalid
+					if (req.data.sliceIndex < 0) {
+						return res.error("`sliceIndex` must be > 0", 400)
+					} else if (req.data.sliceIndex >= this.state.slices.length) {
+						return res.error(
+							`\`sliceIndex\` must be < ${this.state.slices.length} (\`<SliceZone />\` current length)`,
+							400,
+						)
+					}
+
+					const $sliceZone = getSliceZoneDOM(this.state.slices.length)
+					if (!$sliceZone) {
+						return res.error("Failed to find `<SliceZone />`", 500)
+					}
+
+					// Destroy existing active slice as we're about to scroll
+					this.state.activeSlice = null
+
+					const $slice = $sliceZone.children[req.data.sliceIndex]
+					if (!$slice) {
+						return res.error(
+							`Failed fo find slice at index $\`{req.data.sliceIndex}\` in \`<SliceZone />\``,
+							500,
+						)
+					}
+
+					// Scroll to Slice
+					$slice.scrollIntoView({
+						behavior: req.data.behavior,
+						block: req.data.block,
+						inline: req.data.inline,
+					})
+
+					// Update active slice after scrolling
+					if (this._api?.options.activeSliceAPI) {
+						setTimeout(this.state.setActiveSlice, 750)
+					}
+
+					return res.success()
+				},
 			},
-			[ClientRequestType.ScrollToSlice]: (req, res) => {
-				// Error if `sliceIndex` is invalid
-				if (req.data.sliceIndex < 0) {
-					return res.error("`sliceIndex` must be > 0", 400)
-				} else if (req.data.sliceIndex >= this.state.slices.length) {
-					return res.error(
-						`\`sliceIndex\` must be < ${this.state.slices.length} (\`<SliceZone />\` current length)`,
-						400,
-					)
-				}
-
-				const $sliceZone = getSliceZoneDOM(this.state.slices.length)
-				if (!$sliceZone) {
-					return res.error("Failed to find `<SliceZone />`", 500)
-				}
-
-				// Destroy existing active slice as we're about to scroll
-				this.state.activeSlice = null
-
-				const $slice = $sliceZone.children[req.data.sliceIndex]
-				if (!$slice) {
-					return res.error(
-						`Failed fo find slice at index $\`{req.data.sliceIndex}\` in \`<SliceZone />\``,
-						500,
-					)
-				}
-
-				// Scroll to Slice
-				$slice.scrollIntoView({
-					behavior: req.data.behavior,
-					block: req.data.block,
-					inline: req.data.inline,
-				})
-
-				// Update active slice after scrolling
-				if (this._api?.options.activeSliceAPI) {
-					setTimeout(this.state.setActiveSlice, 750)
-				}
-
-				return res.success()
+			{
+				allowedOrigin: this._allowedOrigin,
 			},
-		})
+		)
 
 		// Mark API as ready
 		await this._api.ready()
