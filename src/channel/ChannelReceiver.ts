@@ -85,7 +85,10 @@ export abstract class ChannelReceiver<
 		>(
 			request,
 			(request) => {
-				window.parent.postMessage(request, this.options.allowedOrigin ?? "*")
+				window.parent.postMessage(
+					request,
+					this.options.allowedOrigin ? this.options.allowedOrigin : "*",
+				)
 			},
 			{
 				timeout: this.options.readyTimeout,
