@@ -1,12 +1,7 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	APITransactions} from "../src";
-import {
-	APIRequestType,
-	ClientRequestType,
-	SimulatorAPI,
-} from "../src"
+import type { APITransactions } from "../src"
+import { APIRequestType, ClientRequestType, SimulatorAPI } from "../src"
 import { createRequestMessage } from "../src/channel"
 
 it("instantiates correctly", () => {
@@ -100,6 +95,35 @@ const callsPostFormattedRequestCorrectly = <
 		expect(postFormattedRequestStub.mock.calls[0][1]).toBe(requestData)
 	},
 ]
+
+it("passes allowedOrigin through to receiver options", () => {
+	const simulatorAPI = new SimulatorAPI(
+		{
+			[ClientRequestType.SetSliceZone]: (_req, res) => {
+				return res.success()
+			},
+			[ClientRequestType.ScrollToSlice]: (_req, res) => {
+				return res.success()
+			},
+		},
+		{ allowedOrigin: "https://example.com" },
+	)
+
+	expect(simulatorAPI.options.allowedOrigin).toBe("https://example.com")
+})
+
+it("defaults allowedOrigin to null when not provided", () => {
+	const simulatorAPI = new SimulatorAPI({
+		[ClientRequestType.SetSliceZone]: (_req, res) => {
+			return res.success()
+		},
+		[ClientRequestType.ScrollToSlice]: (_req, res) => {
+			return res.success()
+		},
+	})
+
+	expect(simulatorAPI.options.allowedOrigin).toBeNull()
+})
 
 it(...callsPostFormattedRequestCorrectly(APIRequestType.SetActiveSlice, null))
 it(
