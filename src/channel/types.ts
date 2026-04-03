@@ -119,7 +119,10 @@ export type InternalEmitterTransactions<
 		RequestMessage<
 			InternalEmitterRequestType.Connect,
 			| Partial<
-					Omit<TReceiverOptions, "debug" | "requestIDPrefix" | "readyTimeout">
+					Omit<
+						TReceiverOptions,
+						"debug" | "requestIDPrefix" | "readyTimeout" | "allowedOrigin"
+					>
 			  >
 			| undefined
 		>
