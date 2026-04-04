@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.1](https://github.com/prismicio/slice-simulator/compare/v0.2.0...v0.2.1) (2026-04-04)
+
+
+### Bug Fixes
+
+* update dependencies ([a0bdcb9](https://github.com/prismicio/slice-simulator/commit/a0bdcb97020b64e84032051c8737a87da7562b4a))
+
 ## [0.2.0](https://github.com/prismicio/slice-simulator/compare/v0.1.4...v0.2.0) (2026-01-14)
 
 ### Features
