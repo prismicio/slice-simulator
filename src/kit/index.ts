@@ -3,11 +3,7 @@ export { SimulatorManager } from "./SimulatorManager"
 export { State } from "./State"
 
 // Defaults
-export {
-	getDefaultProps,
-	getDefaultSlices,
-	getDefaultMessage,
-} from "./getDefault"
+export { getDefaultProps, getDefaultSlices, getDefaultMessage } from "./getDefault"
 
 // DOM helpers
 export {

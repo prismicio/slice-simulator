@@ -1,3 +1,17 @@
+import {
+	PortNotSetError,
+	RequestTimeoutError,
+	ResponseError,
+	TooManyConcurrentRequestsError,
+} from "./errors"
+import {
+	createErrorResponseMessage,
+	createRequestMessage,
+	createSuccessResponseMessage,
+	isRequestMessage,
+	isSuccessResponseMessage,
+	validateMessage,
+} from "./messages"
 import type {
 	ExtractErrorResponseMessage,
 	ExtractSuccessResponseMessage,
@@ -7,22 +21,6 @@ import type {
 	UnknownResponseMessage,
 	UnknownTransaction,
 } from "./types"
-
-import {
-	PortNotSetError,
-	RequestTimeoutError,
-	ResponseError,
-	TooManyConcurrentRequestsError,
-} from "./errors"
-
-import {
-	createErrorResponseMessage,
-	createRequestMessage,
-	createSuccessResponseMessage,
-	isRequestMessage,
-	isSuccessResponseMessage,
-	validateMessage,
-} from "./messages"
 
 export type PostRequestOptions = {
 	timeout?: number
@@ -43,10 +41,7 @@ export const channelNetworkDefaultOptions: ChannelNetworkOptions = {
 }
 
 export abstract class ChannelNetwork<
-	TPartnerTransactions extends Record<string, UnknownTransaction> = Record<
-		string,
-		never
-	>,
+	TPartnerTransactions extends Record<string, UnknownTransaction> = Record<string, never>,
 	TOptions extends Record<string, unknown> = Record<string, unknown>,
 > {
 	public requestHandlers: TransactionsHandlers<TPartnerTransactions>
@@ -101,41 +96,27 @@ export abstract class ChannelNetwork<
 
 			if (isRequestMessage(message)) {
 				if (!this.requestHandlers[message.type]) {
-					this.postResponse(
-						createErrorResponseMessage(message.requestID, undefined, 501),
-					)
+					this.postResponse(createErrorResponseMessage(message.requestID, undefined, 501))
 				} else {
 					try {
 						// TODO: Figure out why type cannot be inferred on its own anymore
 						const response = await this.requestHandlers[message.type](message, {
-							success: createSuccessResponseMessage.bind(
-								this,
-								message.requestID,
-							) as Parameters<
+							success: createSuccessResponseMessage.bind(this, message.requestID) as Parameters<
 								(typeof this.requestHandlers)[string]
 							>[1]["success"],
-							error: createErrorResponseMessage.bind(
-								this,
-								message.requestID,
-							) as Parameters<
+							error: createErrorResponseMessage.bind(this, message.requestID) as Parameters<
 								(typeof this.requestHandlers)[string]
 							>[1]["error"],
 						})
 
 						this.postResponse(response)
 					} catch (error) {
-						this.postResponse(
-							createErrorResponseMessage(message.requestID, error, 500),
-						)
+						this.postResponse(createErrorResponseMessage(message.requestID, error, 500))
 					}
 				}
 			} else {
 				if (!this._pendingRequests.has(message.requestID)) {
-					console.error(
-						`Unknown request ID received in response: ${JSON.stringify(
-							message,
-						)}`,
-					)
+					console.error(`Unknown request ID received in response: ${JSON.stringify(message)}`)
 				} else {
 					// Pending requests are checked in previous statement
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -170,37 +151,31 @@ export abstract class ChannelNetwork<
 			throw new TooManyConcurrentRequestsError(request)
 		}
 
-		return new Promise<ExtractSuccessResponseMessage<TResponse>>(
-			(resolve, reject) => {
-				const requestTimeout = setTimeout(() => {
-					if (this._pendingRequests.has(request.requestID)) {
-						this._pendingRequests.delete(request.requestID)
-					}
-					reject(new RequestTimeoutError(request))
-				}, options.timeout || this.options.defaultTimeout)
+		return new Promise<ExtractSuccessResponseMessage<TResponse>>((resolve, reject) => {
+			const requestTimeout = setTimeout(() => {
+				if (this._pendingRequests.has(request.requestID)) {
+					this._pendingRequests.delete(request.requestID)
+				}
+				reject(new RequestTimeoutError(request))
+			}, options.timeout || this.options.defaultTimeout)
 
-				this._pendingRequests.set(
-					request.requestID,
-					(response: TResponse): void => {
-						clearTimeout(requestTimeout)
+			this._pendingRequests.set(request.requestID, (response: TResponse): void => {
+				clearTimeout(requestTimeout)
 
-						if (isSuccessResponseMessage(response)) {
-							resolve(response as ExtractSuccessResponseMessage<TResponse>)
-						} else {
-							reject(new ResponseError(response as ExtractErrorResponseMessage<TResponse>))
-						}
-					},
-				)
+				if (isSuccessResponseMessage(response)) {
+					resolve(response as ExtractSuccessResponseMessage<TResponse>)
+				} else {
+					reject(new ResponseError(response as ExtractErrorResponseMessage<TResponse>))
+				}
+			})
 
-				postMessage(request)
-			},
-		)
+			postMessage(request)
+		})
 	}
 
 	protected postResponse<TResponse extends UnknownResponseMessage>(
 		response: TResponse,
-		postMessage = (response: TResponse): void =>
-			this.port.postMessage(response),
+		postMessage = (response: TResponse): void => this.port.postMessage(response),
 	): TResponse {
 		if (this.options.debug) {
 			// eslint-disable-next-line no-console

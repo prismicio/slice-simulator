@@ -69,9 +69,7 @@ it("returns simulator root when no children are expected", () => {
 	const $sliceZone = getSliceZoneDOM(0)
 
 	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
-	expect(
-		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
-	).toBe(true)
+	expect(($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass)).toBe(true)
 
 	document.body.innerHTML = ""
 })
@@ -86,9 +84,7 @@ it("returns simulator root when matching the expected number of children", () =>
 	const $sliceZone = getSliceZoneDOM(2)
 
 	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
-	expect(
-		($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass),
-	).toBe(true)
+	expect(($sliceZone as HTMLDivElement).classList.contains(simulatorRootClass)).toBe(true)
 
 	document.body.innerHTML = ""
 })
@@ -105,9 +101,7 @@ it("returns first element matching the expected number of children from simulato
 	const $sliceZone = getSliceZoneDOM(2)
 
 	expect($sliceZone).toBeInstanceOf(HTMLDivElement)
-	expect(($sliceZone as HTMLDivElement).classList.contains("slicezone")).toBe(
-		true,
-	)
+	expect(($sliceZone as HTMLDivElement).classList.contains("slicezone")).toBe(true)
 
 	document.body.innerHTML = ""
 })

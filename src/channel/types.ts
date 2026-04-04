@@ -27,13 +27,15 @@ export type ResponseMessage<TData = void, TError = unknown> =
 	| SuccessResponseMessage<TData>
 	| ErrorResponseMessage<TError>
 
-export type ExtractSuccessResponseMessage<
-	TResponse extends UnknownResponseMessage,
-> = Extract<TResponse, { error?: never }>
+export type ExtractSuccessResponseMessage<TResponse extends UnknownResponseMessage> = Extract<
+	TResponse,
+	{ error?: never }
+>
 
-export type ExtractErrorResponseMessage<
-	TResponse extends UnknownResponseMessage,
-> = Extract<TResponse, { data?: never }>
+export type ExtractErrorResponseMessage<TResponse extends UnknownResponseMessage> = Extract<
+	TResponse,
+	{ data?: never }
+>
 
 // Unknown messages
 export type UnknownRequestMessage = RequestMessage<string, unknown>
@@ -42,9 +44,7 @@ export type UnknownSuccessResponseMessage = SuccessResponseMessage<unknown>
 
 export type UnknownErrorResponseMessage = ErrorResponseMessage<unknown>
 
-export type UnknownResponseMessage =
-	| UnknownSuccessResponseMessage
-	| UnknownErrorResponseMessage
+export type UnknownResponseMessage = UnknownSuccessResponseMessage | UnknownErrorResponseMessage
 
 export type UnknownMessage = UnknownRequestMessage | UnknownResponseMessage
 
@@ -58,19 +58,13 @@ export type Transaction<
 }
 
 export type TransactionMethod<
-	TTransaction extends Transaction<
-		UnknownRequestMessage,
-		UnknownResponseMessage
-	>,
+	TTransaction extends Transaction<UnknownRequestMessage, UnknownResponseMessage>,
 > = (
 	data: TTransaction["request"]["data"],
 ) => Promise<ExtractSuccessResponseMessage<TTransaction["response"]>>
 
 export type TransactionHandler<
-	TTransaction extends Transaction<
-		UnknownRequestMessage,
-		UnknownResponseMessage
-	>,
+	TTransaction extends Transaction<UnknownRequestMessage, UnknownResponseMessage>,
 > = (
 	request: TTransaction["request"],
 	response: {
@@ -85,23 +79,16 @@ export type TransactionHandler<
 	},
 ) => Promise<TTransaction["response"]> | TTransaction["response"]
 
-export type TransactionsMethods<
-	TTransactions extends Record<string, UnknownTransaction>,
-> = {
+export type TransactionsMethods<TTransactions extends Record<string, UnknownTransaction>> = {
 	[Key in keyof TTransactions]: TransactionMethod<TTransactions[Key]>
 }
 
-export type TransactionsHandlers<
-	TTransactions extends Record<string, UnknownTransaction>,
-> = {
+export type TransactionsHandlers<TTransactions extends Record<string, UnknownTransaction>> = {
 	[Key in keyof TTransactions]: TransactionHandler<TTransactions[Key]>
 }
 
 // Unknown transactions
-export type UnknownTransaction = Transaction<
-	UnknownRequestMessage,
-	UnknownResponseMessage
->
+export type UnknownTransaction = Transaction<UnknownRequestMessage, UnknownResponseMessage>
 
 export type UnknownTransactionMethod = TransactionMethod<UnknownTransaction>
 
@@ -118,10 +105,7 @@ export type InternalEmitterTransactions<
 	[InternalEmitterRequestType.Connect]: Transaction<
 		RequestMessage<
 			InternalEmitterRequestType.Connect,
-			| Partial<
-					Omit<TReceiverOptions, "debug" | "requestIDPrefix" | "readyTimeout">
-			  >
-			| undefined
+			Partial<Omit<TReceiverOptions, "debug" | "requestIDPrefix" | "readyTimeout">> | undefined
 		>
 	>
 }

@@ -14,21 +14,15 @@ export abstract class EventEmitter<TEventMap = EventMap> {
 		listener: Listener<TEventMap[TEventType]>,
 		key: string | null = null,
 	): void {
-		this._listeners[event] = [
-			...(this._listeners[event] ?? []),
-			[listener, key],
-		]
+		this._listeners[event] = [...(this._listeners[event] ?? []), [listener, key]]
 	}
 
 	off<TEventType extends keyof TEventMap>(
 		event: TEventType,
 		listenerOrKey: Listener<TEventMap[TEventType]> | string,
 	): void {
-		this._listeners[event] = (this._listeners[event] ?? []).filter(
-			([listener, key]) =>
-				typeof listenerOrKey === "function"
-					? listener !== listenerOrKey
-					: key !== listenerOrKey,
+		this._listeners[event] = (this._listeners[event] ?? []).filter(([listener, key]) =>
+			typeof listenerOrKey === "function" ? listener !== listenerOrKey : key !== listenerOrKey,
 		)
 	}
 

@@ -66,10 +66,7 @@ it("posts valid requests to its partner and throws error response", async (ctx) 
 })
 
 it("posts valid requests to its partner and timeout after set default timeout", async (ctx) => {
-	const channelNetwork = new StandaloneChannelNetwork(
-		{},
-		{ defaultTimeout: 100 },
-	)
+	const channelNetwork = new StandaloneChannelNetwork({}, { defaultTimeout: 100 })
 
 	const channel = new MessageChannel()
 
@@ -89,9 +86,7 @@ it("posts valid requests to its partner and timeout after set default timeout", 
 		}, 1000)
 
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(
-			RequestTimeoutError,
-		)
+		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(RequestTimeoutError)
 
 		clearTimeout(timeout)
 
@@ -136,10 +131,7 @@ it("posts valid requests to its partner and timeout after set specific timeout",
 
 // Not sure about how that behavior is possible, reads absurd
 it("posts valid requests to its partner and timeout even if pending request cannot be found", async (ctx) => {
-	const channelNetwork = new StandaloneChannelNetwork(
-		{},
-		{ defaultTimeout: 100 },
-	)
+	const channelNetwork = new StandaloneChannelNetwork({}, { defaultTimeout: 100 })
 
 	const channel = new MessageChannel()
 
@@ -161,9 +153,7 @@ it("posts valid requests to its partner and timeout even if pending request cann
 		}, 1000)
 
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(
-			RequestTimeoutError,
-		)
+		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(RequestTimeoutError)
 
 		clearTimeout(timeout)
 
@@ -229,12 +219,9 @@ it("uses provided post message method", async (ctx) => {
 	}
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	const receivedResponse = await channelNetwork.postRequest(
-		request,
-		(request) => {
-			onmessage({ data: request } as MessageEvent<unknown>)
-		},
-	)
+	const receivedResponse = await channelNetwork.postRequest(request, (request) => {
+		onmessage({ data: request } as MessageEvent<unknown>)
+	})
 
 	expect(receivedResponse).toStrictEqual(response)
 })

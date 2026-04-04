@@ -36,9 +36,7 @@ it("forwards request to default post request handler once ready", (ctx) => {
 	})
 
 	expect(postRequestStub).toHaveBeenCalledOnce()
-	expect(postRequestStub.mock.calls[0][0].requestID.replace(/\d+/, "")).toBe(
-		ctx.task.name,
-	)
+	expect(postRequestStub.mock.calls[0][0].requestID.replace(/\d+/, "")).toBe(ctx.task.name)
 	expect(postRequestStub.mock.calls[0][0].type).toBe(ctx.task.name)
 	expect(postRequestStub.mock.calls[0][0].data).toBe(dummyData)
 	expect(postRequestStub.mock.calls[0][1]).toBeUndefined()

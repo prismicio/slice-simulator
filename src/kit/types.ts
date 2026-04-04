@@ -1,7 +1,6 @@
 import type { SliceZone } from "@prismicio/client"
 
 import type { ActiveSlice } from "../types"
-
 import type { SimulatorManager } from "./SimulatorManager"
 
 export enum StateEventType {

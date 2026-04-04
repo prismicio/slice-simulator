@@ -19,9 +19,7 @@ it("gets wired to public message events on class instantiation", () => {
 
 	const onPublicMessageStub = vi.fn()
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	vi.spyOn(channelEmitter, "_onPublicMessage").mockImplementation(
-		onPublicMessageStub,
-	)
+	vi.spyOn(channelEmitter, "_onPublicMessage").mockImplementation(onPublicMessageStub)
 
 	const event = new MessageEvent("message", {
 		data: dummyData,
@@ -36,11 +34,7 @@ it("gets wired to public message events on class instantiation", () => {
 it("debug logs messages when on debug mode", async (ctx) => {
 	vi.stubGlobal("console", { ...console, debug: vi.fn() })
 
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ debug: true },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { debug: true })
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
@@ -62,11 +56,7 @@ it("debug logs messages when on debug mode", async (ctx) => {
 it("doesn't debug log messages when not on debug mode", async (ctx) => {
 	vi.stubGlobal("console", { ...console, debug: vi.fn() })
 
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ debug: false },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { debug: false })
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
@@ -85,11 +75,7 @@ it("ignores event not coming from target", async (ctx) => {
 	// Using debug mode as a way to make sure function returns early
 	vi.stubGlobal("console", { ...console, debug: vi.fn() })
 
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ debug: true },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { debug: true })
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
@@ -121,11 +107,7 @@ it("throws on other errors", async (ctx) => {
 		},
 	})
 
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ debug: true },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { debug: true })
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
@@ -143,10 +125,7 @@ it("throws on other errors", async (ctx) => {
 it("accepts ready requests", async () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
-	const request = createRequestMessage(
-		InternalReceiverRequestType.Ready,
-		dummyData,
-	)
+	const request = createRequestMessage(InternalReceiverRequestType.Ready, dummyData)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({
@@ -165,10 +144,7 @@ it("accepts ready requests and call `receiverReadyCallback` when available", asy
 	// @ts-expect-error - taking a shortcut by accessing private property
 	channelEmitter._receiverReadyCallback = receiverReadyCallbackStub
 
-	const request = createRequestMessage(
-		InternalReceiverRequestType.Ready,
-		dummyData,
-	)
+	const request = createRequestMessage(InternalReceiverRequestType.Ready, dummyData)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	await channelEmitter._onPublicMessage({

@@ -1,10 +1,7 @@
 import type { UnknownErrorResponseMessage } from "."
-
 import type { UnknownRequestMessage } from "./types"
 
-export class ResponseError<
-	TErrorResponse extends UnknownErrorResponseMessage,
-> extends Error {
+export class ResponseError<TErrorResponse extends UnknownErrorResponseMessage> extends Error {
 	public response: TErrorResponse
 
 	constructor(errorResponse: TErrorResponse) {
@@ -28,9 +25,7 @@ export class TooManyConcurrentRequestsError extends Error {
 		this.request = request
 	}
 }
-export class RequestTimeoutError<
-	TRequest extends UnknownRequestMessage,
-> extends Error {
+export class RequestTimeoutError<TRequest extends UnknownRequestMessage> extends Error {
 	public request: UnknownRequestMessage
 
 	constructor(request: TRequest) {

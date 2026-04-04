@@ -37,7 +37,5 @@ it("creates a valid error response message with status", (ctx) => {
 })
 
 it("throws when invalid error status is provided", (ctx) => {
-	expect(() =>
-		createErrorResponseMessage(ctx.task.name, dummyError, 200),
-	).toThrowError(TypeError)
+	expect(() => createErrorResponseMessage(ctx.task.name, dummyError, 200)).toThrowError(TypeError)
 })
