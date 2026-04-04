@@ -1,12 +1,7 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	APITransactions} from "../src";
-import {
-	APIRequestType,
-	ClientRequestType,
-	SimulatorAPI,
-} from "../src"
+import type { APITransactions } from "../src"
+import { APIRequestType, ClientRequestType, SimulatorAPI } from "../src"
 import { createRequestMessage } from "../src/channel"
 
 it("instantiates correctly", () => {

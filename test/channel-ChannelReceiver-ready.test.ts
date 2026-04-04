@@ -1,11 +1,7 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	UnknownRequestMessage} from "../src/channel";
-import {
-	ChannelReceiver,
-	createSuccessResponseMessage,
-} from "../src/channel"
+import type { UnknownRequestMessage } from "../src/channel"
+import { ChannelReceiver, createSuccessResponseMessage } from "../src/channel"
 
 class StandaloneChannelReceiver extends ChannelReceiver {}
 
@@ -18,10 +14,7 @@ it("throws when not embedded as an iframe", async () => {
 })
 
 it("sends ready request when embedded as an iframe", async (ctx) => {
-	const channelReceiver = new StandaloneChannelReceiver(
-		{},
-		{ requestIDPrefix: ctx.task.name },
-	)
+	const channelReceiver = new StandaloneChannelReceiver({}, { requestIDPrefix: ctx.task.name })
 
 	// Mock `window.parent.postMessage`
 	let response

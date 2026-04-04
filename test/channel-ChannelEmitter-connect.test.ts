@@ -1,7 +1,6 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	UnknownMessage} from "../src/channel";
+import type { UnknownMessage } from "../src/channel"
 import {
 	ChannelEmitter,
 	ConnectionTimeoutError,
@@ -27,32 +26,20 @@ it("throws when target window is not available", async () => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError(
-		"Target window is not available",
-	)
+	await expect(channelEmitter.connect()).rejects.toThrowError("Target window is not available")
 })
 
 it("timeouts after set timeout", async () => {
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ connectTimeout: 100 },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { connectTimeout: 100 })
 
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError(
-		ConnectionTimeoutError,
-	)
+	await expect(channelEmitter.connect()).rejects.toThrowError(ConnectionTimeoutError)
 })
 
 it("sets `receiverReadyCallback` if `receiverReady` is not set", async () => {
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ connectTimeout: 100 },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { connectTimeout: 100 })
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(channelEmitter._receiverReadyCallback).toBe(null)
@@ -60,20 +47,14 @@ it("sets `receiverReadyCallback` if `receiverReady` is not set", async () => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError(
-		ConnectionTimeoutError,
-	)
+	await expect(channelEmitter.connect()).rejects.toThrowError(ConnectionTimeoutError)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(channelEmitter._receiverReadyCallback).toBeTypeOf("function")
 })
 
 it("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option is set", async (ctx) => {
-	const channelEmitter = new StandaloneChannelEmitter(
-		iframe,
-		{},
-		{ connectTimeout: 100 },
-	)
+	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, { connectTimeout: 100 })
 
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelEmitter._receiverReady = ctx.task.name
@@ -83,9 +64,7 @@ it("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect({}, true)).rejects.toThrowError(
-		ConnectionTimeoutError,
-	)
+	await expect(channelEmitter.connect({}, true)).rejects.toThrowError(ConnectionTimeoutError)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(channelEmitter._receiverReady).toBe("")
@@ -103,18 +82,13 @@ it("calls `receiverReadyCallback` straight away if receiver is already ready", a
 	const contentWindowBck = iframe.contentWindow
 	// @ts-expect-error - setting for test purpose
 	delete iframe.contentWindow
-	const postMessageMock = vi.fn(
-		(request: UnknownMessage, host?: string, ports?: [MessagePort]) => {
-			if (isRequestMessage(request) && ports) {
-				const response = createSuccessResponseMessage(
-					request.requestID,
-					undefined,
-				)
+	const postMessageMock = vi.fn((request: UnknownMessage, host?: string, ports?: [MessagePort]) => {
+		if (isRequestMessage(request) && ports) {
+			const response = createSuccessResponseMessage(request.requestID, undefined)
 
-				ports[0].postMessage(response)
-			}
-		},
-	)
+			ports[0].postMessage(response)
+		}
+	})
 	// @ts-expect-error - setting for test purpose
 	iframe.contentWindow = {
 		postMessage: postMessageMock,
@@ -146,10 +120,9 @@ it("calls `receiverReadyCallback` straight away if receiver is already ready", a
 		postMessageMock.mock.calls[0][0].data,
 		"calls `postMessage` with provided options",
 	).toStrictEqual(dummyData)
-	expect(
-		response.requestID.replace(/\d+/, ""),
-		"receives a valid connect response",
-	).toBe(ctx.task.name)
+	expect(response.requestID.replace(/\d+/, ""), "receives a valid connect response").toBe(
+		ctx.task.name,
+	)
 	expect(response.status, "receives a valid connect response").toBe(200)
 
 	// @ts-expect-error - setting for test purpose

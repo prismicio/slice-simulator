@@ -90,10 +90,7 @@ it("accepts connect requests", () => {
 
 	const channel = new MessageChannel()
 
-	const request = createRequestMessage(
-		InternalEmitterRequestType.Connect,
-		undefined,
-	)
+	const request = createRequestMessage(InternalEmitterRequestType.Connect, undefined)
 	const response = createSuccessResponseMessage(request.requestID, undefined)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
@@ -110,10 +107,7 @@ it("updates its options following connect request", () => {
 
 	const channel = new MessageChannel()
 
-	const request = createRequestMessage(
-		InternalEmitterRequestType.Connect,
-		dummyData,
-	)
+	const request = createRequestMessage(InternalEmitterRequestType.Connect, dummyData)
 
 	expect(channelReceiver.options.foo).toBeUndefined()
 

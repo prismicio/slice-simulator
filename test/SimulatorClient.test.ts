@@ -1,12 +1,7 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	ClientTransactions} from "../src";
-import {
-	APIRequestType,
-	ClientRequestType,
-	SimulatorClient,
-} from "../src"
+import type { ClientTransactions } from "../src"
+import { APIRequestType, ClientRequestType, SimulatorClient } from "../src"
 import { createRequestMessage } from "../src/channel"
 
 const iframe = document.createElement("iframe")

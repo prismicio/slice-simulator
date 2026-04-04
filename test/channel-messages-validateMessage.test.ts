@@ -51,10 +51,7 @@ it("throws on invalid object", () => {
 })
 
 it("throws on invalid requestID", (ctx) => {
-	const message: Record<string, unknown> = createRequestMessage(
-		ctx.task.name,
-		dummyData,
-	)
+	const message: Record<string, unknown> = createRequestMessage(ctx.task.name, dummyData)
 	message.requestID = 1
 
 	expect(() => validateMessage(message)).toThrowError(TypeError)

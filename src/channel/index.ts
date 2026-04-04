@@ -1,23 +1,11 @@
 export { ChannelNetwork, channelNetworkDefaultOptions } from "./ChannelNetwork"
-export type {
-	PostRequestOptions,
-	ChannelNetworkOptions,
-} from "./ChannelNetwork"
+export type { PostRequestOptions, ChannelNetworkOptions } from "./ChannelNetwork"
 
 export { ChannelEmitter, channelEmitterDefaultOptions } from "./ChannelEmitter"
-export type {
-	ChannelEmitterOptions,
-	AllChannelEmitterOptions,
-} from "./ChannelEmitter"
+export type { ChannelEmitterOptions, AllChannelEmitterOptions } from "./ChannelEmitter"
 
-export {
-	ChannelReceiver,
-	channelReceiverDefaultOptions,
-} from "./ChannelReceiver"
-export type {
-	ChannelReceiverOptions,
-	AllChannelReceiverOptions,
-} from "./ChannelReceiver"
+export { ChannelReceiver, channelReceiverDefaultOptions } from "./ChannelReceiver"
+export type { ChannelReceiverOptions, AllChannelReceiverOptions } from "./ChannelReceiver"
 
 export {
 	createRequestMessage,
@@ -40,10 +28,7 @@ export {
 	ChannelNotSetError,
 } from "./errors"
 
-export {
-	InternalEmitterRequestType,
-	InternalReceiverRequestType,
-} from "./types"
+export { InternalEmitterRequestType, InternalReceiverRequestType } from "./types"
 export type {
 	// Messages
 	RequestMessage,

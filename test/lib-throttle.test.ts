@@ -1,8 +1,7 @@
 import { expect, it, vi } from "vitest"
 
-import { sleep } from "./__testutils__/sleep"
-
 import { throttle } from "../src/lib/throttle"
+import { sleep } from "./__testutils__/sleep"
 
 it("throttles function", async () => {
 	const fn = vi.fn()
@@ -37,10 +36,7 @@ it("throttles function consitently", async () => {
 	throttled() // skipped
 	throttled() // t=100
 
-	expect(
-		fn,
-		"waits after tail call before calling again",
-	).toHaveBeenCalledTimes(2)
+	expect(fn, "waits after tail call before calling again").toHaveBeenCalledTimes(2)
 
 	await sleep(35) // t=110
 
@@ -56,8 +52,5 @@ it("throttles function consitently", async () => {
 
 	await sleep(50) // t=210
 
-	expect(
-		fn,
-		"if subsequent calls, still calls last on tail",
-	).toHaveBeenCalledTimes(5)
+	expect(fn, "if subsequent calls, still calls last on tail").toHaveBeenCalledTimes(5)
 })

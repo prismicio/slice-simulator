@@ -7,10 +7,7 @@ class StandaloneChannelNetwork extends ChannelNetwork {}
 const dummyData = { foo: "bar" }
 
 it("creates request message with instance prefix", (ctx) => {
-	const channelNetwork = new StandaloneChannelNetwork(
-		{},
-		{ requestIDPrefix: ctx.task.name },
-	)
+	const channelNetwork = new StandaloneChannelNetwork({}, { requestIDPrefix: ctx.task.name })
 
 	const request = channelNetwork.createRequestMessage("test", dummyData)
 

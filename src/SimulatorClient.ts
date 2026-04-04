@@ -1,32 +1,20 @@
 import type {
-	APITransactions,
-	ClientTransactions} from "./types";
-import {
-	APIRequestType,
-	ClientRequestType
-} from "./types"
-
-import type { SimulatorAPIOptions } from "./SimulatorAPI"
-import type {
 	AllChannelEmitterOptions,
 	TransactionMethod,
 	TransactionsHandlers,
-	TransactionsMethods} from "./channel";
-import {
-	ChannelEmitter
+	TransactionsMethods,
 } from "./channel"
+import { ChannelEmitter } from "./channel"
+import type { SimulatorAPIOptions } from "./SimulatorAPI"
+import type { APITransactions, ClientTransactions } from "./types"
+import { APIRequestType, ClientRequestType } from "./types"
 
-export const simulatorClientDefaultOptions: Partial<AllChannelEmitterOptions> =
-	{
-		requestIDPrefix: "client-",
-	}
+export const simulatorClientDefaultOptions: Partial<AllChannelEmitterOptions> = {
+	requestIDPrefix: "client-",
+}
 
 export class SimulatorClient
-	extends ChannelEmitter<
-		APITransactions,
-		Partial<AllChannelEmitterOptions>,
-		SimulatorAPIOptions
-	>
+	extends ChannelEmitter<APITransactions, Partial<AllChannelEmitterOptions>, SimulatorAPIOptions>
 	implements TransactionsMethods<ClientTransactions>
 {
 	constructor(
@@ -36,8 +24,7 @@ export class SimulatorClient
 	) {
 		// True if `options.debug` is true or `debug=true` is among query parameters
 		const debug =
-			options?.debug ||
-			/[?&]debug=true/i.test(decodeURIComponent(window.location.search))
+			options?.debug || /[?&]debug=true/i.test(decodeURIComponent(window.location.search))
 
 		super(
 			target,
@@ -66,11 +53,10 @@ export class SimulatorClient
 		}
 	}
 
-	[ClientRequestType.Ping]: TransactionMethod<
-		ClientTransactions[ClientRequestType.Ping]
-	> = async () => {
-		return await this.postFormattedRequest(ClientRequestType.Ping)
-	};
+	[ClientRequestType.Ping]: TransactionMethod<ClientTransactions[ClientRequestType.Ping]> =
+		async () => {
+			return await this.postFormattedRequest(ClientRequestType.Ping)
+		};
 
 	[ClientRequestType.SetSliceZone]: TransactionMethod<
 		ClientTransactions[ClientRequestType.SetSliceZone]
@@ -81,9 +67,6 @@ export class SimulatorClient
 	[ClientRequestType.ScrollToSlice]: TransactionMethod<
 		ClientTransactions[ClientRequestType.ScrollToSlice]
 	> = async (data) => {
-		return await this.postFormattedRequest(
-			ClientRequestType.ScrollToSlice,
-			data,
-		)
+		return await this.postFormattedRequest(ClientRequestType.ScrollToSlice, data)
 	}
 }
