@@ -1,15 +1,13 @@
 import type { SharedSlice, SliceZone } from "@prismicio/client"
 
-import { EventEmitter } from "../lib/EventEmitter"
 import { __PRODUCTION__ } from "../lib/__PRODUCTION__"
+import { EventEmitter } from "../lib/EventEmitter"
 import { throttle } from "../lib/throttle"
-
 import type { ActiveSlice } from "../types"
-import type { StateEvents } from "./types";
-import { StateEventType } from "./types"
-
 import { getActiveSliceDOM, getSliceZoneDOM } from "./domHelpers"
 import { getDefaultSlices } from "./getDefault"
+import type { StateEvents } from "./types"
+import { StateEventType } from "./types"
 
 type StateConstructorArgs = {
 	slices?: SliceZone
@@ -92,10 +90,7 @@ export class State extends EventEmitter<StateEvents> {
 			return
 		}
 
-		const activeSliceIndex = Array.prototype.indexOf.call(
-			$sliceZone.children,
-			$activeSlice,
-		)
+		const activeSliceIndex = Array.prototype.indexOf.call($sliceZone.children, $activeSlice)
 
 		// Active slice has been found
 		this.activeSlice = {

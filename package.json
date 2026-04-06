@@ -1,36 +1,25 @@
 {
 	"name": "@prismicio/simulator",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Preview and develop Prismic slices fast with minimal configuration",
 	"keywords": [
-		"typescript",
-		"prismic"
+		"prismic",
+		"typescript"
 	],
+	"license": "Apache-2.0",
+	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@github.com/prismicio/slice-simulator.git"
 	},
-	"license": "Apache-2.0",
-	"author": "Prismic <contact@prismic.io> (https://prismic.io)",
-	"type": "module",
-	"exports": {
-		".": {
-			"require": "./dist/index.cjs",
-			"import": "./dist/index.js"
-		},
-		"./kit": {
-			"require": "./dist/kit.cjs",
-			"import": "./dist/kit.js"
-		},
-		"./package.json": "./package.json"
-	},
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.cts",
 	"files": [
 		"./dist",
 		"./src"
 	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.cts",
 	"typesVersions": {
 		"*": {
 			"*": [
@@ -41,10 +30,24 @@
 			]
 		}
 	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./kit": {
+			"import": "./dist/kit.js",
+			"require": "./dist/kit.cjs"
+		},
+		"./package.json": "./package.json"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsdown",
 		"dev": "tsdown --watch",
-		"format": "prettier --write .",
+		"format": "oxfmt",
 		"prepare": "npm run build",
 		"lint": "oxlint --deny-warnings",
 		"types": "tsc --noEmit",
@@ -54,24 +57,19 @@
 	},
 	"devDependencies": {
 		"@prismicio/client": "^7.21.3",
-		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
-		"@types/node": "25.0.8",
-		"@vitest/coverage-v8": "^4.0.17",
-		"jsdom": "^27.4.0",
-		"oxlint": "^1.39.0",
-		"prettier": "^3.7.4",
-		"prettier-plugin-jsdoc": "^1.8.0",
-		"tsdown": "^0.19.0",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.17"
+		"@types/node": "25.5.2",
+		"@vitest/coverage-v8": "^4.1.2",
+		"jsdom": "^29.0.1",
+		"oxfmt": "^0.43.0",
+		"oxlint": "^1.58.0",
+		"tsdown": "^0.21.7",
+		"typescript": "^6.0.2",
+		"vitest": "^4.1.2"
 	},
 	"peerDependencies": {
 		"@prismicio/client": "^7"
 	},
 	"engines": {
-		"node": ">=14.15.0"
-	},
-	"publishConfig": {
-		"access": "public"
+		"node": ">=20"
 	}
 }

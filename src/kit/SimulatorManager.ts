@@ -1,20 +1,13 @@
 import type { SliceZone } from "@prismicio/client"
 
-import { throttle } from "../lib/throttle"
-
-import { ClientRequestType } from "../types"
-import { StateEventType } from "./types"
-
-import { SimulatorAPI } from "../SimulatorAPI"
 import { ResponseError } from "../channel"
-
-import { State } from "./State"
-import {
-	getSimulatorDOM,
-	getSimulatorRootDOM,
-	getSliceZoneDOM,
-} from "./domHelpers"
+import { throttle } from "../lib/throttle"
+import { SimulatorAPI } from "../SimulatorAPI"
+import { ClientRequestType } from "../types"
+import { getSimulatorDOM, getSimulatorRootDOM, getSliceZoneDOM } from "./domHelpers"
 import { sliceSimulatorAccessedDirectly } from "./messages"
+import { State } from "./State"
+import { StateEventType } from "./types"
 
 type ManagerConstructorArgs = {
 	slices?: SliceZone
@@ -150,10 +143,7 @@ export class SimulatorManager {
 						await this._api.setActiveSlice(activeSlice)
 					} catch (error) {
 						// Just log bad requests, throw everything else
-						if (
-							error instanceof ResponseError &&
-							error.response.status === 400
-						) {
+						if (error instanceof ResponseError && error.response.status === 400) {
 							console.error(error.response)
 						} else {
 							throw error
@@ -174,10 +164,7 @@ export class SimulatorManager {
 							await this._api.setSliceZoneSize({ rect: entry.contentRect })
 						} catch (error) {
 							// Just log bad requests, throw everything else
-							if (
-								error instanceof ResponseError &&
-								error.response.status === 400
-							) {
+							if (error instanceof ResponseError && error.response.status === 400) {
 								console.error(error.response)
 							} else {
 								throw error

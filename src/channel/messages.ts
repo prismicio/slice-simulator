@@ -21,10 +21,7 @@ const statuses = {
 
 let requestID = 0
 
-export const createRequestMessage = <
-	TType extends string = string,
-	TData = undefined,
->(
+export const createRequestMessage = <TType extends string = string, TData = undefined>(
 	type: TType,
 	data: TData,
 	prefix = "",
@@ -85,9 +82,7 @@ export const validateMessage = (message: unknown): UnknownMessage => {
 		)
 	) {
 		throw new TypeError(`Invalid message received: ${JSON.stringify(message)}`)
-	} else if (
-		typeof (message as Record<string, unknown>).requestID !== "string"
-	) {
+	} else if (typeof (message as Record<string, unknown>).requestID !== "string") {
 		throw new TypeError(
 			`Invalid message received, expected \`message.requestID\` to be of type \`string\`, got \`${typeof (
 				message as Record<string, unknown>
@@ -98,15 +93,11 @@ export const validateMessage = (message: unknown): UnknownMessage => {
 	return message as UnknownMessage
 }
 
-export const isRequestMessage = (
-	message: UnknownMessage,
-): message is UnknownRequestMessage => {
+export const isRequestMessage = (message: UnknownMessage): message is UnknownRequestMessage => {
 	return "type" in message
 }
 
-export const isResponseMessage = (
-	message: UnknownMessage,
-): message is UnknownResponseMessage => {
+export const isResponseMessage = (message: UnknownMessage): message is UnknownResponseMessage => {
 	return !("type" in message)
 }
 

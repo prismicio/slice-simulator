@@ -9,9 +9,7 @@ export const getSimulatorRootDOM = (): Element | null => {
 	return document.querySelector(`.${simulatorRootClass}`)
 }
 
-export const getSliceZoneDOM = (
-	expectedNumberOfChildren: number,
-): Element | null => {
+export const getSliceZoneDOM = (expectedNumberOfChildren: number): Element | null => {
 	// If SliceZone has been tagged (#5)
 	let node = document.querySelector(`.${simulatorClass} [data-slice-zone]`)
 	if (node) {

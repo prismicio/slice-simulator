@@ -1,12 +1,7 @@
 import { expect, it, vi } from "vitest"
 
+import { ChannelNetwork, PortNotSetError, createRequestMessage } from "../src/channel"
 import { sleep } from "./__testutils__/sleep"
-
-import {
-	ChannelNetwork,
-	PortNotSetError,
-	createRequestMessage,
-} from "../src/channel"
 
 class StandaloneChannelNetwork extends ChannelNetwork {}
 

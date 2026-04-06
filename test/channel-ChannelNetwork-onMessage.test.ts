@@ -1,7 +1,6 @@
 import { expect, it, vi } from "vitest"
 
-import type {
-	UnknownTransaction} from "../src/channel";
+import type { UnknownTransaction } from "../src/channel"
 import {
 	ChannelNetwork,
 	createErrorResponseMessage,
@@ -11,10 +10,7 @@ import {
 
 class StandaloneChannelNetwork<
 	TOptions extends Record<string, unknown> = Record<string, unknown>,
-	TPartnerTransactions extends Record<string, UnknownTransaction> = Record<
-		string,
-		never
-	>,
+	TPartnerTransactions extends Record<string, UnknownTransaction> = Record<string, never>,
 > extends ChannelNetwork<TPartnerTransactions, TOptions> {}
 
 const dummyData = { foo: "bar" }
@@ -101,10 +97,7 @@ it("returns request handler success response", async (ctx) => {
 		}, 1000)
 
 		const request = createRequestMessage("foo", dummyData)
-		const response = createSuccessResponseMessage(
-			request.requestID,
-			ctx.task.name,
-		)
+		const response = createSuccessResponseMessage(request.requestID, ctx.task.name)
 
 		channel.port1.onmessage = (event) => {
 			expect(event.data).toStrictEqual(response)
@@ -139,10 +132,7 @@ it("returns request handler error response", async (ctx) => {
 		}, 1000)
 
 		const request = createRequestMessage("foo", dummyData)
-		const response = createErrorResponseMessage(
-			request.requestID,
-			ctx.task.name,
-		)
+		const response = createErrorResponseMessage(request.requestID, ctx.task.name)
 
 		channel.port1.onmessage = (event) => {
 			expect(event.data).toStrictEqual(response)
@@ -169,11 +159,7 @@ it("returns not implemented when request handler is not found", async (ctx) => {
 		}, 1000)
 
 		const request = createRequestMessage(ctx.task.name, dummyData)
-		const response = createErrorResponseMessage(
-			request.requestID,
-			undefined,
-			501,
-		)
+		const response = createErrorResponseMessage(request.requestID, undefined, 501)
 
 		channel.port1.onmessage = (event) => {
 			expect(event.data).toStrictEqual(response)
@@ -210,11 +196,7 @@ it("returns internal server error when handler throws", async (ctx) => {
 		}, 1000)
 
 		const request = createRequestMessage("foo", dummyData)
-		const response = createErrorResponseMessage(
-			request.requestID,
-			new Error(ctx.task.name),
-			500,
-		)
+		const response = createErrorResponseMessage(request.requestID, new Error(ctx.task.name), 500)
 
 		channel.port1.onmessage = (event) => {
 			expect(event.data).toStrictEqual(response)
@@ -238,9 +220,7 @@ it("logs error when unknown request ID is received", async (ctx) => {
 	await channelNetwork.onMessage({ data: response })
 
 	expect(console.error).toHaveBeenCalledOnce()
-	expect(
-		vi.mocked(console.error).mock.calls[0][0].includes(response.requestID),
-	).toBe(true)
+	expect(vi.mocked(console.error).mock.calls[0][0].includes(response.requestID)).toBe(true)
 
 	vi.restoreAllMocks()
 })

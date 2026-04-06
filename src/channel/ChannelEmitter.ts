@@ -1,3 +1,13 @@
+import type { ChannelNetworkOptions, PostRequestOptions } from "./ChannelNetwork"
+import { ChannelNetwork } from "./ChannelNetwork"
+import type { AllChannelReceiverOptions } from "./ChannelReceiver"
+import { ChannelNotSetError, ConnectionTimeoutError, NotReadyError } from "./errors"
+import {
+	createErrorResponseMessage,
+	createSuccessResponseMessage,
+	isRequestMessage,
+	validateMessage,
+} from "./messages"
 import type {
 	ExtractSuccessResponseMessage,
 	InternalEmitterTransactions,
@@ -5,56 +15,27 @@ import type {
 	TransactionsHandlers,
 	UnknownRequestMessage,
 	UnknownResponseMessage,
-	UnknownTransaction} from "./types";
-import {
-	InternalEmitterRequestType,
-	InternalReceiverRequestType
+	UnknownTransaction,
 } from "./types"
-
-import {
-	ChannelNotSetError,
-	ConnectionTimeoutError,
-	NotReadyError,
-} from "./errors"
-
-import type {
-	ChannelNetworkOptions,
-	PostRequestOptions} from "./ChannelNetwork";
-import {
-	ChannelNetwork
-} from "./ChannelNetwork"
-import type { AllChannelReceiverOptions } from "./ChannelReceiver"
-import {
-	createErrorResponseMessage,
-	createSuccessResponseMessage,
-	isRequestMessage,
-	validateMessage,
-} from "./messages"
+import { InternalEmitterRequestType, InternalReceiverRequestType } from "./types"
 
 export type ChannelEmitterOptions = {
 	connectTimeout: number
 }
 
-export const channelEmitterDefaultOptions: ChannelEmitterOptions &
-	Partial<ChannelNetworkOptions> = {
-	connectTimeout: 20000,
-	requestIDPrefix: "emitter-",
-}
+export const channelEmitterDefaultOptions: ChannelEmitterOptions & Partial<ChannelNetworkOptions> =
+	{
+		connectTimeout: 20000,
+		requestIDPrefix: "emitter-",
+	}
 
-export type AllChannelEmitterOptions = ChannelEmitterOptions &
-	ChannelNetworkOptions
+export type AllChannelEmitterOptions = ChannelEmitterOptions & ChannelNetworkOptions
 
 export abstract class ChannelEmitter<
-	TReceiverTransactions extends Record<string, UnknownTransaction> = Record<
-		string,
-		never
-	>,
+	TReceiverTransactions extends Record<string, UnknownTransaction> = Record<string, never>,
 	TOptions extends Record<string, unknown> = Record<string, unknown>,
 	TReceiverOptions extends Record<string, unknown> = Record<string, unknown>,
-> extends ChannelNetwork<
-	TReceiverTransactions,
-	ChannelEmitterOptions & TOptions
-> {
+> extends ChannelNetwork<TReceiverTransactions, ChannelEmitterOptions & TOptions> {
 	private _target: HTMLIFrameElement
 	private _channel: MessageChannel | null = null
 	protected get channel(): MessageChannel {
@@ -99,9 +80,7 @@ export abstract class ChannelEmitter<
 	 * Initiates connection to receiver
 	 *
 	 * @param receiverOptions - Options to configure the receiver with
-	 * @param newOrigin - Indicates to the emitter that we're connecting to a new
-	 *   origin
-	 *
+	 * @param newOrigin - Indicates to the emitter that we're connecting to a new origin
 	 * @returns Success connect message
 	 */
 	connect(
@@ -157,9 +136,7 @@ export abstract class ChannelEmitter<
 						>(request, (request) => {
 							// Target content window is checked in previous statement
 							// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-							this._target.contentWindow!.postMessage(request, "*", [
-								this.channel.port2,
-							])
+							this._target.contentWindow!.postMessage(request, "*", [this.channel.port2])
 						})
 
 						// Finish by aknowledging ready
@@ -232,10 +209,7 @@ export abstract class ChannelEmitter<
 						this.postResponse(
 							createErrorResponseMessage(message.requestID, undefined),
 							(response) => {
-								;(event.source as WindowProxy).postMessage(
-									response,
-									event.origin,
-								)
+								;(event.source as WindowProxy).postMessage(response, event.origin)
 							},
 						)
 						break
@@ -261,15 +235,9 @@ export abstract class ChannelEmitter<
 		options: PostRequestOptions = {},
 	): Promise<ExtractSuccessResponseMessage<TResponse>> {
 		if (!this._connected) {
-			throw new NotReadyError(
-				"Emitter is not connected, use `ChannelEmitter.connect()` first",
-			)
+			throw new NotReadyError("Emitter is not connected, use `ChannelEmitter.connect()` first")
 		}
 
-		return this.postRequest(
-			this.createRequestMessage(type, data),
-			undefined,
-			options,
-		)
+		return this.postRequest(this.createRequestMessage(type, data), undefined, options)
 	}
 }

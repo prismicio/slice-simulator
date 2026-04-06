@@ -1,3 +1,12 @@
+import type { ChannelNetworkOptions, PostRequestOptions } from "./ChannelNetwork"
+import { ChannelNetwork } from "./ChannelNetwork"
+import { NotReadyError } from "./errors"
+import {
+	createErrorResponseMessage,
+	createSuccessResponseMessage,
+	isRequestMessage,
+	validateMessage,
+} from "./messages"
 import type {
 	ExtractSuccessResponseMessage,
 	InternalEmitterTransactions,
@@ -9,24 +18,7 @@ import type {
 	UnknownResponseMessage,
 	UnknownTransaction,
 } from "./types"
-import {
-	InternalEmitterRequestType,
-	InternalReceiverRequestType,
-} from "./types"
-
-import { NotReadyError } from "./errors"
-
-import type {
-	ChannelNetworkOptions,
-	PostRequestOptions,
-} from "./ChannelNetwork"
-import { ChannelNetwork } from "./ChannelNetwork"
-import {
-	createErrorResponseMessage,
-	createSuccessResponseMessage,
-	isRequestMessage,
-	validateMessage,
-} from "./messages"
+import { InternalEmitterRequestType, InternalReceiverRequestType } from "./types"
 
 export type ChannelReceiverOptions = {
 	readyTimeout: number
@@ -40,19 +32,12 @@ export const channelReceiverDefaultOptions: ChannelReceiverOptions &
 	allowedOrigin: null,
 }
 
-export type AllChannelReceiverOptions = ChannelReceiverOptions &
-	ChannelNetworkOptions
+export type AllChannelReceiverOptions = ChannelReceiverOptions & ChannelNetworkOptions
 
 export abstract class ChannelReceiver<
-	TEmitterTransactions extends Record<string, UnknownTransaction> = Record<
-		string,
-		never
-	>,
+	TEmitterTransactions extends Record<string, UnknownTransaction> = Record<string, never>,
 	TOptions extends Record<string, unknown> = Record<string, unknown>,
-> extends ChannelNetwork<
-	TEmitterTransactions,
-	ChannelReceiverOptions & TOptions
-> {
+> extends ChannelNetwork<TEmitterTransactions, ChannelReceiverOptions & TOptions> {
 	private _ready = false
 
 	constructor(
@@ -74,10 +59,7 @@ export abstract class ChannelReceiver<
 
 		this._ready = false
 
-		const request = this.createRequestMessage(
-			InternalReceiverRequestType.Ready,
-			undefined,
-		)
+		const request = this.createRequestMessage(InternalReceiverRequestType.Ready, undefined)
 
 		const response = await this.postRequest<
 			RequestMessage<InternalReceiverRequestType.Ready>,
@@ -125,8 +107,7 @@ export abstract class ChannelReceiver<
 						this.port = event.ports[0]
 
 						// Update options
-						const { data } =
-							message as InternalEmitterTransactions["connect"]["request"]
+						const { data } = message as InternalEmitterTransactions["connect"]["request"]
 						this.options = {
 							...this.options,
 							...data,
@@ -137,10 +118,7 @@ export abstract class ChannelReceiver<
 							allowedOrigin: this.options.allowedOrigin,
 						}
 
-						const response = createSuccessResponseMessage(
-							message.requestID,
-							undefined,
-						)
+						const response = createSuccessResponseMessage(message.requestID, undefined)
 
 						this.postResponse(response)
 						break
@@ -149,10 +127,7 @@ export abstract class ChannelReceiver<
 						this.postResponse(
 							createErrorResponseMessage(message.requestID, undefined),
 							(response) => {
-								;(event.source as WindowProxy).postMessage(
-									response,
-									event.origin,
-								)
+								;(event.source as WindowProxy).postMessage(response, event.origin)
 							},
 						)
 						break
@@ -182,15 +157,9 @@ export abstract class ChannelReceiver<
 		options: PostRequestOptions = {},
 	): Promise<ExtractSuccessResponseMessage<TResponse>> {
 		if (!this._ready) {
-			throw new NotReadyError(
-				"Receiver is not ready, use `ChannelReceiver.ready()` first",
-			)
+			throw new NotReadyError("Receiver is not ready, use `ChannelReceiver.ready()` first")
 		}
 
-		return this.postRequest(
-			this.createRequestMessage(type, data),
-			undefined,
-			options,
-		)
+		return this.postRequest(this.createRequestMessage(type, data), undefined, options)
 	}
 }

@@ -1,11 +1,6 @@
 import { afterEach, beforeEach, expect, it } from "vitest"
 
-import {
-	getActiveSliceDOM,
-	getSliceZoneDOM,
-	simulatorClass,
-	simulatorRootClass,
-} from "../src/kit"
+import { getActiveSliceDOM, getSliceZoneDOM, simulatorClass, simulatorRootClass } from "../src/kit"
 
 beforeEach(() => {
 	document.body.innerHTML = `<div class="${simulatorClass}">

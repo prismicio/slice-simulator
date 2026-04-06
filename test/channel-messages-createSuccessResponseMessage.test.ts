@@ -37,7 +37,5 @@ it("creates a valid success response message with status", (ctx) => {
 })
 
 it("throws when invalid success status is provided", (ctx) => {
-	expect(() =>
-		createSuccessResponseMessage(ctx.task.name, dummyData, 400),
-	).toThrowError(TypeError)
+	expect(() => createSuccessResponseMessage(ctx.task.name, dummyData, 400)).toThrowError(TypeError)
 })

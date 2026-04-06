@@ -1,7 +1,4 @@
-export {
-	SimulatorClient,
-	simulatorClientDefaultOptions,
-} from "./SimulatorClient"
+export { SimulatorClient, simulatorClientDefaultOptions } from "./SimulatorClient"
 
 export { SimulatorAPI, simulatorAPIDefaultOptions } from "./SimulatorAPI"
 export type { SimulatorAPIOptions } from "./SimulatorAPI"
@@ -32,11 +29,6 @@ export type {
 } from "./channel"
 
 export { APIRequestType, ClientRequestType } from "./types"
-export type {
-	ActiveSlice,
-	SliceZoneSize,
-	APITransactions,
-	ClientTransactions,
-} from "./types"
+export type { ActiveSlice, SliceZoneSize, APITransactions, ClientTransactions } from "./types"
 
 export * from "./globalExtensions"

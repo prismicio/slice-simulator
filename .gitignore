@@ -1,10 +1,7 @@
 # custom
+*.tgz
 dist
 examples/**/package-lock.json
-playground/**/package-lock.json
-.next
-out
-next-env.d.ts
 
 # os
 .DS_Store
