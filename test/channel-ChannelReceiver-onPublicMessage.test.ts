@@ -11,6 +11,8 @@ import {
 class StandaloneChannelReceiver extends ChannelReceiver {}
 
 const dummyData = { foo: "bar" }
+const trustedOrigin = "https://foo.prismic.io"
+
 
 it("gets wired to public message events on class instantiation", () => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
@@ -32,7 +34,7 @@ it("debug logs messages when on debug mode", (ctx) => {
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: request })
+	channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
 
 	expect(
 		console.debug,
@@ -49,7 +51,7 @@ it("doesn't debug log messages when not on debug mode", (ctx) => {
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: request })
+	channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
 
 	expect(console.debug).not.toHaveBeenCalled()
 })
@@ -59,7 +61,7 @@ it("doens't throw on invalid message received", () => {
 
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
-		channelReceiver._onPublicMessage({ data: null })
+		channelReceiver._onPublicMessage({ data: null, origin: trustedOrigin })
 	}).not.toThrowError()
 })
 
@@ -77,7 +79,7 @@ it("throws on other errors", (ctx) => {
 
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
-		channelReceiver._onPublicMessage({ data: request })
+		channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
 	}).toThrowError(ctx.task.name)
 
 	vi.restoreAllMocks()
@@ -94,7 +96,7 @@ it("accepts connect requests", () => {
 	const response = createSuccessResponseMessage(request.requestID, undefined)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1] })
+	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1], origin: trustedOrigin })
 
 	expect(postResponseStub).toHaveBeenCalledOnce()
 	expect(postResponseStub).toHaveBeenCalledWith(response)
@@ -112,7 +114,7 @@ it("updates its options following connect request", () => {
 	expect(channelReceiver.options.foo).toBeUndefined()
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1] })
+	channelReceiver._onPublicMessage({ data: request, ports: [channel.port1], origin: trustedOrigin })
 
 	expect(channelReceiver.options.foo).toBe("bar")
 })
@@ -126,7 +128,7 @@ it("rejects non-connect requests", (ctx) => {
 	const response = createErrorResponseMessage(request.requestID, undefined)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: request })
+	channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
 
 	expect(postResponseStub).toHaveBeenCalledOnce()
 	// @ts-expect-error - type is broken
@@ -143,10 +145,10 @@ it("forwards response messages to default message handler when not ready", (ctx)
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: response })
+	channelReceiver._onPublicMessage({ data: response, origin: trustedOrigin })
 
 	expect(onMessageStub).toHaveBeenCalledOnce()
-	expect(onMessageStub).toHaveBeenCalledWith({ data: response })
+	expect(onMessageStub).toHaveBeenCalledWith({ data: response, origin: trustedOrigin })
 
 	vi.restoreAllMocks()
 })
@@ -161,7 +163,66 @@ it("doesn't forward response messages to default message handler once ready", (c
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
-	channelReceiver._onPublicMessage({ data: response })
+	channelReceiver._onPublicMessage({ data: response, origin: trustedOrigin })
+
+	expect(onMessageStub).not.toHaveBeenCalled()
+})
+
+it("accepts any origin in development", (ctx) => {
+	const nodeEnv = process.env.NODE_ENV
+	process.env.NODE_ENV = "development"
+
+	const channelReceiver = new StandaloneChannelReceiver({}, {})
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
+
+	const response = createSuccessResponseMessage(ctx.task.name, undefined)
+
+	try {
+		// @ts-expect-error - taking a shortcut by accessing private property
+		channelReceiver._onPublicMessage({
+			data: response,
+			origin: "http://foo.example.com",
+		})
+	} finally {
+		process.env.NODE_ENV = nodeEnv
+	}
+
+	expect(onMessageStub).toHaveBeenCalledOnce()
+	expect(onMessageStub).toHaveBeenCalledWith({
+		data: response,
+		origin: "http://foo.example.com",
+	})
+})
+
+it("rejects non-https origins outside development", (ctx) => {
+	const channelReceiver = new StandaloneChannelReceiver({}, {})
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
+
+	const response = createSuccessResponseMessage(ctx.task.name, undefined)
+
+	// @ts-expect-error - taking a shortcut by accessing private property
+	channelReceiver._onPublicMessage({
+		data: response,
+		origin: "http://foo.prismic.io",
+	})
+
+	expect(onMessageStub).not.toHaveBeenCalled()
+})
+
+it("rejects non-prismic origins outside development", (ctx) => {
+	const channelReceiver = new StandaloneChannelReceiver({}, {})
+	// @ts-expect-error - taking a shortcut by accessing protected property
+	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
+
+	const response = createSuccessResponseMessage(ctx.task.name, undefined)
+
+	// @ts-expect-error - taking a shortcut by accessing private property
+	channelReceiver._onPublicMessage({
+		data: response,
+		origin: "https://foo.example.com",
+	})
 
 	expect(onMessageStub).not.toHaveBeenCalled()
 })

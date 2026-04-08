@@ -5,6 +5,8 @@ import { ChannelReceiver, createSuccessResponseMessage } from "../src/channel"
 
 class StandaloneChannelReceiver extends ChannelReceiver {}
 
+const trustedOrigin = "https://foo.prismic.io"
+
 it("throws when not embedded as an iframe", async () => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
 
@@ -24,7 +26,7 @@ it("sends ready request when embedded as an iframe", async (ctx) => {
 	const postMessageMock = vi.fn((request: UnknownRequestMessage) => {
 		response = createSuccessResponseMessage(request.requestID, undefined)
 		// @ts-expect-error - taking a shortcut by accessing private property
-		channelReceiver._onPublicMessage({ data: response })
+		channelReceiver._onPublicMessage({ data: response, origin: trustedOrigin })
 	})
 	window.parent = {
 		postMessage: postMessageMock as Window["postMessage"],
