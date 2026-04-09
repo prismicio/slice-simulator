@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.2](https://github.com/prismicio/slice-simulator/compare/v0.2.1...v0.2.2) (2026-04-09)
+
+
+### Features
+
+* enforce allowed message origin in non-development environment ([#24](https://github.com/prismicio/slice-simulator/issues/24)) ([4625090](https://github.com/prismicio/slice-simulator/commit/462509083fe1aff0edfbf43b58ad6e0901a85c76))
+
+
+### Miscellaneous Chores
+
+* release 0.2.2 ([d9ffa62](https://github.com/prismicio/slice-simulator/commit/d9ffa6217970d6c5bb36d1c539bffe0409741587))
+
 ## [0.2.1](https://github.com/prismicio/slice-simulator/compare/v0.2.0...v0.2.1) (2026-04-04)
 
 
