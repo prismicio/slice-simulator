@@ -79,6 +79,22 @@ export abstract class ChannelReceiver<
 
 	/** Handles public messages */
 	private _onPublicMessage(event: MessageEvent<unknown>): void {
+		if (process.env.NODE_ENV !== "development") {
+			if (
+				!event.origin.startsWith("https://") ||
+				!(
+					event.origin.endsWith(".prismic.io") ||
+					event.origin.endsWith(".wroom.io") ||
+					event.origin.endsWith(".marketing-tools-wroom.com") ||
+					event.origin.endsWith(".dev-tools-wroom.com") ||
+					event.origin.endsWith(".platform-wroom.com")
+				)
+			) {
+				// Ignore messages from non-allowed origins in non-development environment
+				return
+			}
+		}
+
 		try {
 			const message = validateMessage(event.data)
 
