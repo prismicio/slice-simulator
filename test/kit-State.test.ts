@@ -54,13 +54,3 @@ it("doesn't allow reading slices when not embedded", () => {
 
 	expect(state.slices).toStrictEqual([])
 })
-
-it("clears slices when message is set", () =>
-	withEmbeddedWindowParent(() => {
-		const state = new State({ slices })
-
-		state.message = "Slice simulator is unavailable"
-
-		expect(state.message).toBe("Slice simulator is unavailable")
-		expect(state.slices).toStrictEqual([])
-	}))
