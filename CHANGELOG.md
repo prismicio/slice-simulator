@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.3](https://github.com/prismicio/slice-simulator/compare/v0.2.2...v0.2.3) (2026-04-10)
+
+
+### Bug Fixes
+
+* strengthen state lifecycles ([a3b2a3b](https://github.com/prismicio/slice-simulator/commit/a3b2a3b55153a0bbe27ed5585a4b92e9bdb8b759))
+
+
+### Reverts
+
+* keep slices management the same (only emission changes) ([ba1a035](https://github.com/prismicio/slice-simulator/commit/ba1a0359a7a03f7e5200ef824af2f01c0722f417))
+
 ## [0.2.2](https://github.com/prismicio/slice-simulator/compare/v0.2.1...v0.2.2) (2026-04-09)
 
 
