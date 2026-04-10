@@ -34,18 +34,16 @@ export class SimulatorManager {
 		// Init state manager
 		await this.state.init()
 
+		// Do not init the API is the simulator is accessed directly
+		if (window.parent === window) {
+			this.state.message = sliceSimulatorAccessedDirectly
+			return
+		}
+
 		// Init API
 		try {
 			await this._initAPI()
 		} catch (error) {
-			if (
-				error instanceof Error &&
-				error.message === "Receiver is currently not embedded as an iframe" &&
-				!this.state.slices.length
-			) {
-				// Catch not embedded error and display message
-				this.state.message = sliceSimulatorAccessedDirectly
-			}
 			console.error(error)
 
 			return

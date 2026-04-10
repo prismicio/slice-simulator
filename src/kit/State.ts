@@ -18,18 +18,20 @@ export class State extends EventEmitter<StateEvents> {
 	public set slices(slices: SliceZone) {
 		this._slices = slices
 		// Clean up message
-		this.message = ""
-		// Dispatch event
-		this.emit(StateEventType.Slices, slices)
+		this._message = ""
+
+		// Dispatch events
+		this.emit(StateEventType.Slices, this.slices)
+		this.emit(StateEventType.Message, this.message)
 	}
 	public get slices(): SliceZone {
-		return this._slices
+		return window.parent !== window ? this._slices : []
 	}
 
 	private _activeSlice: ActiveSlice | null
 	public set activeSlice(activeSlice: ActiveSlice | null) {
 		this._activeSlice = activeSlice
-		this.emit(StateEventType.ActiveSlice, activeSlice)
+		this.emit(StateEventType.ActiveSlice, this.activeSlice)
 	}
 	public get activeSlice(): ActiveSlice | null {
 		return this._activeSlice
@@ -38,7 +40,12 @@ export class State extends EventEmitter<StateEvents> {
 	private _message: string
 	public set message(message: string) {
 		this._message = message
-		this.emit(StateEventType.Message, message)
+		// Clean up slices
+		this._slices = []
+
+		// Dispatch events
+		this.emit(StateEventType.Message, this.message)
+		this.emit(StateEventType.Slices, this.slices)
 	}
 	public get message(): string {
 		return this._message

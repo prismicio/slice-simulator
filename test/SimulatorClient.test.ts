@@ -17,7 +17,7 @@ it("instantiates correctly", () => {
 					return res.success()
 				},
 			}),
-	).not.toThrowError()
+	).not.toThrow()
 })
 
 it("instantiates correctly with defaults", () => {
