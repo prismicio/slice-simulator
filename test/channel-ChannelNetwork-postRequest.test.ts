@@ -86,7 +86,7 @@ it("posts valid requests to its partner and timeout after set default timeout", 
 		}, 1000)
 
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(RequestTimeoutError)
+		await expect(channelNetwork.postRequest(request)).rejects.toThrow(RequestTimeoutError)
 
 		clearTimeout(timeout)
 
@@ -119,7 +119,7 @@ it("posts valid requests to its partner and timeout after set specific timeout",
 		await expect(
 			// @ts-expect-error - taking a shortcut by accessing protected property
 			channelNetwork.postRequest(request, undefined, { timeout: 100 }),
-		).rejects.toThrowError(RequestTimeoutError)
+		).rejects.toThrow(RequestTimeoutError)
 
 		clearTimeout(timeout)
 
@@ -153,7 +153,7 @@ it("posts valid requests to its partner and timeout even if pending request cann
 		}, 1000)
 
 		// @ts-expect-error - taking a shortcut by accessing protected property
-		await expect(channelNetwork.postRequest(request)).rejects.toThrowError(RequestTimeoutError)
+		await expect(channelNetwork.postRequest(request)).rejects.toThrow(RequestTimeoutError)
 
 		clearTimeout(timeout)
 
@@ -198,7 +198,7 @@ it("throws when maximum request concurrency has been hit", async (ctx) => {
 		}
 
 		await Promise.all(promises)
-	}).rejects.toThrowError(TooManyConcurrentRequestsError)
+	}).rejects.toThrow(TooManyConcurrentRequestsError)
 })
 
 it("uses provided post message method", async (ctx) => {

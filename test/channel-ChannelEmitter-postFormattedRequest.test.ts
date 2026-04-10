@@ -14,7 +14,7 @@ it("throws when not ready", (ctx) => {
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing protected property
 		channelEmitter.postFormattedRequest(ctx.task.name, dummyData)
-	}).toThrowError(NotReadyError)
+	}).toThrow(NotReadyError)
 })
 
 it("forwards request to default post request handler once ready", (ctx) => {

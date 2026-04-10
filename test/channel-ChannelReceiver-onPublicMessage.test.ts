@@ -62,7 +62,7 @@ it("doens't throw on invalid message received", () => {
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
 		channelReceiver._onPublicMessage({ data: null, origin: trustedOrigin })
-	}).not.toThrowError()
+	}).not.toThrow()
 })
 
 it("throws on other errors", (ctx) => {
@@ -80,7 +80,7 @@ it("throws on other errors", (ctx) => {
 	expect(() => {
 		// @ts-expect-error - taking a shortcut by accessing private property
 		channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
-	}).toThrowError(ctx.task.name)
+	}).toThrow(ctx.task.name)
 
 	vi.restoreAllMocks()
 })

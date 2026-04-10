@@ -13,46 +13,46 @@ const dummyError = dummyData
 it("validates valid request message", (ctx) => {
 	const request = createRequestMessage(ctx.task.name, dummyData)
 
-	expect(() => validateMessage(request)).not.toThrowError()
+	expect(() => validateMessage(request)).not.toThrow()
 })
 
 it("validates valid success response message", (ctx) => {
 	const response = createSuccessResponseMessage(ctx.task.name, dummyData)
 
-	expect(() => validateMessage(response)).not.toThrowError()
+	expect(() => validateMessage(response)).not.toThrow()
 })
 
 it("validates valid error response message", (ctx) => {
 	const response = createErrorResponseMessage(ctx.task.name, dummyError)
 
-	expect(() => validateMessage(response)).not.toThrowError()
+	expect(() => validateMessage(response)).not.toThrow()
 })
 
 it("throws on non-object", () => {
 	const message1 = 1
 
-	expect(() => validateMessage(message1)).toThrowError(TypeError)
+	expect(() => validateMessage(message1)).toThrow(TypeError)
 
 	const message2 = null
 
-	expect(() => validateMessage(message2)).toThrowError(TypeError)
+	expect(() => validateMessage(message2)).toThrow(TypeError)
 })
 
 it("throws on invalid object", () => {
 	const message1 = {}
 
-	expect(() => validateMessage(message1)).toThrowError(TypeError)
+	expect(() => validateMessage(message1)).toThrow(TypeError)
 
 	const message2 = {
 		foo: "bar",
 	}
 
-	expect(() => validateMessage(message2)).toThrowError(TypeError)
+	expect(() => validateMessage(message2)).toThrow(TypeError)
 })
 
 it("throws on invalid requestID", (ctx) => {
 	const message: Record<string, unknown> = createRequestMessage(ctx.task.name, dummyData)
 	message.requestID = 1
 
-	expect(() => validateMessage(message)).toThrowError(TypeError)
+	expect(() => validateMessage(message)).toThrow(TypeError)
 })

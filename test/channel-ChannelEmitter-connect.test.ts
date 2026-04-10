@@ -26,7 +26,7 @@ it("throws when target window is not available", async () => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError("Target window is not available")
+	await expect(channelEmitter.connect()).rejects.toThrow("Target window is not available")
 })
 
 it("timeouts after set timeout", async () => {
@@ -35,7 +35,7 @@ it("timeouts after set timeout", async () => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError(ConnectionTimeoutError)
+	await expect(channelEmitter.connect()).rejects.toThrow(ConnectionTimeoutError)
 })
 
 it("sets `receiverReadyCallback` if `receiverReady` is not set", async () => {
@@ -47,7 +47,7 @@ it("sets `receiverReadyCallback` if `receiverReady` is not set", async () => {
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect()).rejects.toThrowError(ConnectionTimeoutError)
+	await expect(channelEmitter.connect()).rejects.toThrow(ConnectionTimeoutError)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(channelEmitter._receiverReadyCallback).toBeTypeOf("function")
@@ -64,7 +64,7 @@ it("awaits new receiver and sets `receiverReadyCallback` when `newOrigin` option
 	setTimeout(() => {
 		iframe.dispatchEvent(new Event("load"))
 	}, 10)
-	await expect(channelEmitter.connect({}, true)).rejects.toThrowError(ConnectionTimeoutError)
+	await expect(channelEmitter.connect({}, true)).rejects.toThrow(ConnectionTimeoutError)
 
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(channelEmitter._receiverReady).toBe("")
@@ -115,7 +115,7 @@ it("calls `receiverReadyCallback` straight away if receiver is already ready", a
 		postMessageMock.mock.calls.forEach((call) => {
 			validateMessage(call[0])
 		})
-	}, "calls `postMessage` with valid messages only").not.toThrowError()
+	}, "calls `postMessage` with valid messages only").not.toThrow()
 	expect(
 		postMessageMock.mock.calls[0][0].data,
 		"calls `postMessage` with provided options",

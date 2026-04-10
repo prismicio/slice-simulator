@@ -72,7 +72,7 @@ it("throws on other errors", async (ctx) => {
 	await expect(
 		// @ts-expect-error - taking a shortcut by accessing protected property
 		channelNetwork.onMessage({ data: response }),
-	).rejects.toThrowError(ctx.task.name)
+	).rejects.toThrow(ctx.task.name)
 })
 
 it("returns request handler success response", async (ctx) => {

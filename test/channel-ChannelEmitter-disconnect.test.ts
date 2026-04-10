@@ -23,6 +23,6 @@ it("disconnects emitter from receiver by killing channel", () => {
 	channelEmitter.disconnect()
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError)
+	expect(() => channelEmitter.channel).toThrow(ChannelNotSetError)
 	expect(channelEmitter.connected).toBe(false)
 })

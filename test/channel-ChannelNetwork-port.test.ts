@@ -11,7 +11,7 @@ it("throws when accessing unset port", () => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {})
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(() => channelNetwork.port).toThrowError(PortNotSetError)
+	expect(() => channelNetwork.port).toThrow(PortNotSetError)
 })
 
 it("listens to new port messages automatically", async (ctx) => {

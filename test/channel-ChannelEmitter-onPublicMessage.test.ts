@@ -96,7 +96,7 @@ it("doens't throw on invalid message received", async () => {
 			data: null,
 			source: iframe.contentWindow,
 		}),
-	).resolves.not.toThrowError()
+	).resolves.not.toThrow()
 })
 
 it("throws on other errors", async (ctx) => {
@@ -117,7 +117,7 @@ it("throws on other errors", async (ctx) => {
 			data: request,
 			source: iframe.contentWindow,
 		}),
-	).rejects.toThrowError(ctx.task.name)
+	).rejects.toThrow(ctx.task.name)
 
 	vi.restoreAllMocks()
 })

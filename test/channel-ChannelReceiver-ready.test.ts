@@ -10,7 +10,7 @@ const trustedOrigin = "https://foo.prismic.io"
 it("throws when not embedded as an iframe", async () => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
 
-	await expect(channelReceiver.ready()).rejects.toThrowError(
+	await expect(channelReceiver.ready()).rejects.toThrow(
 		"Receiver is currently not embedded as an iframe",
 	)
 })

@@ -10,7 +10,7 @@ it("throws when accessing unset channel", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(() => channelEmitter.channel).toThrowError(ChannelNotSetError)
+	expect(() => channelEmitter.channel).toThrow(ChannelNotSetError)
 })
 
 it("returns channel when channel is set", () => {
@@ -52,5 +52,5 @@ it("unsets port when channel is unset", () => {
 	channelEmitter.channel = null
 
 	// @ts-expect-error - taking a shortcut by accessing protected property
-	expect(() => channelEmitter.port).toThrowError(PortNotSetError)
+	expect(() => channelEmitter.port).toThrow(PortNotSetError)
 })

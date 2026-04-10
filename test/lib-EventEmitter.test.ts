@@ -45,7 +45,7 @@ it("dispatches event", () => {
 it("doesn't fail to dispatch when no handler", () => {
 	const eventEmitter = new StandaloneEventEmitter()
 
-	expect(() => eventEmitter.emit("foo", "bar")).not.toThrowError()
+	expect(() => eventEmitter.emit("foo", "bar")).not.toThrow()
 })
 
 it("unregisters event handler", () => {
@@ -97,5 +97,5 @@ it("doesn't fail to unregister when no handler", () => {
 
 	const listener = vi.fn()
 
-	expect(() => eventEmitter.off("foo", listener)).not.toThrowError()
+	expect(() => eventEmitter.off("foo", listener)).not.toThrow()
 })
