@@ -3,6 +3,7 @@ import { expect, it, vi } from "vitest"
 import { SimulatorAPI } from "../src/SimulatorAPI"
 import type { UnknownRequestMessage } from "../src/channel"
 import { createSuccessResponseMessage } from "../src/channel"
+import { simulatorClass, simulatorRootClass } from "../src/kit/domHelpers"
 import { sliceSimulatorAccessedDirectly } from "../src/kit/messages"
 import { SimulatorManager } from "../src/kit/SimulatorManager"
 
@@ -42,4 +43,37 @@ it("doesn't initialize API when not embedded and sets message", async () => {
 	// @ts-expect-error - taking a shortcut by accessing private property
 	expect(manager._api).toBeNull()
 	expect(manager.state.message).toBe(sliceSimulatorAccessedDirectly)
+})
+
+it("observes an existing simulator root when slice zone size API is enabled", () => {
+	document.body.innerHTML = `<div class="${simulatorClass}">
+		<div class="${simulatorRootClass}"></div>
+	</div>`
+
+	const observeMock = vi.fn()
+	vi.stubGlobal(
+		"ResizeObserver",
+		vi.fn(function ResizeObserverMock() {
+			return {
+				disconnect: vi.fn(),
+				observe: observeMock,
+			}
+		}),
+	)
+
+	try {
+		const manager = new SimulatorManager()
+		// @ts-expect-error - taking a shortcut by accessing private property
+		manager._api = { options: { sliceZoneSizeAPI: true } }
+
+		// @ts-expect-error - taking a shortcut by accessing private method
+		manager._initListeners()
+
+		expect(observeMock).toHaveBeenCalledWith(
+			document.querySelector(`.${simulatorRootClass}`),
+		)
+	} finally {
+		document.body.innerHTML = ""
+		vi.unstubAllGlobals()
+	}
 })

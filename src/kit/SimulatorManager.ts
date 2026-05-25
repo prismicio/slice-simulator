@@ -179,6 +179,7 @@ export class SimulatorManager {
 				subtree: false,
 				childList: true,
 			})
+			observeSimulatorRoot()
 		}
 	}
 }
