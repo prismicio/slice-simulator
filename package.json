@@ -57,14 +57,14 @@
 	},
 	"devDependencies": {
 		"@prismicio/client": "^7.21.3",
-		"@types/node": "25.5.2",
-		"@vitest/coverage-v8": "^4.1.2",
-		"jsdom": "^29.0.1",
-		"oxfmt": "^0.43.0",
-		"oxlint": "^1.58.0",
-		"tsdown": "^0.21.7",
-		"typescript": "^6.0.2",
-		"vitest": "^4.1.2"
+		"@types/node": "26.6.4",
+		"@vitest/coverage-v8": "^4.1.11",
+		"jsdom": "^29.1.1",
+		"oxfmt": "^0.71.0",
+		"oxlint": "^1.86.0",
+		"tsdown": "^0.21.10",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.11"
 	},
 	"peerDependencies": {
 		"@prismicio/client": "^7"
