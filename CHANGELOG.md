@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/prismicio/slice-simulator/compare/v0.2.4...v1.0.0) (2026-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** The package now requires Node.js 22 or later.
+
+### Miscellaneous Chores
+
+* **deps:** require Node.js 22 and update dependencies ([#30](https://github.com/prismicio/slice-simulator/issues/30)) ([3c8e26b](https://github.com/prismicio/slice-simulator/commit/3c8e26b05202209b26e2b1bfda5696dba7625366))
+
 ## [0.2.4](https://github.com/prismicio/slice-simulator/compare/v0.2.3...v0.2.4) (2026-05-25)
 
 
