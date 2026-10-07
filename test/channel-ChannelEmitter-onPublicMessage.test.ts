@@ -18,7 +18,6 @@ it("gets wired to public message events on class instantiation", () => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
 	const onPublicMessageStub = vi.fn()
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	vi.spyOn(channelEmitter, "_onPublicMessage").mockImplementation(onPublicMessageStub)
 
 	const event = new MessageEvent("message", {
@@ -161,7 +160,6 @@ it("rejects non-ready requests", async (ctx) => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
 	const postResponseStub = vi.fn()
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	vi.spyOn(channelEmitter, "postResponse").mockImplementation(postResponseStub)
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
@@ -181,7 +179,6 @@ it("ignores response messages", async (ctx) => {
 	const channelEmitter = new StandaloneChannelEmitter(iframe, {}, {})
 
 	const onMessageStub = vi.fn()
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	vi.spyOn(channelEmitter, "onMessage").mockImplementation(onMessageStub)
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelEmitter._ready = true

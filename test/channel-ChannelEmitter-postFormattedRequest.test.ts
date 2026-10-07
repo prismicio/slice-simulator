@@ -25,7 +25,6 @@ it("forwards request to default post request handler once ready", (ctx) => {
 	)
 
 	const postRequestStub = vi.fn()
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	vi.spyOn(channelEmitter, "postRequest").mockImplementation(postRequestStub)
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelEmitter._connected = true

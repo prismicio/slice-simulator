@@ -16,7 +16,6 @@ const trustedOrigin = "https://foo.prismic.io"
 
 it("gets wired to public message events on class instantiation", () => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onPublicMessageStub = vi.spyOn(channelReceiver, "_onPublicMessage")
 
 	const event = new MessageEvent("message", { data: dummyData })
@@ -87,7 +86,6 @@ it("throws on other errors", (ctx) => {
 
 it("accepts connect requests", () => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = vi.spyOn(channelReceiver, "postResponse")
 
 	const channel = new MessageChannel()
@@ -121,7 +119,6 @@ it("updates its options following connect request", () => {
 
 it("rejects non-connect requests", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const postResponseStub = vi.spyOn(channelReceiver, "postResponse")
 
 	const request = createRequestMessage(ctx.task.name, dummyData)
@@ -131,7 +128,6 @@ it("rejects non-connect requests", (ctx) => {
 	channelReceiver._onPublicMessage({ data: request, origin: trustedOrigin })
 
 	expect(postResponseStub).toHaveBeenCalledOnce()
-	// @ts-expect-error - type is broken
 	expect(postResponseStub.mock.calls[0][0]).toStrictEqual(response)
 })
 
@@ -139,7 +135,6 @@ it("forwards response messages to default message handler when not ready", (ctx)
 	vi.stubGlobal("console", { ...console, error: vi.fn() })
 
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
 
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
@@ -155,7 +150,6 @@ it("forwards response messages to default message handler when not ready", (ctx)
 
 it("doesn't forward response messages to default message handler once ready", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
 	// @ts-expect-error - taking a shortcut by setting private property
 	channelReceiver._ready = true
@@ -173,7 +167,6 @@ it("accepts any origin in development", (ctx) => {
 	process.env.NODE_ENV = "development"
 
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
 
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
@@ -197,7 +190,6 @@ it("accepts any origin in development", (ctx) => {
 
 it("rejects non-https origins outside development", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
 
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
@@ -213,7 +205,6 @@ it("rejects non-https origins outside development", (ctx) => {
 
 it("rejects non-prismic origins outside development", (ctx) => {
 	const channelReceiver = new StandaloneChannelReceiver({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelReceiver, "onMessage")
 
 	const response = createSuccessResponseMessage(ctx.task.name, undefined)
