@@ -16,7 +16,6 @@ it("throws when accessing unset port", () => {
 
 it("listens to new port messages automatically", async (ctx) => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelNetwork, "onMessage")
 
 	const channel = new MessageChannel()
@@ -31,13 +30,11 @@ it("listens to new port messages automatically", async (ctx) => {
 	await sleep(10)
 
 	expect(onMessageStub).toHaveBeenCalledOnce()
-	// @ts-expect-error - type is broken
 	expect(onMessageStub.mock.calls[0][0].data).toStrictEqual(request)
 })
 
 it("stops listening to old port after new port automatically", async () => {
 	const channelNetwork = new StandaloneChannelNetwork({}, {})
-	// @ts-expect-error - taking a shortcut by accessing protected property
 	const onMessageStub = vi.spyOn(channelNetwork, "onMessage")
 
 	const channel = new MessageChannel()
@@ -52,7 +49,6 @@ it("stops listening to old port after new port automatically", async () => {
 	await sleep(10)
 
 	expect(onMessageStub).toHaveBeenCalledOnce()
-	// @ts-expect-error - type is broken
 	expect(onMessageStub.mock.calls[0][0].data).toStrictEqual(request1)
 
 	// @ts-expect-error - taking a shortcut by setting protected property
