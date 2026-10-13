@@ -57,7 +57,7 @@
 	},
 	"devDependencies": {
 		"@prismicio/client": "^7.22.3",
-		"@types/node": "26.6.4",
+		"@types/node": "26.6.5",
 		"@vitest/coverage-v8": "^5.0.3",
 		"jsdom": "^30.1.2",
 		"oxfmt": "^0.72.0",
